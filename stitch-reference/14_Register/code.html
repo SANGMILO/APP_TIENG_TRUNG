@@ -1,0 +1,260 @@
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Mandarin Master - Đăng ký</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@700&amp;family=Noto+Sans+SC:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-high": "#eae7e7",
+                        "surface-container": "#f0eded",
+                        "tertiary-container": "#3b775b",
+                        "on-tertiary-fixed-variant": "#0e5138",
+                        "surface-container-low": "#f6f3f2",
+                        "on-primary-fixed": "#410005",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#ffb3af",
+                        "tertiary-fixed-dim": "#95d4b3",
+                        "on-secondary-fixed": "#1a1c1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#e3e2e0",
+                        "on-tertiary-fixed": "#002114",
+                        "on-tertiary-container": "#bcfcd9",
+                        "inverse-on-surface": "#f3f0ef",
+                        "secondary-container": "#e0e0dd",
+                        "secondary": "#5e5f5d",
+                        "outline-variant": "#e7bcba",
+                        "outline": "#926e6c",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#626361",
+                        "on-primary-container": "#ffeae8",
+                        "surface-bright": "#fcf9f8",
+                        "tertiary-fixed": "#b1f0ce",
+                        "on-background": "#1b1b1b",
+                        "background": "#fcf9f8",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffdad7",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#dcd9d9",
+                        "surface-container-highest": "#e5e2e1",
+                        "primary-fixed-dim": "#ffb3af",
+                        "primary-container": "#d90429",
+                        "on-surface": "#1b1b1b",
+                        "secondary-fixed-dim": "#c7c6c4",
+                        "inverse-surface": "#313030",
+                        "surface-tint": "#bf0022",
+                        "on-secondary-fixed-variant": "#464745",
+                        "tertiary": "#205e44",
+                        "on-primary-fixed-variant": "#930018",
+                        "surface": "#fcf9f8",
+                        "on-surface-variant": "#5d3f3d",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary": "#ac001e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "container-margin": "20px",
+                        "xl": "32px",
+                        "xs": "8px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "label-sm": [
+                            "Inter"
+                        ],
+                        "headline-lg": [
+                            "Montserrat"
+                        ],
+                        "pinyin-md": [
+                            "Inter"
+                        ],
+                        "headline-lg-mobile": [
+                            "Montserrat"
+                        ],
+                        "display-hanzi": [
+                            "Noto Sans SC"
+                        ],
+                        "body-vn": [
+                            "Inter"
+                        ]
+                    },
+                    "fontSize": {
+                        "label-sm": [
+                            "12px",
+                            {
+                                "lineHeight": "16px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "headline-lg": [
+                            "32px",
+                            {
+                                "lineHeight": "40px",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "pinyin-md": [
+                            "18px",
+                            {
+                                "lineHeight": "24px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "headline-lg-mobile": [
+                            "28px",
+                            {
+                                "lineHeight": "34px",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "display-hanzi": [
+                            "64px",
+                            {
+                                "lineHeight": "80px",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "body-vn": [
+                            "16px",
+                            {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f8; /* Warm ivory */
+        }
+        .input-soft-shadow {
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-vn">
+<!-- Header -->
+<header class="px-container-margin py-md flex items-center justify-between z-10 sticky top-0 bg-background">
+<button aria-label="Go back" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 300;">arrow_back</span>
+</button>
+<div class="flex items-center gap-xs">
+<!-- Simple logo placeholder -->
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary font-display-hanzi text-pinyin-md leading-none pt-1">
+                中
+            </div>
+<span class="font-headline-lg-mobile text-[16px] text-on-surface">Mandarin Master</span>
+</div>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</header>
+<!-- Main Content -->
+<main class="flex-grow px-container-margin py-lg flex flex-col">
+<!-- Titles -->
+<div class="mb-xl">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-xs">Tạo tài khoản</h1>
+<p class="font-body-vn text-body-vn text-on-surface-variant">Bắt đầu hành trình học tiếng Trung cùng Mandarin Master.</p>
+</div>
+<!-- Form -->
+<form class="flex flex-col gap-md flex-grow">
+<!-- Full Name -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface" for="fullName">Họ và tên</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant/50">person</span>
+<input class="w-full h-14 pl-12 pr-md rounded-xl bg-surface border border-outline-variant/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors input-soft-shadow font-body-vn text-body-vn text-on-surface placeholder:text-on-surface-variant/40" id="fullName" placeholder="Nhập tên của bạn" type="text">
+</div>
+</div>
+<!-- Email -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface" for="email">Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
+<input class="w-full h-14 pl-12 pr-md rounded-xl bg-surface border border-outline-variant/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors input-soft-shadow font-body-vn text-body-vn text-on-surface placeholder:text-on-surface-variant/40" id="email" placeholder="Nhập địa chỉ email" type="email">
+</div>
+</div>
+<!-- Password -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface" for="password">Mật khẩu</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
+<input class="w-full h-14 pl-12 pr-12 rounded-xl bg-surface border border-outline-variant/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors input-soft-shadow font-body-vn text-body-vn text-on-surface placeholder:text-on-surface-variant/40" id="password" placeholder="Tạo mật khẩu" type="password">
+<button aria-label="Toggle password visibility" class="absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant/50 p-1 hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined">visibility_off</span>
+</button>
+</div>
+<!-- Password Strength -->
+<div class="flex gap-sm mt-xs">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
+<span class="font-label-sm text-[11px] text-on-surface-variant">Ít nhất 8 ký tự</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-outline-variant">radio_button_unchecked</span>
+<span class="font-label-sm text-[11px] text-on-surface-variant">Có chữ và số</span>
+</div>
+</div>
+</div>
+<!-- Confirm Password -->
+<div class="flex flex-col gap-base mt-sm">
+<label class="font-label-sm text-label-sm text-on-surface" for="confirmPassword">Xác nhận mật khẩu</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
+<input class="w-full h-14 pl-12 pr-md rounded-xl bg-surface border border-outline-variant/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors input-soft-shadow font-body-vn text-body-vn text-on-surface placeholder:text-on-surface-variant/40" id="confirmPassword" placeholder="Nhập lại mật khẩu" type="password">
+</div>
+</div>
+<!-- Terms -->
+<div class="flex items-start gap-sm mt-md">
+<div class="relative flex items-center justify-center mt-1">
+<input class="w-5 h-5 appearance-none rounded bg-surface border border-outline-variant/80 checked:bg-primary checked:border-primary transition-colors cursor-pointer peer" id="terms" type="checkbox">
+<span class="material-symbols-outlined absolute text-on-primary text-[18px] opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity">check</span>
+</div>
+<label class="font-body-vn text-[14px] leading-snug text-on-surface-variant" for="terms">
+                    Tôi đồng ý với <a class="text-primary font-medium hover:underline" href="#">Điều khoản sử dụng</a> và <a class="text-primary font-medium hover:underline" href="#">Chính sách quyền riêng tư</a>
+</label>
+</div>
+<!-- Submit Button -->
+<button class="w-full h-14 bg-primary text-on-primary rounded-xl font-label-sm text-[16px] tracking-wide mt-lg shadow-[0_4px_20px_rgba(172,0,30,0.15)] active:scale-[0.98] transition-transform flex items-center justify-center gap-xs" type="submit">
+                Tạo tài khoản
+                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</form>
+<!-- Social Login -->
+<div class="mt-xl flex flex-col gap-md">
+<div class="flex items-center gap-md"><div class="h-px bg-outline-variant/20 flex-grow"></div><span class="font-label-sm text-[12px] text-on-surface-variant/40 uppercase tracking-[0.2em] px-md">hoặc</span><div class="h-px bg-outline-variant/20 flex-grow"></div></div>
+<div class="flex gap-md">
+<button class="flex-1 h-14 bg-surface rounded-xl border border-outline-variant/30 flex items-center justify-center gap-sm active:bg-surface-container transition-colors" type="button"><img alt="Google" class="w-5 h-5" src="https://www.gstatic.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"><span class="font-label-sm text-[14px] text-on-surface">Đăng ký với Google</span></button>
+<button class="flex-1 h-14 bg-surface rounded-xl border border-outline-variant/30 flex items-center justify-center gap-sm active:bg-surface-container transition-colors" type="button"><svg class="w-5 h-5" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 21.8-88.5 21.8-11.4 0-51.1-20.8-83.6-20.1-42.9.6-82.7 25.1-104.6 63.9-43.4 77-11.1 191.1 30.3 251.1 20.3 29.2 44.1 61.7 75.4 60.5 30.2-1.2 41.5-19.9 78-19.9 36.4 0 46.8 19.9 78.7 19.2 32.5-.7 53.1-29.2 73.1-58.3 23.2-34 32.6-67 33.1-68.7-.8-.3-64.7-24.8-65.4-99.1zM285.2 81.5c15.7-19 26.1-45.5 23.2-72.3-23.2 1-51.3 15.5-67.9 34.9-14.9 17.2-27.9 44.3-24.4 70.3 25.9 2 53.4-13.9 69.1-32.9z" fill="currentColor"></path></svg><span class="font-label-sm text-[14px] text-on-surface">Đăng ký với Apple</span></button>
+</div>
+</div>
+<!-- Footer -->
+<div class="mt-xl text-center pb-xl">
+<p class="font-body-vn text-body-vn text-on-surface-variant">
+                Đã có tài khoản? <a class="text-primary font-semibold hover:underline" href="#">Đăng nhập</a>
+</p>
+</div>
+</main>
+
+
+</body></html>

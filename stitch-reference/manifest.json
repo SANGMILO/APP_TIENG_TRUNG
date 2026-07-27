@@ -1,0 +1,91 @@
+{
+  "projectId": "6506278782152367391",
+  "exportedAt": "2026-07-27T14:40:56.541Z",
+  "screens": [
+    {
+      "index": 1,
+      "screenId": "c4068b9669d542d88cb416a363045a2e",
+      "folder": "01_c4068b9669d542d88cb416a363045a2e",
+      "html": "01_c4068b9669d542d88cb416a363045a2e/design.html",
+      "image": "01_c4068b9669d542d88cb416a363045a2e/screenshot.png",
+      "status": "ok"
+    },
+    {
+      "index": 2,
+      "screenId": "92df967f5cc04643b66b2192e3954e2d",
+      "folder": "02_92df967f5cc04643b66b2192e3954e2d",
+      "html": "02_92df967f5cc04643b66b2192e3954e2d/design.html",
+      "image": "02_92df967f5cc04643b66b2192e3954e2d/screenshot.png",
+      "status": "ok"
+    },
+    {
+      "index": 3,
+      "screenId": "8c3dd242d4dc43b083ffb5884d422d2c",
+      "folder": "03_8c3dd242d4dc43b083ffb5884d422d2c",
+      "html": "03_8c3dd242d4dc43b083ffb5884d422d2c/design.html",
+      "image": "03_8c3dd242d4dc43b083ffb5884d422d2c/screenshot.png",
+      "status": "ok"
+    },
+    {
+      "index": 4,
+      "screenId": "831e9c8aae864bd7b04a4f0b0c72694f",
+      "folder": "04_831e9c8aae864bd7b04a4f0b0c72694f",
+      "status": "failed",
+      "error": "Failed to parse URL from "
+    },
+    {
+      "index": 5,
+      "screenId": "9c1cf71c4355414aaff57de2f4f20562",
+      "folder": "05_9c1cf71c4355414aaff57de2f4f20562",
+      "html": "05_9c1cf71c4355414aaff57de2f4f20562/design.html",
+      "image": "05_9c1cf71c4355414aaff57de2f4f20562/screenshot.png",
+      "status": "ok"
+    },
+    {
+      "index": 6,
+      "screenId": "c3eec56fbd9842819dee1be32cb63bec",
+      "folder": "06_c3eec56fbd9842819dee1be32cb63bec",
+      "status": "failed",
+      "error": "Failed to parse URL from "
+    },
+    {
+      "index": 7,
+      "screenId": "dcad7c1016294ad7a3a2ce669bc53cb2",
+      "folder": "07_dcad7c1016294ad7a3a2ce669bc53cb2",
+      "html": "07_dcad7c1016294ad7a3a2ce669bc53cb2/design.html",
+      "image": "07_dcad7c1016294ad7a3a2ce669bc53cb2/screenshot.png",
+      "status": "ok"
+    },
+    {
+      "index": 8,
+      "screenId": "dff33d10409c4473a0a812172da78173",
+      "folder": "08_dff33d10409c4473a0a812172da78173",
+      "html": "08_dff33d10409c4473a0a812172da78173/design.html",
+      "image": "08_dff33d10409c4473a0a812172da78173/screenshot.png",
+      "status": "ok"
+    },
+    {
+      "index": 9,
+      "screenId": "efc80a0a393a446d855e396743ff2200",
+      "folder": "09_efc80a0a393a446d855e396743ff2200",
+      "status": "failed",
+      "error": "Failed to parse URL from "
+    },
+    {
+      "index": 10,
+      "screenId": "a597051bf66f4ff19f8e9fec2e49096b",
+      "folder": "10_a597051bf66f4ff19f8e9fec2e49096b",
+      "html": "10_a597051bf66f4ff19f8e9fec2e49096b/design.html",
+      "image": "10_a597051bf66f4ff19f8e9fec2e49096b/screenshot.png",
+      "status": "ok"
+    },
+    {
+      "index": 11,
+      "screenId": "33ccb869857b4335b5022136e1bad04e",
+      "folder": "11_33ccb869857b4335b5022136e1bad04e",
+      "html": "11_33ccb869857b4335b5022136e1bad04e/design.html",
+      "image": "11_33ccb869857b4335b5022136e1bad04e/screenshot.png",
+      "status": "ok"
+    }
+  ]
+}

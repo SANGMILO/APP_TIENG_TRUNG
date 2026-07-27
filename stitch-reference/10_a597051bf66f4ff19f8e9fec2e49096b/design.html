@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ôn tập - Hanzi Premium</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700;800&amp;family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#bf0022",
+                      "inverse-primary": "#ffb3af",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#926e6c",
+                      "on-surface": "#1b1b1b",
+                      "inverse-on-surface": "#f3f0ef",
+                      "surface-container-high": "#eae7e7",
+                      "on-secondary-container": "#626361",
+                      "on-tertiary-container": "#bcfcd9",
+                      "primary-container": "#d90429",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#002114",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#930018",
+                      "secondary-container": "#e0e0dd",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#0e5138",
+                      "on-secondary-fixed": "#1a1c1a",
+                      "tertiary-fixed": "#b1f0ce",
+                      "tertiary-fixed-dim": "#95d4b3",
+                      "surface": "#fcf9f8",
+                      "tertiary-container": "#3b775b",
+                      "inverse-surface": "#313030",
+                      "surface-dim": "#dcd9d9",
+                      "secondary": "#5e5f5d",
+                      "tertiary": "#205e44",
+                      "on-primary": "#ffffff",
+                      "primary": "#ac001e",
+                      "error-container": "#ffdad6",
+                      "surface-bright": "#fcf9f8",
+                      "background": "#fcf9f8",
+                      "surface-container-low": "#f6f3f2",
+                      "on-secondary-fixed-variant": "#464745",
+                      "on-primary-fixed": "#410005",
+                      "secondary-fixed": "#e3e2e0",
+                      "on-surface-variant": "#5d3f3d",
+                      "on-tertiary": "#ffffff",
+                      "outline-variant": "#e7bcba",
+                      "surface-container": "#f0eded",
+                      "surface-variant": "#e5e2e1",
+                      "on-primary-container": "#ffeae8",
+                      "surface-container-highest": "#e5e2e1",
+                      "on-background": "#1b1b1b",
+                      "primary-fixed-dim": "#ffb3af",
+                      "primary-fixed": "#ffdad7",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#c7c6c4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "sm": "12px",
+                      "md": "16px",
+                      "container-margin": "20px",
+                      "xs": "8px",
+                      "gutter": "16px",
+                      "lg": "24px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Montserrat"
+                      ],
+                      "display-hanzi": [
+                              "Noto Sans SC"
+                      ],
+                      "headline-lg": [
+                              "Montserrat"
+                      ],
+                      "pinyin-md": [
+                              "Inter"
+                      ],
+                      "body-vn": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-hanzi": [
+                              "64px",
+                              {
+                                      "lineHeight": "80px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "pinyin-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-vn": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-vn min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-background shadow-[0px_4px_20px_rgba(191,0,34,0.05)] z-40 hidden md:flex">
+<div class="flex justify-between items-center px-container-margin py-sm w-full max-w-full mx-auto">
+<div class="flex items-center gap-2 text-primary dark:text-primary-fixed-dim">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<h1 class="text-primary font-headline-lg font-bold tracking-tight">Học Tiếng Trung</h1>
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full cursor-pointer hover:bg-surface-container transition-colors">
+<span class="font-label-sm text-label-sm text-primary">500 XP</span>
+<span class="material-symbols-outlined text-primary text-sm">stars</span>
+</div>
+</div>
+</header>
+<!-- Mobile Header (Simplified for Mobile Destination) -->
+<header class="w-full top-0 sticky bg-surface dark:bg-background shadow-[0px_4px_20px_rgba(191,0,34,0.05)] z-40 md:hidden">
+<div class="flex justify-between items-center px-container-margin py-sm w-full max-w-full mx-auto">
+<div class="flex items-center gap-2 text-primary dark:text-primary-fixed-dim">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<h1 class="text-primary font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tight">Ôn tập</h1>
+<div class="flex items-center gap-1 bg-surface-container-low px-3 py-1.5 rounded-full">
+<span class="font-label-sm text-label-sm text-primary">500 XP</span>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-5xl mx-auto px-container-margin pt-lg pb-xl space-y-xl">
+<!-- Review Summary Card -->
+<section class="w-full">
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-surface-variant flex flex-col md:flex-row items-center justify-between gap-lg relative overflow-hidden">
+<!-- Decorative background element -->
+<div class="absolute -right-16 -top-16 opacity-5 pointer-events-none text-primary">
+<span class="material-symbols-outlined" style="font-size: 200px;">history_edu</span>
+</div>
+<div class="flex flex-col gap-sm z-10 w-full md:w-auto">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg font-bold text-on-surface">Đến hạn hôm nay</h2>
+<p class="font-body-vn text-body-vn text-secondary">Bạn có 42 từ vựng và 5 ngữ pháp cần ôn tập để giữ vững trí nhớ.</p>
+<div class="flex items-center gap-4 mt-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">42 Từ vựng</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-xl" style="font-variation-settings: 'FILL' 1;">book</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 Ngữ pháp</span>
+</div>
+</div>
+</div>
+<button class="w-full md:w-auto bg-primary text-on-primary font-label-sm text-label-sm h-[56px] px-8 rounded-full shadow-md hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-2 z-10 active:scale-95 duration-200">
+                    Bắt đầu ôn tập
+                    <span class="material-symbols-outlined text-xl">play_arrow</span>
+</button>
+</div>
+</section>
+<!-- Memory Progress Bento Grid -->
+<section class="w-full space-y-md">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg font-bold text-on-surface">Tiến độ ghi nhớ</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-md">
+<!-- Cần ôn -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-surface-variant flex flex-col items-center justify-center gap-xs hover:border-primary-fixed transition-colors cursor-pointer group">
+<div class="relative w-16 h-16 flex items-center justify-center mb-2">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3"></path>
+<path class="text-error" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="60, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute material-symbols-outlined text-error group-hover:scale-110 transition-transform">schedule</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Cần ôn</span>
+<span class="font-body-vn text-body-vn font-bold text-on-surface-variant">47</span>
+</div>
+<!-- Đang học -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-surface-variant flex flex-col items-center justify-center gap-xs hover:border-primary-fixed transition-colors cursor-pointer group">
+<div class="relative w-16 h-16 flex items-center justify-center mb-2">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3"></path>
+<path class="text-outline" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="35, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute material-symbols-outlined text-outline group-hover:scale-110 transition-transform">menu_book</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Đang học</span>
+<span class="font-body-vn text-body-vn font-bold text-on-surface-variant">128</span>
+</div>
+<!-- Thành thạo -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-surface-variant flex flex-col items-center justify-center gap-xs hover:border-primary-fixed transition-colors cursor-pointer group">
+<div class="relative w-16 h-16 flex items-center justify-center mb-2">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3"></path>
+<path class="text-tertiary-container" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="85, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute material-symbols-outlined text-tertiary-container group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Thành thạo</span>
+<span class="font-body-vn text-body-vn font-bold text-on-surface-variant">540</span>
+</div>
+<!-- Hay sai -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-surface-variant flex flex-col items-center justify-center gap-xs hover:border-primary-fixed transition-colors cursor-pointer group">
+<div class="relative w-16 h-16 flex items-center justify-center mb-2">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3"></path>
+<path class="text-on-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="15, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute material-symbols-outlined text-on-surface-variant group-hover:scale-110 transition-transform">warning</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Hay sai</span>
+<span class="font-body-vn text-body-vn font-bold text-on-surface-variant">24</span>
+</div>
+</div>
+</section>
+<!-- Tools Section -->
+<section class="w-full space-y-md">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg font-bold text-on-surface">Công cụ ôn tập</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Tất cả từ vựng -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-surface-variant flex items-center gap-md hover:shadow-[0px_6px_24px_rgba(191,0,34,0.08)] hover:-translate-y-1 transition-all cursor-pointer">
+<div class="w-14 h-14 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant text-2xl">format_list_bulleted</span>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-sm text-label-sm text-on-surface font-bold text-lg mb-1">Tất cả từ vựng</h4>
+<p class="font-body-vn text-body-vn text-secondary text-sm">Duyệt và tìm kiếm toàn bộ kho từ vựng của bạn.</p>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<!-- Luyện tập lỗi sai -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-surface-variant flex items-center gap-md hover:shadow-[0px_6px_24px_rgba(191,0,34,0.08)] hover:-translate-y-1 transition-all cursor-pointer">
+<div class="w-14 h-14 rounded-full bg-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-error text-2xl">healing</span>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-sm text-label-sm text-on-surface font-bold text-lg mb-1">Luyện tập lỗi sai</h4>
+<p class="font-body-vn text-body-vn text-secondary text-sm">Tập trung vào những từ bạn thường trả lời sai.</p>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-lowest border-t border-outline-variant shadow-[0px_-4px_20px_rgba(0,0,0,0.04)] rounded-t-xl md:hidden">
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim opacity-70 hover:opacity-100 transition-opacity active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">school</span>
+<span class="font-label-sm text-label-sm">Học</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/10 rounded-full px-4 py-1 hover:opacity-100 transition-opacity active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">history_edu</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Ôn tập</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim opacity-70 hover:opacity-100 transition-opacity active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">psychology</span>
+<span class="font-label-sm text-label-sm">AI Tutor</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim opacity-70 hover:opacity-100 transition-opacity active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">play_circle</span>
+<span class="font-label-sm text-label-sm">Video</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim opacity-70 hover:opacity-100 transition-opacity active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-label-sm">Cá nhân</span>
+</button>
+</nav>
+<!-- Desktop Navigation Overlay (Simulated Left Nav if needed for broader app context, but per instructions relying on Top Nav for Web) -->
+</body></html>

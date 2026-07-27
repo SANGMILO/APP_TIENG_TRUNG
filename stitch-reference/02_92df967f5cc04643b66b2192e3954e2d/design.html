@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Học Tiếng Trung - Video Learning</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@700&amp;family=Noto+Sans+SC:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#bf0022",
+                      "inverse-primary": "#ffb3af",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#926e6c",
+                      "on-surface": "#1b1b1b",
+                      "inverse-on-surface": "#f3f0ef",
+                      "surface-container-high": "#eae7e7",
+                      "on-secondary-container": "#626361",
+                      "on-tertiary-container": "#bcfcd9",
+                      "primary-container": "#d90429",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#002114",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#930018",
+                      "secondary-container": "#e0e0dd",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#0e5138",
+                      "on-secondary-fixed": "#1a1c1a",
+                      "tertiary-fixed": "#b1f0ce",
+                      "tertiary-fixed-dim": "#95d4b3",
+                      "surface": "#fcf9f8",
+                      "tertiary-container": "#3b775b",
+                      "inverse-surface": "#313030",
+                      "surface-dim": "#dcd9d9",
+                      "secondary": "#5e5f5d",
+                      "tertiary": "#205e44",
+                      "on-primary": "#ffffff",
+                      "primary": "#ac001e",
+                      "error-container": "#ffdad6",
+                      "surface-bright": "#fcf9f8",
+                      "background": "#fcf9f8",
+                      "surface-container-low": "#f6f3f2",
+                      "on-secondary-fixed-variant": "#464745",
+                      "on-primary-fixed": "#410005",
+                      "secondary-fixed": "#e3e2e0",
+                      "on-surface-variant": "#5d3f3d",
+                      "on-tertiary": "#ffffff",
+                      "outline-variant": "#e7bcba",
+                      "surface-container": "#f0eded",
+                      "surface-variant": "#e5e2e1",
+                      "on-primary-container": "#ffeae8",
+                      "surface-container-highest": "#e5e2e1",
+                      "on-background": "#1b1b1b",
+                      "primary-fixed-dim": "#ffb3af",
+                      "primary-fixed": "#ffdad7",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#c7c6c4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "sm": "12px",
+                      "md": "16px",
+                      "container-margin": "20px",
+                      "xs": "8px",
+                      "gutter": "16px",
+                      "lg": "24px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Montserrat"
+                      ],
+                      "display-hanzi": [
+                              "Noto Sans SC"
+                      ],
+                      "headline-lg": [
+                              "Montserrat"
+                      ],
+                      "pinyin-md": [
+                              "Inter"
+                      ],
+                      "body-vn": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-hanzi": [
+                              "64px",
+                              {
+                                      "lineHeight": "80px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "pinyin-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-vn": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-vn min-h-screen pb-[90px] md:pb-0">
+<!-- Desktop Navigation (Hidden on Mobile) -->
+<header class="hidden md:flex justify-between items-center px-container-margin py-sm w-full max-w-full mx-auto bg-surface dark:bg-background shadow-[0px_4px_20px_rgba(191,0,34,0.05)] w-full top-0 sticky z-40">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-2xl" data-icon="local_fire_department">local_fire_department</span>
+<h1 class="text-primary font-headline-lg font-bold tracking-tight">Học Tiếng Trung</h1>
+</div>
+<nav class="flex gap-8">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low transition-colors px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">Học</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low transition-colors px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">Ôn tập</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low transition-colors px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">AI Tutor</a>
+<a class="text-primary dark:text-inverse-primary bg-primary-container/10 px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">Video</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low transition-colors px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">Cá nhân</a>
+</nav>
+<div class="text-primary dark:text-primary-fixed-dim font-bold font-label-sm text-label-sm">
+            500 XP
+        </div>
+</header>
+<!-- Mobile Top App Bar -->
+<header class="md:hidden flex justify-between items-center px-container-margin py-sm w-full max-w-full mx-auto bg-surface dark:bg-background shadow-[0px_4px_20px_rgba(191,0,34,0.05)] w-full top-0 sticky z-40">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-2xl" data-icon="local_fire_department">local_fire_department</span>
+<h1 class="text-primary font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tight">Học Tiếng Trung</h1>
+<div class="text-primary dark:text-primary-fixed-dim font-bold font-label-sm text-label-sm">
+            500 XP
+        </div>
+</header>
+<main class="max-w-4xl mx-auto px-container-margin py-lg space-y-xl">
+<!-- Search Bar -->
+<section>
+<div class="relative flex items-center w-full h-[56px] bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-outline-variant/30 focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined absolute left-md text-secondary" data-icon="search">search</span>
+<input class="w-full h-full bg-transparent pl-12 pr-4 text-on-surface font-body-vn outline-none placeholder:text-secondary/70" placeholder="Tìm kiếm video, từ vựng..." type="text"/>
+</div>
+</section>
+<!-- Category Tabs -->
+<section class="flex gap-sm overflow-x-auto pb-2 scrollbar-hide -mx-container-margin px-container-margin md:mx-0 md:px-0">
+<button class="whitespace-nowrap px-md py-2 rounded-full bg-primary text-on-primary font-label-sm text-label-sm shadow-sm">Tất cả</button>
+<button class="whitespace-nowrap px-md py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface font-label-sm text-label-sm shadow-[0px_4px_20px_rgba(191,0,34,0.05)]">Phim ảnh</button>
+<button class="whitespace-nowrap px-md py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface font-label-sm text-label-sm shadow-[0px_4px_20px_rgba(191,0,34,0.05)]">Tin tức</button>
+<button class="whitespace-nowrap px-md py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface font-label-sm text-label-sm shadow-[0px_4px_20px_rgba(191,0,34,0.05)]">Bài hát</button>
+<button class="whitespace-nowrap px-md py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface font-label-sm text-label-sm shadow-[0px_4px_20px_rgba(191,0,34,0.05)]">Vlog</button>
+</section>
+<!-- Hero Featured Video -->
+<section>
+<div class="relative w-full h-[240px] md:h-[320px] rounded-xl overflow-hidden shadow-[0px_4px_20px_rgba(191,0,34,0.1)] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="A cinematic still from a high-quality Chinese drama series, featuring elegant traditional architecture and warm ambient lighting. The scene is bright and sophisticated, suitable for a premium language learning platform. Soft ivory tones mixed with vibrant reds." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDHHeUnW88oQeueUHMUMQsT-RRGO8NZkjlYCL_vaJzlJRJ_5MMTYe5_-7h9yUpCCVFjQr5oTEVruGB_FQWF0QcKKgL5Gt1zRctdAUYTqBl9hm1vmyiUBYArhyfZHYpH2dv7Rvder2tOUp0GuFVYXK2XJ64zx-qLAg_-Aorwk966K6Sk4QzxeuqyZPG0MrHJKSSuiipjhHcivzN4fVL95FwfjxHfXbsUvAprpvpQe-RGF0f3ClGAYSX3pY12JRu4UR-98OZ6n083KWI')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/80 via-on-background/20 to-transparent"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-16 h-16 rounded-full bg-primary/90 text-on-primary flex items-center justify-center backdrop-blur-sm shadow-lg group-hover:bg-primary transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-3xl" data-icon="play_arrow" data-weight="fill" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<div class="absolute bottom-md left-md right-md text-on-primary">
+<span class="inline-block px-2 py-1 rounded bg-tertiary-container/80 text-on-tertiary-container font-label-sm text-[10px] uppercase tracking-wider mb-2 backdrop-blur-md">Nổi bật hôm nay</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg font-bold line-clamp-2">Học qua phim: Tây Du Ký (Tập 1)</h2>
+<div class="flex items-center gap-3 mt-2 text-on-primary/80 font-label-sm text-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> 45 phút</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="bar_chart">bar_chart</span> HSK 3-4</span>
+</div>
+</div>
+<div class="absolute top-md right-md bg-surface/90 text-primary px-3 py-1.5 rounded-full flex items-center gap-1.5 font-label-sm text-label-sm backdrop-blur-md shadow-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="timelapse">timelapse</span>
+                    Tiếp tục xem (12:45)
+                </div>
+</div>
+</section>
+<!-- Video Feed List -->
+<section>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface mb-md">Gợi ý cho bạn</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Video Item 1 -->
+<div class="flex gap-md group cursor-pointer bg-surface-container-lowest p-sm rounded-xl shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-outline-variant/20 hover:border-outline-variant/60 transition-colors">
+<div class="relative w-32 md:w-40 h-24 md:h-28 rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="A modern lifestyle vlog thumbnail showing a young professional ordering coffee in a brightly lit, chic Shanghai cafe. Warm ivory and subtle gold tones, very clean and inviting premium look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjpyqTb-fFlvvYMrIbP0bYCQgSFNad4MpIFf54Ykpei-08O8E1P_xsXXoQ80gtnFn7a59w0nHHVO_qAGMCrPPdAdcul85eUOvMrMOEM-oObyVZUQYikj2VI0FOqxdAgkryY9ovLUNqF5QcYAlp4DTx0TMm2WMJ-yqNzeTyx9OCYJOJQn0JtBQ1LkfsbwQGT3oqsq00he3As8ithWzTJnORF2de-7PKT82R6eNc6XNk9A6Fn3ZN4MluqWkeT0bxN8Ioj68pFBJKTjw"/>
+<div class="absolute bottom-1 right-1 bg-on-background/80 text-on-primary px-1.5 py-0.5 rounded text-[10px] font-semibold backdrop-blur-sm">
+                            08:20
+                        </div>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<span class="inline-block px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-[10px] mb-1">Vlog</span>
+<h4 class="font-body-vn font-semibold text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">Cách gọi đồ uống tại quán cà phê Trung Quốc</h4>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-tertiary/10 text-tertiary font-label-sm text-[10px] font-bold">HSK 2</span>
+<span class="text-secondary text-[12px]">1.2k lượt xem</span>
+</div>
+</div>
+</div>
+<!-- Video Item 2 -->
+<div class="flex gap-md group cursor-pointer bg-surface-container-lowest p-sm rounded-xl shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-outline-variant/20 hover:border-outline-variant/60 transition-colors">
+<div class="relative w-32 md:w-40 h-24 md:h-28 rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="A beautifully lit studio shot of a Chinese news anchor delivering a broadcast. Professional, clean environment with soft lighting, matching the premium educational platform style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD35RxwmTqcr4PpDl4vi7teyb0kJv67F230aQ8BfqHFTTnSMiHv0AlLsAJ45SJ1eUwP6ZBPh8ojRiwEL7yywGhkxGBoEIotuz22tRYAEmlwVkoABRRgxUUfE7HtpDGWtn-KgVZxS8wYrkcqbsCl5AyhIwWwjBXD8Q8Afgo5cLecw46ahccSCyKgXjjtkMQ7WEVJ8AJEMbq38m5bU-01VOiMyBSd5SE14SSaW9Y7ERlbqu9h_QYAjmaU9syCf8-gwZ_Naxrp_JDmjLw"/>
+<div class="absolute bottom-1 right-1 bg-on-background/80 text-on-primary px-1.5 py-0.5 rounded text-[10px] font-semibold backdrop-blur-sm">
+                            15:45
+                        </div>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<span class="inline-block px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-[10px] mb-1">Tin tức</span>
+<h4 class="font-body-vn font-semibold text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">Bản tin công nghệ: AI trong đời sống hàng ngày</h4>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-tertiary/10 text-tertiary font-label-sm text-[10px] font-bold">HSK 5</span>
+<span class="text-secondary text-[12px]">850 lượt xem</span>
+</div>
+</div>
+</div>
+<!-- Video Item 3 -->
+<div class="flex gap-md group cursor-pointer bg-surface-container-lowest p-sm rounded-xl shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-outline-variant/20 hover:border-outline-variant/60 transition-colors">
+<div class="relative w-32 md:w-40 h-24 md:h-28 rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="A stylized music video scene featuring a singer on a gently lit stage with soft warm ivory and gold accents. The atmosphere is romantic and elegant, suitable for learning through songs." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRhmM-HQZgL5kY-uAESySByFn7MwjkNleiwj3eQN_XkJ8pgOSqEzSczjUzTDCnkXUZc7o-hpyXBpKwkrVqOyYro7H3EXgyr2U2AiMIUljqNW0ab3K9-45MrdyMxhpQ9E357Od4HEYwusR8E66D2ZKcYZ2nAk8cj6KCuq6WlORji9_Lws2oQjLBK6T-bWhhCo6VzraZsTiIpy1s-Tmwxigwc-RVW8hW2UccEgzQTOxeOSuugbnRJr3K7Rdx-A6WEEQWLOSj2FnwnZU"/>
+<div class="absolute bottom-1 right-1 bg-on-background/80 text-on-primary px-1.5 py-0.5 rounded text-[10px] font-semibold backdrop-blur-sm">
+                            04:30
+                        </div>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<span class="inline-block px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-[10px] mb-1">Bài hát</span>
+<h4 class="font-body-vn font-semibold text-on-surface line-clamp-2 leading-snug group-hover:text-primary transition-colors">Ánh trăng nói hộ lòng tôi - Học từ vựng lãng mạn</h4>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-tertiary/10 text-tertiary font-label-sm text-[10px] font-bold">HSK 3</span>
+<span class="text-secondary text-[12px]">3.4k lượt xem</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Mobile Bottom Nav Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-lowest shadow-[0px_-4px_20px_rgba(0,0,0,0.04)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim opacity-70 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-sm text-label-sm mt-1">Học</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim opacity-70 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-label-sm text-label-sm mt-1">Ôn tập</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim opacity-70 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-sm text-label-sm mt-1">AI Tutor</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/10 rounded-full px-4 py-1 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="play_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span class="font-label-sm text-label-sm mt-1">Video</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim opacity-70 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Cá nhân</span>
+</a>
+</nav>
+</body></html>

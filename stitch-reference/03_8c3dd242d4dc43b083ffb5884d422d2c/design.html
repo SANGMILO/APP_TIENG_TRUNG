@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Tutor - Học Tiếng Trung</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@700&amp;family=Noto+Sans+SC:wght@500&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed": "#002114",
+                      "inverse-on-surface": "#f3f0ef",
+                      "surface-tint": "#bf0022",
+                      "surface-dim": "#dcd9d9",
+                      "tertiary-container": "#3b775b",
+                      "on-surface": "#1b1b1b",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#c7c6c4",
+                      "surface-container-low": "#f6f3f2",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#f0eded",
+                      "surface-bright": "#fcf9f8",
+                      "on-secondary": "#ffffff",
+                      "inverse-surface": "#313030",
+                      "tertiary-fixed": "#b1f0ce",
+                      "on-secondary-fixed-variant": "#464745",
+                      "secondary": "#5e5f5d",
+                      "on-secondary-fixed": "#1a1c1a",
+                      "surface": "#fcf9f8",
+                      "on-primary-fixed-variant": "#930018",
+                      "on-surface-variant": "#5d3f3d",
+                      "on-tertiary-container": "#bcfcd9",
+                      "primary": "#ac001e",
+                      "outline-variant": "#e7bcba",
+                      "surface-container-highest": "#e5e2e1",
+                      "outline": "#926e6c",
+                      "primary-fixed-dim": "#ffb3af",
+                      "inverse-primary": "#ffb3af",
+                      "tertiary-fixed-dim": "#95d4b3",
+                      "primary-fixed": "#ffdad7",
+                      "on-primary-fixed": "#410005",
+                      "on-background": "#1b1b1b",
+                      "surface-container-high": "#eae7e7",
+                      "on-tertiary-fixed-variant": "#0e5138",
+                      "on-primary-container": "#ffeae8",
+                      "primary-container": "#d90429",
+                      "on-tertiary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "on-secondary-container": "#626361",
+                      "on-primary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#e5e2e1",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#e3e2e0",
+                      "tertiary": "#205e44",
+                      "secondary-container": "#e0e0dd",
+                      "background": "#fcf9f8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "sm": "12px",
+                      "xl": "32px",
+                      "gutter": "16px",
+                      "container-margin": "20px",
+                      "xs": "8px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Montserrat"
+                      ],
+                      "body-vn": [
+                              "Inter"
+                      ],
+                      "display-hanzi": [
+                              "Noto Sans SC"
+                      ],
+                      "pinyin-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Montserrat"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-vn": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-hanzi": [
+                              "64px",
+                              {
+                                      "lineHeight": "80px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "pinyin-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              },
+              animation: {
+                  'pulse-soft': 'pulse-soft 2s infinite ease-in-out',
+                  'shimmer': 'shimmer 2s infinite linear',
+                  'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+              },
+              keyframes: {
+                  'pulse-soft': {
+                      '0%, 100%': { transform: 'scale(1)', boxShadow: '0 4px 20px rgba(191,0,34,0.2)' },
+                      '50%': { transform: 'scale(1.02)', boxShadow: '0 8px 30px rgba(191,0,34,0.4)' },
+                  },
+                  'shimmer': {
+                      '0%': { backgroundPosition: '-1000px 0' },
+                      '100%': { backgroundPosition: '1000px 0' }
+                  },
+                  'fadeInUp': {
+                      '0%': { opacity: '0', transform: 'translateY(20px)' },
+                      '100%': { opacity: '1', transform: 'translateY(0)' }
+                  }
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #ac001e 0%, #d90429 100%);
+        }
+        .gold-accent {
+            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stagger-1 { animation-delay: 0.1s; opacity: 0; }
+        .stagger-2 { animation-delay: 0.2s; opacity: 0; }
+        .stagger-3 { animation-delay: 0.3s; opacity: 0; }
+        
+        .premium-hover {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .premium-hover:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(191, 0, 34, 0.05);
+        }
+        
+        .skeleton {
+            background: #f6f3f2;
+            background-image: linear-gradient(to right, #f6f3f2 0%, #e5e2e1 20%, #f6f3f2 40%, #f6f3f2 100%);
+            background-repeat: no-repeat;
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+
+        .content-loaded .skeleton-hide {
+            opacity: 1;
+            transition: opacity 0.5s ease-in;
+        }
+        .content-loaded .skeleton-show {
+            display: none;
+        }
+        
+        .skeleton-hide { opacity: 0; }
+        .skeleton-show { display: block; }
+        
+        .glass-nav {
+            background: rgba(252, 249, 248, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(229, 226, 225, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<script>
+      document.addEventListener("DOMContentLoaded", () => {
+          setTimeout(() => {
+              document.body.classList.add('content-loaded');
+          }, 1000); // Simulate loading
+
+          // Setup Three.js Shader
+          const container = document.getElementById('ai-shader-container');
+          if (container) {
+              const scene = new THREE.Scene();
+              const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+              camera.position.z = 1;
+              const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+              renderer.setSize(container.clientWidth, container.clientHeight);
+              container.appendChild(renderer.domElement);
+
+              const geometry = new THREE.PlaneGeometry(2, 2);
+              
+              const material = new THREE.ShaderMaterial({
+                  uniforms: {
+                      u_time: { value: 0.0 },
+                      u_resolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) }
+                  },
+                  vertexShader: `
+                      varying vec2 v_texCoord;
+                      void main() {
+                          v_texCoord = uv;
+                          gl_Position = vec4(position, 1.0);
+                      }
+                  `,
+                  fragmentShader: `
+                      precision highp float;
+                      varying vec2 v_texCoord;
+                      uniform float u_time;
+                      uniform vec2 u_resolution;
+
+                      void main() {
+                          vec2 uv = v_texCoord;
+                          float time = u_time * 0.5;
+                          
+                          // Create a soft, breathing AI aura
+                          vec2 center = vec2(0.5, 0.5);
+                          float d = length(uv - center);
+                          
+                          // Multi-layered noise for fluid motion
+                          float wave = sin(d * 10.0 - time) * 0.1;
+                          wave += sin(uv.x * 5.0 + time * 0.8) * 0.05;
+                          wave += cos(uv.y * 4.0 - time * 1.2) * 0.05;
+                          
+                          float pulse = 0.5 + 0.5 * sin(time * 0.7);
+                          float alpha = smoothstep(0.4 + wave, 0.2 + wave, d);
+                          alpha *= (0.3 + 0.2 * pulse);
+                          
+                          // Hanzi Premium Red (#D90429) softened for glow
+                          vec3 color = vec3(0.85, 0.01, 0.16); 
+                          
+                          gl_FragColor = vec4(color, alpha);
+                      }
+                  `,
+                  transparent: true
+              });
+
+              const mesh = new THREE.Mesh(geometry, material);
+              scene.add(mesh);
+
+              let time = 0;
+              function animate() {
+                  requestAnimationFrame(animate);
+                  time += 0.05;
+                  material.uniforms.u_time.value = time;
+                  renderer.render(scene, camera);
+              }
+              animate();
+
+              window.addEventListener('resize', () => {
+                  renderer.setSize(container.clientWidth, container.clientHeight);
+                  material.uniforms.u_resolution.value.set(container.clientWidth, container.clientHeight);
+              });
+          }
+      });
+  </script>
+</head>
+<body class="bg-background text-on-background font-body-vn antialiased pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface shadow-[0px_4px_20px_rgba(191,0,34,0.05)]">
+<div class="flex justify-between items-center px-container-margin py-sm w-full max-w-full mx-auto md:hidden">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">local_fire_department</span>
+<span class="text-primary font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tight">Học Tiếng Trung</span>
+</div>
+<button class="text-primary font-label-sm text-label-sm font-semibold flex items-center gap-1 active:scale-95 duration-200">
+                500 XP <span class="material-symbols-outlined text-sm">stars</span>
+</button>
+</div>
+<!-- Desktop Nav Shell (Hidden on mobile) -->
+<div class="hidden md:flex justify-between items-center px-container-margin py-sm max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">local_fire_department</span>
+<span class="text-primary font-headline-lg text-headline-lg font-bold tracking-tight">Học Tiếng Trung</span>
+</div>
+<nav class="flex gap-lg">
+<a class="text-secondary hover:bg-surface-container-low transition-colors px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">Học</a>
+<a class="text-secondary hover:bg-surface-container-low transition-colors px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">Ôn tập</a>
+<a class="text-primary bg-primary-container/10 px-4 py-2 rounded-full font-label-sm text-label-sm flex items-center gap-2" href="#"><span class="material-symbols-outlined text-sm">psychology</span> AI Tutor</a>
+<a class="text-secondary hover:bg-surface-container-low transition-colors px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">Video</a>
+<a class="text-secondary hover:bg-surface-container-low transition-colors px-4 py-2 rounded-full font-label-sm text-label-sm" href="#">Cá nhân</a>
+</nav>
+<button class="text-primary font-label-sm text-label-sm font-semibold flex items-center gap-1 border border-outline-variant px-4 py-2 rounded-full hover:bg-surface-container-low transition-colors">
+                500 XP <span class="material-symbols-outlined text-sm">stars</span>
+</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin pt-lg pb-xl space-y-xl">
+<!-- Hero Section -->
+<section class="relative rounded-2xl overflow-hidden bg-surface-container-low shadow-[0px_4px_20px_rgba(191,0,34,0.05)] border border-outline-variant/30 flex flex-col md:flex-row items-center p-lg md:p-xl gap-lg skeleton-hide animate-fade-in-up">
+<div class="flex-1 space-y-md z-10">
+<div class="inline-flex items-center gap-2 bg-white/80 px-3 py-1.5 rounded-full border border-[#E8E6DF] shadow-sm">
+<span class="material-symbols-outlined text-primary text-sm">verified</span>
+<span class="font-label-sm text-label-sm text-on-surface">Hanzi Premium</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface">
+                    Trò chuyện cùng <span class="text-primary">AI</span>
+</h1>
+<p class="text-secondary max-w-md">Nâng cao kỹ năng giao tiếp với gia sư AI 24/7. Nhận phản hồi phát âm ngay lập tức.</p>
+<button class="ai-gradient text-on-primary w-full md:w-auto h-[56px] px-8 rounded-xl font-label-sm text-label-sm flex items-center justify-center gap-3 animate-pulse-soft hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
+                    Bắt đầu hội thoại
+                </button>
+</div>
+<div class="w-full md:w-1/2 h-64 md:h-80 relative rounded-xl overflow-hidden glass-card">
+<div class="absolute inset-0 z-0" id="ai-shader-container"></div>
+<img class="object-cover w-full h-full opacity-80 mix-blend-multiply relative z-10" data-alt="A modern, high-end illustration of a friendly AI robot persona in a sophisticated ivory and cinnabar red environment, designed in a modern corporate style with tactile refinement, emphasizing language learning." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlL0iTr08MGtHlVzprXxw8WhFa_BFpynhvPIousrlPFC3HGyWslYvhsQ4Y-koGE31qWpqpDpfKoZr7WVMw2xTG3P8auRSsCAkuaJug7x7PrmkDPyl6ZRsS0YRqshYDIpJpMcroYMKzdCrCXlFtSr7pflEnR0_ILO8snleX_M6rNmMeHE3WTjA5XCD6Qg-zKyR_Wre2PtXVN4bHzly5wLIncmd3eUp3cFUsApi_SnZELxmWqZjCZCW7qHYcZdTcBJZYAo4DvQYKa90"/>
+<div class="absolute inset-0 flex items-center justify-center z-20">
+<!-- Placeholder for AI Voice Wave Animation -->
+<div class="flex items-center gap-1">
+<div class="w-1.5 h-8 bg-primary rounded-full animate-[pulse_1s_ease-in-out_infinite]"></div>
+<div class="w-1.5 h-16 bg-primary rounded-full animate-[pulse_1.2s_ease-in-out_infinite_0.1s]"></div>
+<div class="w-1.5 h-12 bg-primary rounded-full animate-[pulse_0.9s_ease-in-out_infinite_0.2s]"></div>
+<div class="w-1.5 h-20 bg-primary rounded-full animate-[pulse_1.5s_ease-in-out_infinite_0.3s]"></div>
+<div class="w-1.5 h-10 bg-primary rounded-full animate-[pulse_1.1s_ease-in-out_infinite_0.4s]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Skeleton Hero -->
+<section class="skeleton-show h-80 rounded-2xl skeleton mb-xl"></section>
+<!-- Conversation Scenarios -->
+<section class="space-y-md skeleton-hide animate-fade-in-up stagger-1">
+<h2 class="font-headline-lg-mobile text-[24px] font-bold text-on-surface">Tình huống giao tiếp</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md md:gap-lg">
+<!-- Card 1 -->
+<div class="bg-surface rounded-xl p-md border border-[#E8E6DF] shadow-[0px_4px_20px_rgba(191,0,34,0.05)] premium-hover cursor-pointer group">
+<div class="flex justify-between items-start mb-md">
+<div class="bg-tertiary-fixed/30 text-tertiary px-2 py-1 rounded-md font-label-sm text-[10px]">Dễ</div>
+<div class="text-primary font-label-sm text-sm flex items-center gap-1">+50 <span class="material-symbols-outlined text-xs">bolt</span></div>
+</div>
+<div class="w-12 h-12 bg-surface-container-low rounded-full flex items-center justify-center mb-md group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-on-surface group-hover:text-primary">restaurant</span>
+</div>
+<h3 class="font-label-sm text-[16px] text-on-surface mb-1">Tại nhà hàng</h3>
+<p class="text-secondary text-sm">Gọi món, thanh toán, hỏi đường.</p>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface rounded-xl p-md border border-[#E8E6DF] shadow-[0px_4px_20px_rgba(191,0,34,0.05)] premium-hover cursor-pointer group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-bl-full"></div>
+<div class="flex justify-between items-start mb-md relative z-10">
+<div class="bg-primary/10 text-primary px-2 py-1 rounded-md font-label-sm text-[10px]">Khó</div>
+<div class="text-primary font-label-sm text-sm flex items-center gap-1">+150 <span class="material-symbols-outlined text-xs">bolt</span></div>
+</div>
+<div class="w-12 h-12 bg-surface-container-low rounded-full flex items-center justify-center mb-md group-hover:bg-primary/10 transition-colors relative z-10">
+<span class="material-symbols-outlined text-on-surface group-hover:text-primary">work</span>
+</div>
+<h3 class="font-label-sm text-[16px] text-on-surface mb-1 relative z-10">Phỏng vấn xin việc</h3>
+<p class="text-secondary text-sm relative z-10">Giới thiệu bản thân, kỹ năng, kinh nghiệm.</p>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface rounded-xl p-md border border-[#E8E6DF] shadow-[0px_4px_20px_rgba(191,0,34,0.05)] premium-hover cursor-pointer group">
+<div class="flex justify-between items-start mb-md">
+<div class="bg-surface-variant text-on-surface-variant px-2 py-1 rounded-md font-label-sm text-[10px]">Trung bình</div>
+<div class="text-primary font-label-sm text-sm flex items-center gap-1">+100 <span class="material-symbols-outlined text-xs">bolt</span></div>
+</div>
+<div class="w-12 h-12 bg-surface-container-low rounded-full flex items-center justify-center mb-md group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-on-surface group-hover:text-primary">flight_takeoff</span>
+</div>
+<h3 class="font-label-sm text-[16px] text-on-surface mb-1">Đi du lịch</h3>
+<p class="text-secondary text-sm">Hỏi đường, đặt vé, mua sắm.</p>
+</div>
+</div>
+</section>
+<!-- Skeleton Scenarios -->
+<section class="skeleton-show grid grid-cols-1 md:grid-cols-3 gap-md md:gap-lg mb-xl">
+<div class="h-40 rounded-xl skeleton"></div>
+<div class="h-40 rounded-xl skeleton"></div>
+<div class="h-40 rounded-xl skeleton"></div>
+</section>
+<!-- Pronunciation Practice -->
+<section class="bg-surface rounded-2xl p-lg border border-[#E8E6DF] shadow-[0px_4px_20px_rgba(191,0,34,0.05)] skeleton-hide animate-fade-in-up stagger-2">
+<div class="flex items-center justify-between mb-lg">
+<h2 class="font-headline-lg-mobile text-[24px] font-bold text-on-surface">Luyện phát âm</h2>
+<button class="text-primary font-label-sm text-label-sm hover:underline">Xem tất cả</button>
+</div>
+<div class="flex flex-col gap-md">
+<!-- Item 1 -->
+<div class="flex items-center justify-between p-sm rounded-lg premium-hover border border-transparent hover:border-outline-variant/30 hover:bg-surface-container-low">
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div>
+<div class="font-display-hanzi text-2xl text-on-surface">你好</div>
+<div class="font-pinyin-md text-sm text-secondary">nǐ hǎo</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="text-tertiary font-bold font-label-sm">98%</div>
+<div class="text-xs text-secondary">Tuyệt vời</div>
+</div>
+</div>
+<div class="h-[1px] bg-outline-variant/30 w-full"></div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between p-sm rounded-lg premium-hover border border-transparent hover:border-outline-variant/30 hover:bg-surface-container-low">
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div>
+<div class="font-display-hanzi text-2xl text-on-surface">谢谢</div>
+<div class="font-pinyin-md text-sm text-secondary">xièxie</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="text-primary font-bold font-label-sm">75%</div>
+<div class="text-xs text-secondary">Cần cải thiện</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Skeleton Practice -->
+<section class="skeleton-show h-48 rounded-2xl skeleton"></section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-4 left-4 right-4 z-50 flex justify-around items-center px-4 py-3 glass-nav shadow-lg rounded-2xl">
+<a class="flex flex-col items-center justify-center text-secondary opacity-70 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1 text-2xl">school</span>
+<span class="font-label-sm text-label-sm">Học</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary opacity-70 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1 text-2xl">history_edu</span>
+<span class="font-label-sm text-label-sm">Ôn tập</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/10 rounded-full px-4 py-1 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1 text-2xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-label-sm text-label-sm">AI Tutor</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary opacity-70 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1 text-2xl">play_circle</span>
+<span class="font-label-sm text-label-sm">Video</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary opacity-70 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1 text-2xl">person</span>
+<span class="font-label-sm text-label-sm">Cá nhân</span>
+</a>
+</nav>
+</body></html>

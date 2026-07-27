@@ -1,0 +1,1 @@
+export { SpeakingExercise } from './SpeakingExercise';
