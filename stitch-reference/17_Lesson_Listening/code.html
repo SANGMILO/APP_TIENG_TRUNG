@@ -1,0 +1,254 @@
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Nghe và chọn đáp án đúng</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@700&amp;family=Noto+Sans+SC:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c7c6c4",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e5e2e1",
+                        "primary": "#ac001e",
+                        "on-surface": "#1b1b1b",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#e3e2e0",
+                        "primary-fixed-dim": "#ffb3af",
+                        "tertiary-fixed": "#b1f0ce",
+                        "surface-container-low": "#f6f3f2",
+                        "surface-bright": "#fcf9f8",
+                        "primary-fixed": "#ffdad7",
+                        "inverse-primary": "#ffb3af",
+                        "surface": "#fcf9f8",
+                        "surface-dim": "#dcd9d9",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#410005",
+                        "inverse-surface": "#313030",
+                        "tertiary-fixed-dim": "#95d4b3",
+                        "on-secondary-fixed-variant": "#464745",
+                        "surface-variant": "#e5e2e1",
+                        "error": "#ba1a1a",
+                        "tertiary": "#205e44",
+                        "secondary-container": "#e0e0dd",
+                        "surface-container-high": "#eae7e7",
+                        "primary-container": "#d90429",
+                        "tertiary-container": "#3b775b",
+                        "outline": "#926e6c",
+                        "on-tertiary-fixed": "#002114",
+                        "surface-container": "#f0eded",
+                        "on-tertiary-container": "#bcfcd9",
+                        "on-primary-container": "#ffeae8",
+                        "on-primary-fixed-variant": "#930018",
+                        "background": "#fcf9f8",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-background": "#1b1b1b",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#bf0022",
+                        "on-secondary-fixed": "#1a1c1a",
+                        "on-secondary-container": "#626361",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#5e5f5d",
+                        "on-tertiary-fixed-variant": "#0e5138",
+                        "outline-variant": "#e7bcba",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#5d3f3d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "container-margin": "20px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "display-hanzi": ["Noto Sans SC"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "headline-lg": ["Montserrat"],
+                        "pinyin-md": ["Inter"],
+                        "body-vn": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "display-hanzi": ["64px", { "lineHeight": "80px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "pinyin-md": ["18px", { "lineHeight": "24px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-vn": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+        
+        /* Subtle pulsing animation for audio playback */
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .audio-playing .play-icon { animation: pulse-soft 2s infinite; }
+        
+        /* Audio waveform simulation */
+        .waveform-bar {
+            width: 4px;
+            background-color: theme('colors.primary');
+            border-radius: 9999px;
+            transition: height 0.2s ease-in-out;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+<!-- TopAppBar (Transactional - Hidden Navigation on main flow, but kept as header per JSON) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-container-margin h-14 bg-surface dark:bg-surface-dim flat no shadows"><button class="p-2 -ml-2 text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors rounded-full active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg font-bold text-primary dark:text-primary-fixed-dim text-center flex-1 truncate px-4">
+            Bài học
+</h1>
+<button class="p-2 -mr-2 text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors rounded-full active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined">more_horiz</span>
+</button></header>
+<!-- Main Content Canvas -->
+<main class="flex-1 pt-14 pb-24 px-container-margin max-w-2xl mx-auto w-full flex flex-col">
+<!-- Progress Bar (Contextual addition for learning flow) -->
+<div class="w-full h-2 bg-tertiary-fixed rounded-full my-6 overflow-hidden">
+<div class="h-full bg-tertiary rounded-full w-3/4"></div>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-xl text-center">
+            Nghe và chọn đáp án đúng
+        </h2>
+<!-- Audio Player Section -->
+<div class="flex flex-col items-center justify-center bg-surface-container-lowest rounded-xl p-xl shadow-[0px_4px_20px_rgba(172,0,30,0.05)] border border-surface-container-highest mb-xl relative overflow-hidden group cursor-pointer" id="audioPlayer"><!-- Decorative background blob -->
+<div class="absolute inset-0 opacity-10 bg-gradient-to-tr from-primary-container to-transparent rounded-xl pointer-events-none"></div>
+<!-- Play Button Container -->
+<div class="w-28 h-28 bg-primary rounded-full flex items-center justify-center shadow-xl relative z-10 mb-lg transition-transform hover:scale-105 active:scale-95">
+<span class="material-symbols-outlined fill text-on-primary text-6xl play-icon">play_arrow</span>
+</div>
+<!-- Fake Waveform -->
+<div class="flex items-end justify-center gap-1 h-12 w-full max-w-[200px] mb-md" id="waveform">
+<div class="waveform-bar h-4"></div>
+<div class="waveform-bar h-8"></div>
+<div class="waveform-bar h-3"></div>
+<div class="waveform-bar h-10"></div>
+<div class="waveform-bar h-6"></div>
+<div class="waveform-bar h-12"></div>
+<div class="waveform-bar h-7"></div>
+<div class="waveform-bar h-4"></div>
+<div class="waveform-bar h-9"></div>
+<div class="waveform-bar h-5"></div>
+</div>
+<p class="font-body-vn text-body-vn text-secondary text-center">Nhấn để nghe</p></div>
+<!-- Question Text -->
+<p class="font-body-vn text-body-vn text-on-surface mb-lg text-center">
+            Bạn nghe thấy câu nào?
+        </p>
+<!-- Answer Options (Bento-style grid) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md mb-xl flex-1">
+<!-- Option A -->
+<label class="relative flex items-center p-lg cursor-pointer rounded-xl bg-surface-container-lowest border border-surface-container-highest shadow-[0px_4px_20px_rgba(172,0,30,0.05)] hover:bg-surface-container-low transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary-container/10">
+<input class="peer sr-only" name="answer" type="radio" value="A">
+<div class="w-8 h-8 rounded-full border-2 border-secondary-fixed-dim flex items-center justify-center mr-md peer-checked:border-primary peer-checked:bg-primary transition-all">
+<span class="font-body-vn text-body-vn text-secondary peer-checked:text-on-primary">A</span>
+</div>
+<span class="font-display-hanzi text-[32px] leading-[40px] text-on-surface">你好！</span>
+</label>
+<!-- Option B -->
+<label class="relative flex items-center p-lg cursor-pointer rounded-xl bg-surface-container-lowest border border-surface-container-highest shadow-[0px_4px_20px_rgba(172,0,30,0.05)] hover:bg-surface-container-low transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary-container/10">
+<input class="peer sr-only" name="answer" type="radio" value="B">
+<div class="w-8 h-8 rounded-full border-2 border-secondary-fixed-dim flex items-center justify-center mr-md peer-checked:border-primary peer-checked:bg-primary transition-all">
+<span class="font-body-vn text-body-vn text-secondary peer-checked:text-on-primary">B</span>
+</div>
+<span class="font-display-hanzi text-[32px] leading-[40px] text-on-surface">你是哪国人？</span>
+</label>
+<!-- Option C -->
+<label class="relative flex items-center p-lg cursor-pointer rounded-xl bg-surface-container-lowest border border-surface-container-highest shadow-[0px_4px_20px_rgba(172,0,30,0.05)] hover:bg-surface-container-low transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary-container/10">
+<input class="peer sr-only" name="answer" type="radio" value="C">
+<div class="w-8 h-8 rounded-full border-2 border-secondary-fixed-dim flex items-center justify-center mr-md peer-checked:border-primary peer-checked:bg-primary transition-all">
+<span class="font-body-vn text-body-vn text-secondary peer-checked:text-on-primary">C</span>
+</div>
+<span class="font-display-hanzi text-[32px] leading-[40px] text-on-surface">我很好。</span>
+</label>
+<!-- Option D -->
+<label class="relative flex items-center p-lg cursor-pointer rounded-xl bg-surface-container-lowest border border-surface-container-highest shadow-[0px_4px_20px_rgba(172,0,30,0.05)] hover:bg-surface-container-low transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary-container/10">
+<input class="peer sr-only" name="answer" type="radio" value="D">
+<div class="w-8 h-8 rounded-full border-2 border-secondary-fixed-dim flex items-center justify-center mr-md peer-checked:border-primary peer-checked:bg-primary transition-all">
+<span class="font-body-vn text-body-vn text-secondary peer-checked:text-on-primary">D</span>
+</div>
+<span class="font-display-hanzi text-[32px] leading-[40px] text-on-surface">谢谢！</span>
+</label>
+</div>
+</main>
+<!-- Bottom Action Bar (Sticky CTA) -->
+<div class="fixed bottom-0 left-0 w-full p-container-margin bg-surface/90 backdrop-blur-md border-t border-surface-container border-transparent z-40 flex justify-center">
+<button class="w-full max-w-2xl h-14 bg-primary text-on-primary font-headline-lg-mobile text-[18px] font-bold rounded-xl shadow-lg active:scale-95 transition-transform duration-200">
+            Kiểm tra
+        </button>
+</div>
+<script>
+        // Simple script to simulate audio playing interaction
+        const player = document.getElementById('audioPlayer');
+        const icon = player.querySelector('.material-symbols-outlined');
+        const bars = document.querySelectorAll('.waveform-bar');
+        let isPlaying = false;
+        let animationInterval;
+
+        player.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                player.classList.add('audio-playing');
+                icon.textContent = 'pause';
+                
+                // Animate waveform
+                animationInterval = setInterval(() => {
+                    bars.forEach(bar => {
+                        const height = Math.random() * 40 + 8; // Random height between 8 and 48px
+                        bar.style.height = `${height}px`;
+                    });
+                }, 150);
+                
+                // Auto stop after 3 seconds for demo
+                setTimeout(() => {
+                    if (isPlaying) player.click();
+                }, 3000);
+            } else {
+                player.classList.remove('audio-playing');
+                icon.textContent = 'play_arrow';
+                clearInterval(animationInterval);
+                
+                // Reset waveform
+                const defaultHeights = [4, 8, 3, 10, 6, 12, 7, 4, 9, 5];
+                bars.forEach((bar, index) => {
+                    bar.style.height = `${defaultHeights[index] * 4}px`; // approximate original relative heights
+                });
+            }
+        });
+    </script>
+
+
+</body></html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Bài học</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@700&amp;family=Noto+Sans+SC:wght@500&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c7c6c4",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e5e2e1",
+                        "primary": "#ac001e",
+                        "on-surface": "#1b1b1b",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#e3e2e0",
+                        "primary-fixed-dim": "#ffb3af",
+                        "tertiary-fixed": "#b1f0ce",
+                        "surface-container-low": "#f6f3f2",
+                        "surface-bright": "#fcf9f8",
+                        "primary-fixed": "#ffdad7",
+                        "inverse-primary": "#ffb3af",
+                        "surface": "#fcf9f8",
+                        "surface-dim": "#dcd9d9",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#410005",
+                        "inverse-surface": "#313030",
+                        "tertiary-fixed-dim": "#95d4b3",
+                        "on-secondary-fixed-variant": "#464745",
+                        "surface-variant": "#e5e2e1",
+                        "error": "#ba1a1a",
+                        "tertiary": "#205e44",
+                        "secondary-container": "#e0e0dd",
+                        "surface-container-high": "#eae7e7",
+                        "primary-container": "#d90429",
+                        "tertiary-container": "#3b775b",
+                        "outline": "#926e6c",
+                        "on-tertiary-fixed": "#002114",
+                        "surface-container": "#f0eded",
+                        "on-tertiary-container": "#bcfcd9",
+                        "on-primary-container": "#ffeae8",
+                        "on-primary-fixed-variant": "#930018",
+                        "background": "#fcf9f8",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-background": "#1b1b1b",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#bf0022",
+                        "on-secondary-fixed": "#1a1c1a",
+                        "on-secondary-container": "#626361",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#5e5f5d",
+                        "on-tertiary-fixed-variant": "#0e5138",
+                        "outline-variant": "#e7bcba",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#5d3f3d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "container-margin": "20px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "display-hanzi": ["Noto Sans SC"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "headline-lg": ["Montserrat"],
+                        "pinyin-md": ["Inter"],
+                        "body-vn": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "display-hanzi": ["64px", { "lineHeight": "80px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "pinyin-md": ["18px", { "lineHeight": "24px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-vn": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            min-height: max(884px, 100dvh);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-background">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface border-b border-surface-variant">
+<div class="flex items-center justify-between px-container-margin h-14">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Bài học</h2>
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="px-container-margin pb-2">
+<div class="h-1.5 w-full bg-tertiary-fixed rounded-full overflow-hidden relative">
+<div class="h-full bg-tertiary rounded-full absolute top-0 left-0" style="width: 60%;"></div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 pt-20 pb-40 px-container-margin max-w-2xl mx-auto w-full flex flex-col justify-center">
+<!-- Question -->
+<div class="mb-10 text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Chọn nghĩa đúng</h1>
+<p class="font-body-vn text-body-vn text-on-surface-variant">Chọn bản dịch chính xác nhất cho câu dưới đây.</p>
+</div>
+<!-- Hanzi Display Card -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-[0px_4px_20px_rgba(172,0,30,0.03)] border border-surface-variant mb-xl flex flex-col items-center justify-center">
+<div class="font-pinyin-md text-pinyin-md text-outline mb-1">nǐ shì nǎ guó rén?</div>
+<div class="font-display-hanzi text-display-hanzi text-on-surface tracking-wide">你是哪国人?</div>
+</div>
+<!-- Options -->
+<div class="space-y-md w-full">
+<!-- Option A (Incorrect Choice) -->
+<button class="w-full text-left bg-error-container rounded-xl p-md border-2 border-error flex items-center justify-between transition-all relative overflow-hidden">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-error text-on-error flex items-center justify-center mr-sm font-label-sm text-label-sm">
+<span class="material-symbols-outlined icon-fill text-[18px]">close</span>
+</div>
+<span class="font-body-vn text-body-vn text-on-error-container">Bạn tên là gì?</span>
+</div>
+</button>
+<!-- Option B (Correct Answer Revealed) -->
+<button class="w-full text-left bg-tertiary-fixed rounded-xl p-md border-2 border-tertiary-fixed-dim flex items-center justify-between transition-all relative overflow-hidden">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center mr-sm font-label-sm text-label-sm">
+<span class="material-symbols-outlined icon-fill text-[18px]">check</span>
+</div>
+<span class="font-body-vn text-body-vn text-on-tertiary-fixed font-medium">Bạn là người nước nào?</span>
+</div>
+</button>
+<!-- Option C (Unselected) -->
+<button class="w-full text-left bg-surface-container-lowest rounded-xl p-md border-2 border-surface-variant flex items-center justify-between opacity-50 cursor-not-allowed">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center mr-sm font-label-sm text-label-sm text-on-surface-variant">
+                        C
+                    </div>
+<span class="font-body-vn text-body-vn text-on-surface-variant">Bạn khỏe không?</span>
+</div>
+</button>
+</div>
+</main>
+<!-- Bottom Feedback Panel (Incorrect State) -->
+<div class="fixed bottom-0 left-0 w-full bg-error-container z-50 rounded-t-2xl shadow-[0px_-8px_24px_rgba(0,0,0,0.1)]">
+<div class="max-w-2xl mx-auto px-container-margin py-lg">
+<!-- Feedback Header -->
+<div class="flex items-start mb-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center mr-sm shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-error icon-fill">sentiment_dissatisfied</span>
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile !text-[20px] !leading-[28px] text-on-error-container mb-1">Chưa chính xác.</h2>
+<p class="font-body-vn text-body-vn text-on-error-container font-medium">Đáp án đúng: Bạn là người nước nào?</p>
+</div>
+</div>
+<!-- Explanation Box -->
+<div class="bg-surface-container-lowest rounded-lg p-sm mb-lg border border-error/30 shadow-sm">
+<p class="font-body-vn text-body-vn text-on-error-container !text-[14px]">
+<span class="font-medium text-error">Giải thích:</span> 哪国 = nước nào, 人 = người
+                </p>
+</div>
+<!-- Primary Action -->
+<button class="w-full h-[56px] bg-primary text-on-primary font-headline-lg-mobile text-headline-lg-mobile !text-[18px] rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-transform duration-200">
+                Tiếp tục
+            </button>
+</div>
+</div>
+
+
+</body></html>
