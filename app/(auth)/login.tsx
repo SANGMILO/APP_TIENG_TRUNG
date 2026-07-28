@@ -552,13 +552,15 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   soonBadge: {
-    marginLeft: 'auto',
+    position: 'absolute',
+    right: 8,
+    top: 4,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 999,
   },
   soonText: {
-    fontSize: 10,
+    fontSize: 9,
     fontFamily: FontFamily.semibold,
     fontWeight: FontWeight.semibold,
   },

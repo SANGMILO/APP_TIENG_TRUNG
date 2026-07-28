@@ -17,15 +17,20 @@ describe('auth finishing contracts', () => {
   const supabaseClient = read('lib/supabase/client.ts');
   const onboarding = read('app/onboarding/index.tsx');
 
-  it('uses real persistent session storage without a dead Remember Me control', () => {
+  it('uses real persistent session storage with an informational Remember Me state', () => {
     expect(supabaseClient).toContain('persistSession: true');
     expect(supabaseClient).toContain('expo-secure-store');
-    expect(login).not.toContain('Ghi nhớ đăng nhập');
+    expect(login).toContain('Ghi nhớ đăng nhập');
+    expect(login).toContain('styles.rememberRow');
   });
 
-  it('does not expose Apple sign-in without provider configuration', () => {
-    expect(login).not.toContain('Tiếp tục với Apple');
-    expect(register).not.toContain('Đăng ký với Apple');
+  it('keeps Apple sign-in visible but honestly disabled without provider configuration', () => {
+    expect(login).toContain('Tiếp tục với Apple');
+    expect(register).toContain('Đăng ký với Apple');
+    expect(login).toContain('accessibilityLabel="Tiếp tục với Apple, sắp có"');
+    expect(register).toContain('accessibilityLabel="Đăng ký với Apple, sắp có"');
+    expect(login).toMatch(/Tiếp tục với Apple[\s\S]*?Sắp có/);
+    expect(register).toMatch(/Đăng ký với Apple[\s\S]*?Sắp có/);
   });
 
   it('keeps consent separate from independent legal destinations', () => {

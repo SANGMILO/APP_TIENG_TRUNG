@@ -61,7 +61,11 @@ describe('user interaction reachability', () => {
       const source = fs.readFileSync(file, 'utf8');
       for (const match of source.matchAll(pressablePattern)) {
         const attributes = match[2];
-        if (!/\bonPress\s*=/.test(attributes) && !/\{\.\.\.props\}/.test(attributes)) {
+        if (
+          !/\bonPress\s*=/.test(attributes)
+          && !/\{\.\.\.props\}/.test(attributes)
+          && !/\bdisabled(?:\s|=|$)/.test(attributes)
+        ) {
           missingHandlers.push(path.relative(projectRoot, file));
         }
       }
@@ -108,7 +112,7 @@ describe('user interaction reachability', () => {
     const protectedQueryRoutes: Array<[string, number]> = [
       ['app/(tabs)/learn.tsx', 3],
       ['app/(tabs)/videos.tsx', 2],
-      ['app/(tabs)/profile.tsx', 2],
+      ['app/(tabs)/profile.tsx', 3],
       ['app/videos/[id].tsx', 6],
       ['app/gamification/shop.tsx', 2],
       ['app/gamification/leaderboard.tsx', 1],

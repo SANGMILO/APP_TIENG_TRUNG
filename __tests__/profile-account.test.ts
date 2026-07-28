@@ -102,7 +102,8 @@ describe('profile and account completion', () => {
     expect(profile).not.toContain('Chuỗi 7 Ngày');
     expect(profile).not.toContain('Video Master');
     expect(profile).not.toContain('totalXp % xpForNextLevel');
-    expect(profile).not.toContain('Quản lý gói Premium');
+    expect(profile).toContain('Quản lý gói Premium');
+    expect(profile).toContain('disabledLabel="Sắp có"');
     expect(profile).toContain("router.push('/account')");
     expect(profile).toContain("router.push('/notification-settings')");
     expect(profile).toContain("router.push('/privacy')");
