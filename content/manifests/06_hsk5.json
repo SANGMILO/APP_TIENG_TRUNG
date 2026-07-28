@@ -1,0 +1,601 @@
+{
+  "schemaVersion": 1,
+  "batchKey": "batch-06-hsk5",
+  "version": 1,
+  "migrationName": "20260729150000_content_batch_06_hsk5",
+  "description": "HSK 5 core curriculum; review-stage pending qualified linguistic approval.",
+  "courses": [
+    {
+      "slug": "hsk-5",
+      "title": "HSK 5",
+      "titleZh": "HSK 五级",
+      "descriptionVi": "Đọc và diễn đạt quan điểm ở mức thượng trung cấp.",
+      "level": "upper-intermediate",
+      "orderIndex": 6,
+      "status": "review",
+      "estimatedMinutes": 78,
+      "objectives": [
+        "Hiểu văn bản lập luận",
+        "Dùng liên kết trang trọng",
+        "Diễn đạt sắc thái và đánh giá"
+      ],
+      "units": [
+        {
+          "slug": "hsk5-nen-tang",
+          "title": "Nền tảng",
+          "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+          "orderIndex": 1,
+          "status": "review",
+          "objectives": [
+            "Hiểu văn bản lập luận",
+            "Dùng liên kết trang trọng"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk5-nen-tang-chapter",
+              "title": "Khái niệm cốt lõi",
+              "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Hiểu văn bản lập luận",
+                "Dùng liên kết trang trọng"
+              ],
+              "lessons": [
+                {
+                  "slug": "xu-huong",
+                  "title": "随着社会发展 — Xu hướng",
+                  "descriptionVi": "Mô tả thay đổi đồng thời theo bối cảnh.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Phân tích xu hướng"
+                  ],
+                  "culturalNote": "随着 không trực tiếp biểu thị nguyên nhân tuyệt đối.",
+                  "reviewVocabularyKeys": [],
+                  "reviewGrammarKeys": [],
+                  "vocabulary": [
+                    {
+                      "key": "hsk5:趋势",
+                      "chinese": "趋势",
+                      "pinyin": "qūshì",
+                      "meaningVi": "xu hướng",
+                      "meaningEn": "trend",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "xu-huong",
+                      "status": "review",
+                      "exampleSentence": "这个行业的发展趋势很明显。",
+                      "examplePinyin": "Zhège hángyè de fāzhǎn qūshì hěn míngxiǎn.",
+                      "exampleMeaningVi": "Xu hướng phát triển của ngành này rất rõ."
+                    },
+                    {
+                      "key": "hsk5:逐渐",
+                      "chinese": "逐渐",
+                      "pinyin": "zhújiàn",
+                      "meaningVi": "dần dần",
+                      "meaningEn": "gradually",
+                      "partOfSpeech": "phó từ",
+                      "level": "upper-intermediate",
+                      "category": "xu-huong",
+                      "status": "review",
+                      "exampleSentence": "人们逐渐改变了消费习惯。",
+                      "examplePinyin": "Rénmen zhújiàn gǎibiàn le xiāofèi xíguàn.",
+                      "exampleMeaningVi": "Mọi người dần thay đổi thói quen tiêu dùng."
+                    },
+                    {
+                      "key": "hsk5:普遍",
+                      "chinese": "普遍",
+                      "pinyin": "pǔbiàn",
+                      "meaningVi": "phổ biến",
+                      "meaningEn": "widespread",
+                      "partOfSpeech": "tính từ",
+                      "level": "upper-intermediate",
+                      "category": "xu-huong",
+                      "status": "review",
+                      "exampleSentence": "移动支付已经十分普遍。",
+                      "examplePinyin": "Yídòng zhīfù yǐjīng shífēn pǔbiàn.",
+                      "exampleMeaningVi": "Thanh toán di động đã rất phổ biến."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk5:xu-huong",
+                      "title": "Biến đổi theo bối cảnh",
+                      "pattern": "随着 + danh từ/cụm động từ，mệnh đề thay đổi",
+                      "explanationVi": "随着 giới thiệu quá trình làm nền cho một thay đổi khác.",
+                      "exampleChinese": "随着技术发展，生活逐渐更方便。",
+                      "examplePinyin": "Suízhe jìshù fāzhǎn, shēnghuó zhújiàn gèng fāngbiàn.",
+                      "exampleMeaningVi": "Cùng với công nghệ phát triển, cuộc sống dần tiện hơn.",
+                      "level": "upper-intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk5:趋势",
+                    "distractorKeys": [
+                      "hsk5:逐渐",
+                      "hsk5:普遍"
+                    ],
+                    "sentenceTokens": [
+                      "随着",
+                      "技术",
+                      "发展",
+                      "，",
+                      "生活",
+                      "逐渐",
+                      "更",
+                      "方便",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "随着技术发展，生活逐渐更方便。",
+                    "translationPromptVi": "Cùng với công nghệ phát triển, cuộc sống dần tiện hơn.",
+                    "translationAnswerZh": "随着技术发展，生活逐渐更方便。",
+                    "grammarQuestion": "Câu nào mô tả xu hướng đồng thời?",
+                    "grammarOptions": [
+                      "随着技术发展，生活逐渐更方便。",
+                      "。方便更逐渐生活，发展技术随着",
+                      "技术发展，生活逐渐更方便。随着"
+                    ],
+                    "grammarCorrect": "随着技术发展，生活逐渐更方便。",
+                    "grammarExplanationVi": "随着 giới thiệu quá trình làm nền cho một thay đổi khác.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk5:xu-huong",
+                    "speakingTextZh": "随着技术发展，生活逐渐更方便。",
+                    "speakingPinyin": "Suízhe jìshù fāzhǎn, shēnghuó zhújiàn gèng fāngbiàn."
+                  }
+                },
+                {
+                  "slug": "nhuong-bo",
+                  "title": "尽管…仍然… — Nhượng bộ",
+                  "descriptionVi": "Đối chiếu thực tế với kết quả không đổi.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Diễn đạt tương phản có sắc thái"
+                  ],
+                  "culturalNote": "还是 thường khẩu ngữ hơn; 仍然 phù hợp văn viết.",
+                  "reviewVocabularyKeys": [
+                    "hsk5:趋势",
+                    "hsk5:逐渐",
+                    "hsk5:普遍"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk5:xu-huong"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk5:尽管",
+                      "chinese": "尽管",
+                      "pinyin": "jǐnguǎn",
+                      "meaningVi": "mặc dù",
+                      "meaningEn": "although",
+                      "partOfSpeech": "liên từ",
+                      "level": "upper-intermediate",
+                      "category": "nhuong-bo",
+                      "status": "review",
+                      "exampleSentence": "尽管很累，他还是继续工作。",
+                      "examplePinyin": "Jǐnguǎn hěn lèi, tā háishi jìxù gōngzuò.",
+                      "exampleMeaningVi": "Mặc dù rất mệt, anh ấy vẫn tiếp tục làm việc."
+                    },
+                    {
+                      "key": "hsk5:仍然",
+                      "chinese": "仍然",
+                      "pinyin": "réngrán",
+                      "meaningVi": "vẫn",
+                      "meaningEn": "still",
+                      "partOfSpeech": "phó từ",
+                      "level": "upper-intermediate",
+                      "category": "nhuong-bo",
+                      "status": "review",
+                      "exampleSentence": "天气很冷，比赛仍然进行。",
+                      "examplePinyin": "Tiānqì hěn lěng, bǐsài réngrán jìnxíng.",
+                      "exampleMeaningVi": "Trời rất lạnh, trận đấu vẫn diễn ra."
+                    },
+                    {
+                      "key": "hsk5:克服",
+                      "chinese": "克服",
+                      "pinyin": "kèfú",
+                      "meaningVi": "khắc phục",
+                      "meaningEn": "overcome",
+                      "partOfSpeech": "động từ",
+                      "level": "upper-intermediate",
+                      "category": "nhuong-bo",
+                      "status": "review",
+                      "exampleSentence": "我们一起克服了困难。",
+                      "examplePinyin": "Wǒmen yìqǐ kèfú le kùnnan.",
+                      "exampleMeaningVi": "Chúng tôi cùng nhau khắc phục khó khăn."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk5:nhuong-bo",
+                      "title": "Nhượng bộ trang trọng",
+                      "pattern": "尽管 A，仍然 B",
+                      "explanationVi": "Kết quả B vẫn tồn tại dù có trở ngại A.",
+                      "exampleChinese": "尽管遇到困难，他仍然没有放弃。",
+                      "examplePinyin": "Jǐnguǎn yùdào kùnnan, tā réngrán méiyǒu fàngqì.",
+                      "exampleMeaningVi": "Mặc dù gặp khó khăn, anh ấy vẫn không từ bỏ.",
+                      "level": "upper-intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk5:尽管",
+                    "distractorKeys": [
+                      "hsk5:仍然",
+                      "hsk5:克服"
+                    ],
+                    "sentenceTokens": [
+                      "尽管",
+                      "遇到",
+                      "困难",
+                      "，",
+                      "他",
+                      "仍然",
+                      "没有",
+                      "放弃",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "尽管遇到困难，他仍然没有放弃。",
+                    "translationPromptVi": "Mặc dù gặp khó khăn, anh ấy vẫn không từ bỏ.",
+                    "translationAnswerZh": "尽管遇到困难，他仍然没有放弃。",
+                    "grammarQuestion": "Câu nào thể hiện quan hệ nhượng bộ?",
+                    "grammarOptions": [
+                      "尽管遇到困难，他仍然没有放弃。",
+                      "。放弃没有仍然他，困难遇到尽管",
+                      "遇到困难，他仍然没有放弃。尽管"
+                    ],
+                    "grammarCorrect": "尽管遇到困难，他仍然没有放弃。",
+                    "grammarExplanationVi": "Kết quả B vẫn tồn tại dù có trở ngại A.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk5:nhuong-bo",
+                    "speakingTextZh": "尽管遇到困难，他仍然没有放弃。",
+                    "speakingPinyin": "Jǐnguǎn yùdào kùnnan, tā réngrán méiyǒu fàngqì."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "hsk5-van-dung",
+          "title": "Vận dụng",
+          "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+          "orderIndex": 2,
+          "status": "review",
+          "objectives": [
+            "Dùng liên kết trang trọng",
+            "Diễn đạt sắc thái và đánh giá"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk5-van-dung-chapter",
+              "title": "Ngữ cảnh thực tế",
+              "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Dùng liên kết trang trọng",
+                "Diễn đạt sắc thái và đánh giá"
+              ],
+              "lessons": [
+                {
+                  "slug": "danh-gia",
+                  "title": "未必如此 — Đánh giá thận trọng",
+                  "descriptionVi": "Giảm mức khẳng định trong nhận xét.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Nêu đánh giá có giới hạn"
+                  ],
+                  "culturalNote": "未必 khác 不: nó để ngỏ khả năng đúng.",
+                  "reviewVocabularyKeys": [
+                    "hsk5:尽管",
+                    "hsk5:仍然",
+                    "hsk5:克服"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk5:nhuong-bo"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk5:未必",
+                      "chinese": "未必",
+                      "pinyin": "wèibì",
+                      "meaningVi": "chưa chắc",
+                      "meaningEn": "not necessarily",
+                      "partOfSpeech": "phó từ",
+                      "level": "upper-intermediate",
+                      "category": "danh-gia",
+                      "status": "review",
+                      "exampleSentence": "价格高的产品未必最好。",
+                      "examplePinyin": "Jiàgé gāo de chǎnpǐn wèibì zuì hǎo.",
+                      "exampleMeaningVi": "Sản phẩm giá cao chưa chắc tốt nhất."
+                    },
+                    {
+                      "key": "hsk5:合理",
+                      "chinese": "合理",
+                      "pinyin": "hélǐ",
+                      "meaningVi": "hợp lý",
+                      "meaningEn": "reasonable",
+                      "partOfSpeech": "tính từ",
+                      "level": "upper-intermediate",
+                      "category": "danh-gia",
+                      "status": "review",
+                      "exampleSentence": "这个安排比较合理。",
+                      "examplePinyin": "Zhège ānpái bǐjiào hélǐ.",
+                      "exampleMeaningVi": "Sự sắp xếp này khá hợp lý."
+                    },
+                    {
+                      "key": "hsk5:判断",
+                      "chinese": "判断",
+                      "pinyin": "pànduàn",
+                      "meaningVi": "phán đoán",
+                      "meaningEn": "judge; judgment",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "upper-intermediate",
+                      "category": "danh-gia",
+                      "status": "review",
+                      "exampleSentence": "不要只根据外表判断一个人。",
+                      "examplePinyin": "Búyào zhǐ gēnjù wàibiǎo pànduàn yí ge rén.",
+                      "exampleMeaningVi": "Đừng chỉ dựa vào vẻ ngoài để đánh giá một người."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk5:danh-gia",
+                      "title": "Phủ định khả năng với 未必",
+                      "pattern": "chủ ngữ + 未必 + vị ngữ",
+                      "explanationVi": "未必 bác bỏ suy luận tất yếu nhưng không phủ định hoàn toàn.",
+                      "exampleChinese": "看起来简单，做起来未必容易。",
+                      "examplePinyin": "Kànqilai jiǎndān, zuòqilai wèibì róngyì.",
+                      "exampleMeaningVi": "Nhìn có vẻ đơn giản nhưng làm chưa chắc dễ.",
+                      "level": "upper-intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk5:未必",
+                    "distractorKeys": [
+                      "hsk5:合理",
+                      "hsk5:判断"
+                    ],
+                    "sentenceTokens": [
+                      "看起来",
+                      "简单",
+                      "，",
+                      "做起来",
+                      "未必",
+                      "容易",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "看起来简单，做起来未必容易。",
+                    "translationPromptVi": "Nhìn có vẻ đơn giản nhưng làm chưa chắc dễ.",
+                    "translationAnswerZh": "看起来简单，做起来未必容易。",
+                    "grammarQuestion": "Câu nào đưa ra đánh giá thận trọng?",
+                    "grammarOptions": [
+                      "看起来简单，做起来未必容易。",
+                      "。容易未必做起来，简单看起来",
+                      "简单，做起来未必容易。看起来"
+                    ],
+                    "grammarCorrect": "看起来简单，做起来未必容易。",
+                    "grammarExplanationVi": "未必 bác bỏ suy luận tất yếu nhưng không phủ định hoàn toàn.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk5:danh-gia",
+                    "speakingTextZh": "看起来简单，做起来未必容易。",
+                    "speakingPinyin": "Kànqilai jiǎndān, zuòqilai wèibì róngyì."
+                  }
+                },
+                {
+                  "slug": "van-viet",
+                  "title": "由此可见 — Kết luận văn viết",
+                  "descriptionVi": "Dẫn ra kết luận từ bằng chứng trước đó.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Viết đoạn kết luận mạch lạc"
+                  ],
+                  "culturalNote": "Cần có dữ kiện trước 由此可见, không dùng như ý kiến vô căn cứ.",
+                  "reviewVocabularyKeys": [
+                    "hsk5:未必",
+                    "hsk5:合理",
+                    "hsk5:判断"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk5:danh-gia"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk5:证据",
+                      "chinese": "证据",
+                      "pinyin": "zhèngjù",
+                      "meaningVi": "chứng cứ",
+                      "meaningEn": "evidence",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "van-viet",
+                      "status": "review",
+                      "exampleSentence": "目前还没有足够的证据。",
+                      "examplePinyin": "Mùqián hái méiyǒu zúgòu de zhèngjù.",
+                      "exampleMeaningVi": "Hiện vẫn chưa có đủ bằng chứng."
+                    },
+                    {
+                      "key": "hsk5:结论",
+                      "chinese": "结论",
+                      "pinyin": "jiélùn",
+                      "meaningVi": "kết luận",
+                      "meaningEn": "conclusion",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "van-viet",
+                      "status": "review",
+                      "exampleSentence": "现在下结论还太早。",
+                      "examplePinyin": "Xiànzài xià jiélùn hái tài zǎo.",
+                      "exampleMeaningVi": "Bây giờ đưa ra kết luận còn quá sớm."
+                    },
+                    {
+                      "key": "hsk5:表明",
+                      "chinese": "表明",
+                      "pinyin": "biǎomíng",
+                      "meaningVi": "cho thấy",
+                      "meaningEn": "indicate",
+                      "partOfSpeech": "động từ",
+                      "level": "upper-intermediate",
+                      "category": "van-viet",
+                      "status": "review",
+                      "exampleSentence": "调查结果表明情况有所改善。",
+                      "examplePinyin": "Diàochá jiéguǒ biǎomíng qíngkuàng yǒusuǒ gǎishàn.",
+                      "exampleMeaningVi": "Kết quả khảo sát cho thấy tình hình đã cải thiện."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk5:van-viet",
+                      "title": "Dẫn kết luận với 由此可见",
+                      "pattern": "bằng chứng。由此可见，kết luận",
+                      "explanationVi": "由此可见 đánh dấu kết luận logic trong văn viết.",
+                      "exampleChinese": "数据持续上升，由此可见需求正在增加。",
+                      "examplePinyin": "Shùjù chíxù shàngshēng, yóucǐ kějiàn xūqiú zhèngzài zēngjiā.",
+                      "exampleMeaningVi": "Dữ liệu liên tục tăng; từ đó có thể thấy nhu cầu đang tăng.",
+                      "level": "upper-intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk5:证据",
+                    "distractorKeys": [
+                      "hsk5:结论",
+                      "hsk5:表明"
+                    ],
+                    "sentenceTokens": [
+                      "数据",
+                      "持续",
+                      "上升",
+                      "，",
+                      "由此可见",
+                      "需求",
+                      "正在",
+                      "增加",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "数据持续上升，由此可见需求正在增加。",
+                    "translationPromptVi": "Dữ liệu liên tục tăng; từ đó có thể thấy nhu cầu đang tăng.",
+                    "translationAnswerZh": "数据持续上升，由此可见需求正在增加。",
+                    "grammarQuestion": "Câu nào dùng dấu hiệu kết luận phù hợp?",
+                    "grammarOptions": [
+                      "数据持续上升，由此可见需求正在增加。",
+                      "。增加正在需求由此可见，上升持续数据",
+                      "持续上升，由此可见需求正在增加。数据"
+                    ],
+                    "grammarCorrect": "数据持续上升，由此可见需求正在增加。",
+                    "grammarExplanationVi": "由此可见 đánh dấu kết luận logic trong văn viết.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk5:van-viet",
+                    "speakingTextZh": "数据持续上升，由此可见需求正在增加。",
+                    "speakingPinyin": "Shùjù chíxù shàngshēng, yóucǐ kějiàn xūqiú zhèngzài zēngjiā."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "hsk5-on-tap",
+          "title": "Ôn tập",
+          "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+          "orderIndex": 3,
+          "status": "review",
+          "objectives": [
+            "Ôn từ vựng",
+            "Ôn mẫu câu"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk5-on-tap-chapter",
+              "title": "Củng cố lộ trình",
+              "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Ôn từ vựng",
+                "Ôn mẫu câu"
+              ],
+              "lessons": [
+                {
+                  "slug": "hsk5-review",
+                  "title": "Ôn tập HSK 5",
+                  "descriptionVi": "Củng cố từ vựng, mẫu câu và khả năng diễn đạt của toàn khóa.",
+                  "orderIndex": 1,
+                  "xpReward": 30,
+                  "status": "review",
+                  "lessonType": "review",
+                  "estimatedMinutes": 18,
+                  "objectives": [
+                    "Vận dụng lại từ vựng trọng tâm",
+                    "Tự kiểm tra mẫu câu đã học"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk5:证据",
+                    "hsk5:结论",
+                    "hsk5:表明"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk5:van-viet"
+                  ],
+                  "vocabulary": [],
+                  "grammar": [],
+                  "practice": {
+                    "targetKey": "hsk5:证据",
+                    "distractorKeys": [
+                      "hsk5:结论",
+                      "hsk5:表明"
+                    ],
+                    "sentenceTokens": [
+                      "数据",
+                      "持续",
+                      "上升",
+                      "，",
+                      "由此可见",
+                      "需求",
+                      "正在",
+                      "增加",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "数据持续上升，由此可见需求正在增加。",
+                    "translationPromptVi": "Dữ liệu liên tục tăng; từ đó có thể thấy nhu cầu đang tăng.",
+                    "translationAnswerZh": "数据持续上升，由此可见需求正在增加。",
+                    "grammarQuestion": "Câu nào dùng dấu hiệu kết luận phù hợp?",
+                    "grammarOptions": [
+                      "数据持续上升，由此可见需求正在增加。",
+                      "。增加正在需求由此可见，上升持续数据",
+                      "持续上升，由此可见需求正在增加。数据"
+                    ],
+                    "grammarCorrect": "数据持续上升，由此可见需求正在增加。",
+                    "grammarExplanationVi": "由此可见 đánh dấu kết luận logic trong văn viết.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk5:van-viet",
+                    "speakingTextZh": "数据持续上升，由此可见需求正在增加。",
+                    "speakingPinyin": "Shùjù chíxù shàngshēng, yóucǐ kějiàn xūqiú zhèngzài zēngjiā."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
