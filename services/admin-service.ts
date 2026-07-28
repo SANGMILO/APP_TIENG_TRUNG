@@ -25,7 +25,7 @@ export type AdminPermission =
 const ROLE_PERMISSIONS: Record<string, AdminPermission[]> = {
   student: [],
   teacher: ['view_admin'],
-  editor: ['view_admin', 'create_content', 'edit_content', 'view_analytics'],
+  editor: ['view_admin', 'create_content', 'edit_content'],
   admin: ['view_admin', 'create_content', 'edit_content', 'publish_content', 'manage_users', 'manage_gamification', 'manage_ai_config', 'view_analytics', 'manage_settings'],
   super_admin: ['view_admin', 'create_content', 'edit_content', 'publish_content', 'manage_users', 'manage_roles', 'manage_gamification', 'manage_ai_config', 'view_analytics', 'manage_settings'],
 };
@@ -69,7 +69,12 @@ export async function fetchAdminList(table: string, filters?: { status?: string;
   let query = supabase.from(table).select('*', { count: 'exact' }).order('created_at', { ascending: false }).range(page * limit, (page + 1) * limit - 1);
 
   if (filters?.status) query = query.eq('status', filters.status);
-  if (filters?.search) query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+  const search = filters?.search?.replace(/[,%()]/g, '').trim();
+  if (search) {
+    query = table === 'vocabulary'
+      ? query.or(`chinese.ilike.%${search}%,pinyin.ilike.%${search}%,meaning_vi.ilike.%${search}%`)
+      : query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+  }
 
   const { data, error, count } = await query;
   if (error) throw error;

@@ -433,16 +433,61 @@ Stitch migration remains the visual source of truth.
   - Supabase CLI emitted the known non-fatal pg-delta certificate cache warning;
     matching migration history and a fresh remote schema dump independently
     confirmed the hosted schema
-- Commit: pending
+- Commit: `1048a1e` (`fix: populate gamification from trusted events`)
 
 ### Phase 9 — Dead interactions, route reachability, and analytics
 
-- Status: PENDING
-- Files: pending
-- Migrations: none expected
-- Deployments: none expected
-- Validation: pending
-- Blockers: pending audit
+- Status: COMPLETE
+- Files:
+  - `app/(auth)/welcome.tsx`
+  - `app/(tabs)/learn.tsx`
+  - `app/(tabs)/review.tsx`
+  - `app/(tabs)/profile.tsx`
+  - `app/pronunciation/index.tsx`
+  - `app/pronunciation/history.tsx`
+  - `app/pronunciation/tone-training.tsx`
+  - `app/admin/analytics.tsx`
+  - `app/admin/courses.tsx`
+  - `app/admin/vocabulary.tsx`
+  - `components/media/AudioPlayer.tsx`
+  - `hooks/useAudioRecorder.ts`
+  - `lib/analytics/index.ts`
+  - `services/admin-service.ts`
+  - `services/pronunciation-service.ts`
+  - `__tests__/interaction-reachability.test.ts`
+- Migrations: none
+- Deployments: none
+- Validation:
+  - Static audit found zero pressable components without handlers or forwarded
+    action props
+  - Focused interactions/admin/gamification: 3 suites / 39 tests passed
+  - TypeScript: 0 errors
+  - Jest: 27 suites / 290 tests passed
+  - Expo Web: 51 routes exported
+- Result:
+  - Decorative Welcome features, Review flame, Review rings, and profile/AI
+    stat displays no longer imply actions
+  - Learn View All expands/collapses the real lesson list, and unavailable
+    lesson heroes are disabled instead of silently doing nothing
+  - Learn daily XP now uses the timezone-aware server summary, while progress
+    and summary failures are visible and retryable
+  - Pronunciation, tone training, leaderboard, and the functional streak-freeze
+    shop are reachable from existing primary screens
+  - Newly reachable pronunciation screens have loading, empty, and retryable
+    error behavior
+  - Removed admin controls that created dummy course/vocabulary records; existing
+    list/search/publish behavior remains available
+  - Vocabulary admin search now targets its real columns and strips raw filter
+    metacharacters
+  - Analytics defaults to a silent configurable abstraction; client identity,
+    audio object URLs, and raw error objects are no longer console-logged
+  - Editor analytics visibility now matches the server's admin-only analytics RPC
+- Blockers:
+  - P1 external/product: no analytics or crash-reporting vendor can be enabled
+    without an owner-approved provider, credentials, privacy disclosure, and
+    consent policy
+  - P1 product/admin UX: course and vocabulary creation remain hidden until real
+    validated edit forms exist; one-click placeholder creation was removed
 - Commit: pending
 
 ### Phase 10 — Dependency, Expo, security, and quality audit

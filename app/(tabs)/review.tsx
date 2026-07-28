@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -60,9 +59,9 @@ export default function ReviewScreen() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       {/* ─── TopAppBar (Mobile) ─── */}
       <View style={[styles.topBar, { paddingTop: insets.top + 12 }]}>
-        <TouchableOpacity style={styles.topBarPill} activeOpacity={0.7}>
+        <View style={styles.topBarPill}>
           <Ionicons name="flame" size={20} color={colors.primary} />
-        </TouchableOpacity>
+        </View>
         <Text style={[styles.topBarTitle, { color: colors.primary }]}>Ôn tập</Text>
         <View style={[styles.topBarXpPill, { backgroundColor: colors.surfaceElevated }]}>
           <Text style={[styles.topBarXpText, { color: colors.primary }]}>
@@ -154,7 +153,6 @@ export default function ReviewScreen() {
                   ringColor={colors.error}
                   iconColor={colors.error}
                   colors={colors}
-                  delay={50}
                 />
                 <ProgressRingCard
                   icon="book-outline"
@@ -164,7 +162,6 @@ export default function ReviewScreen() {
                   ringColor={colors.textTertiary}
                   iconColor={colors.textTertiary}
                   colors={colors}
-                  delay={100}
                 />
                 <ProgressRingCard
                   icon="medal-outline"
@@ -174,7 +171,6 @@ export default function ReviewScreen() {
                   ringColor={colors.jade}
                   iconColor={colors.jade}
                   colors={colors}
-                  delay={150}
                 />
                 <ProgressRingCard
                   icon="warning-outline"
@@ -184,7 +180,6 @@ export default function ReviewScreen() {
                   ringColor={colors.textTertiary}
                   iconColor={colors.textTertiary}
                   colors={colors}
-                  delay={200}
                 />
               </View>
             </FadeInView>
@@ -211,6 +206,15 @@ export default function ReviewScreen() {
                   colors={colors}
                   onPress={() => router.push('/review/mistakes')}
                 />
+                <ToolCard
+                  icon="mic-outline"
+                  title="Luyện phát âm"
+                  desc="Luyện từ vựng, thanh điệu và xem lại lịch sử chấm điểm."
+                  iconColor={colors.primary}
+                  iconBg={colors.primary + '12'}
+                  colors={colors}
+                  onPress={() => router.push('/pronunciation')}
+                />
               </View>
             </FadeInView>
           </>
@@ -222,14 +226,14 @@ export default function ReviewScreen() {
 
 // ─── Progress Ring Card ───
 
-function ProgressRingCard({ icon, label, value, percent, ringColor, iconColor, colors, delay }: {
+function ProgressRingCard({ icon, label, value, percent, ringColor, iconColor, colors }: {
   icon: string; label: string; value: number; percent: number;
-  ringColor: string; iconColor: string; colors: any; delay: number;
+  ringColor: string; iconColor: string; colors: any;
 }) {
   const strokeDash = Math.min(RING_CIRCUMFERENCE, (percent / 100) * RING_CIRCUMFERENCE);
 
   return (
-    <AnimatedPressable scaleValue={0.97} style={[styles.ringCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+    <View style={[styles.ringCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
       {/* SVG ring */}
       <View style={styles.ringWrap}>
         <Svg width={64} height={64} viewBox="0 0 36 36">
@@ -260,7 +264,7 @@ function ProgressRingCard({ icon, label, value, percent, ringColor, iconColor, c
       </View>
       <Text style={[styles.ringLabel, { color: colors.text }]}>{label}</Text>
       <Text style={[styles.ringValue, { color: colors.textTertiary }]}>{value}</Text>
-    </AnimatedPressable>
+    </View>
   );
 }
 

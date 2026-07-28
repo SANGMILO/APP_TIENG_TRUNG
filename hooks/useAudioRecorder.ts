@@ -150,10 +150,9 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}): UseAudi
           stopRecording();
         }
       }, 100);
-    } catch (err: any) {
+    } catch {
       setState('error');
       setError('Không thể bắt đầu thu âm. Vui lòng thử lại.');
-      console.error('Start recording error:', err);
     }
   }, [maxDurationMs, requestPermission]);
 
@@ -201,10 +200,9 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}): UseAudi
       const result: RecorderResult = { uri, durationMs: finalDuration };
       onRecordingComplete?.(result);
       return result;
-    } catch (err: any) {
+    } catch {
       setState('error');
       setError('Lỗi khi dừng thu âm.');
-      console.error('Stop recording error:', err);
       return null;
     }
   }, [onRecordingComplete]);
@@ -245,8 +243,9 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}): UseAudi
           playbackRef.current = null;
         }
       });
-    } catch (err) {
-      console.error('Playback error:', err);
+    } catch {
+      setState('error');
+      setError('Không thể phát lại bản thu. Vui lòng thử lại.');
     }
   }, [recordingUri]);
 

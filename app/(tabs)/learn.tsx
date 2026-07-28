@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
 import { FadeInView, AnimatedPressable, PulsingDot, EmptyState } from '@/components/ui';
 import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
+import { getGamificationSummary } from '@/services/gamification-service';
 import { Shadow, FontWeight, FontFamily } from '@/constants/theme';
 import { Lesson } from '@/types';
 
@@ -25,6 +26,7 @@ export default function LearnScreen() {
   const { colors } = useThemeStore();
   const { profile } = useAuthStore();
   const insets = useSafeAreaInsets();
+  const [showAllLessons, setShowAllLessons] = useState(false);
 
   // ─── Data Queries (preserved exactly) ───
   const { data: courseData, isLoading, isError, refetch } = useQuery({
@@ -54,12 +56,18 @@ export default function LearnScreen() {
   const courseLevel = courseData?.course?.level ?? 'HSK 1'; // Fallback if no course data
   const courseTitle = courseData?.course?.title ?? 'Hành trình học';
 
-  const { data: progress } = useQuery({
+  const {
+    data: progress,
+    isLoading: progressLoading,
+    isError: progressError,
+    refetch: refetchProgress,
+  } = useQuery({
     queryKey: ['lesson-progress'],
     queryFn: async () => {
       if (!profile) return {};
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('user_lesson_progress').select('lesson_id, status').eq('user_id', profile.id);
+      if (error) throw error;
       const map: Record<string, string> = {};
       (data ?? []).forEach((p: any) => { map[p.lesson_id] = p.status; });
       return map;
@@ -67,28 +75,37 @@ export default function LearnScreen() {
     enabled: !!profile,
   });
 
-  const { data: todayXp } = useQuery({
-    queryKey: ['today-xp'],
-    queryFn: async () => {
-      if (!profile) return 0;
-      const today = new Date(); today.setHours(0, 0, 0, 0);
-      const { data } = await supabase
-        .from('xp_transactions').select('amount').eq('user_id', profile.id).gte('created_at', today.toISOString());
-      return (data ?? []).reduce((sum: number, t: any) => sum + t.amount, 0);
-    },
+  const {
+    data: gamificationSummary,
+    isError: gamificationError,
+    refetch: refetchGamification,
+  } = useQuery({
+    queryKey: ['gamification-summary'],
+    queryFn: getGamificationSummary,
     enabled: !!profile,
   });
 
   // ─── Derived State (preserved) ───
-  const dailyGoal = profile?.daily_goal_xp ?? 20;
-  const dailyProgress = Math.min(100, ((todayXp ?? 0) / dailyGoal) * 100);
+  const dailyGoal = Math.max(
+    1,
+    gamificationSummary?.dailyGoalXp ?? profile?.daily_goal_xp ?? 20,
+  );
+  const todayXp = gamificationSummary?.todayXp ?? 0;
+  const dailyProgress = Math.min(100, (todayXp / dailyGoal) * 100);
   const completedCount = lessons?.filter((_, i) => (progress ?? {})[lessons[i]?.id] === 'completed').length ?? 0;
   const totalLessons = lessons?.length ?? 0;
   const courseProgress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
 
   // Find current lesson for hero card
-  const currentLesson = lessons?.find((l, i) => getStatus(l.id, i, progress ?? {}) === 'current');
+  const currentLesson = progressError ? undefined : lessons?.find(
+    (lesson, index) => getStatus(lesson.id, index, progress ?? {}) === 'current',
+  ) ?? lessons?.find(
+    (lesson, index) => getStatus(lesson.id, index, progress ?? {}) === 'available',
+  ) ?? [...(lessons ?? [])].reverse().find(
+    (lesson) => (progress ?? {})[lesson.id] === 'completed',
+  );
   const currentLessonIndex = currentLesson ? (lessons?.indexOf(currentLesson) ?? 0) + 1 : 1;
+  const visibleLessons = showAllLessons ? lessons : lessons?.slice(0, 4);
 
   // SVG circular progress calculations (Stitch: r=40, stroke-width=8, circumference=2πr=251.2)
   const CIRCLE_RADIUS = 40;
@@ -146,9 +163,20 @@ export default function LearnScreen() {
           <FadeInView delay={150} animation="slideUp">
             <AnimatedPressable
               scaleValue={0.98}
-              onPress={() => { if (currentLesson) router.push(`/lesson/${currentLesson.id}`); }}
+              onPress={() => {
+                if (currentLesson) router.push(`/lesson/${currentLesson.id}`);
+              }}
+              disabled={!currentLesson}
+              accessibilityState={{ disabled: !currentLesson }}
             >
-              <View style={[styles.heroCard, { backgroundColor: colors.card, borderColor: colors.border + '4D' }]}>
+              <View style={[
+                styles.heroCard,
+                {
+                  backgroundColor: colors.card,
+                  borderColor: colors.border + '4D',
+                  opacity: currentLesson ? 1 : 0.65,
+                },
+              ]}>
                 {/* Decorative accent */}
                 <View style={[styles.heroAccent, { backgroundColor: colors.primaryLight }]} />
 
@@ -188,7 +216,9 @@ export default function LearnScreen() {
 
                 {/* CTA */}
                 <View style={[styles.heroCta, { backgroundColor: colors.primary }]}>
-                  <Text style={styles.heroCtaText}>Tiếp tục học</Text>
+                  <Text style={styles.heroCtaText}>
+                    {currentLesson ? 'Tiếp tục học' : 'Chưa có bài học'}
+                  </Text>
                   <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
                 </View>
               </View>
@@ -237,9 +267,17 @@ export default function LearnScreen() {
                   {todayXp ?? 0}/{dailyGoal}
                   <Text style={[styles.dailyUnit, { color: colors.textSecondary }]}> XP</Text>
                 </Text>
-                <Text style={[styles.dailyHint, { color: colors.textSecondary }]}>
-                  {dailyProgress >= 100 ? 'Hoàn thành! 🎉' : 'Cố lên, sắp đạt mục tiêu!'}
-                </Text>
+                {gamificationError ? (
+                  <TouchableOpacity onPress={() => { void refetchGamification(); }}>
+                    <Text style={[styles.dailyHint, { color: colors.error }]}>
+                      Không thể cập nhật · Thử lại
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <Text style={[styles.dailyHint, { color: colors.textSecondary }]}>
+                    {dailyProgress >= 100 ? 'Hoàn thành! 🎉' : 'Cố lên, sắp đạt mục tiêu!'}
+                  </Text>
+                )}
               </View>
             </FadeInView>
 
@@ -275,23 +313,34 @@ export default function LearnScreen() {
             <Text style={[styles.journeyTitle, { color: colors.text }]}>
               {courseTitle.length > 20 ? `Hành trình ${courseLevel}` : courseTitle}
             </Text>
-            <TouchableOpacity>
-              <Text style={[styles.journeySeeAll, { color: colors.primary }]}>Xem tất cả</Text>
-            </TouchableOpacity>
+            {totalLessons > 4 ? (
+              <TouchableOpacity
+                onPress={() => setShowAllLessons((visible) => !visible)}
+                accessibilityRole="button"
+                accessibilityState={{ expanded: showAllLessons }}
+              >
+                <Text style={[styles.journeySeeAll, { color: colors.primary }]}>
+                  {showAllLessons ? 'Thu gọn' : 'Xem tất cả'}
+                </Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </FadeInView>
 
-        {isLoading ? (
+        {isLoading || progressLoading ? (
           <View style={styles.loading}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
-        ) : isError ? (
+        ) : isError || progressError ? (
           <EmptyState
             iconName="cloud-offline-outline"
             title="Không thể tải hành trình học"
             description="Kiểm tra kết nối rồi thử lại."
             actionLabel="Thử lại"
-            onAction={() => { void refetch(); }}
+            onAction={() => {
+              void refetch();
+              void refetchProgress();
+            }}
           />
         ) : !lessons?.length ? (
           <FadeInView delay={500} animation="slideUp">
@@ -314,7 +363,7 @@ export default function LearnScreen() {
             </View>
             {/* Nodes */}
             <View style={styles.journeyNodes}>
-              {lessons.slice(0, 4).map((lesson, i) => {
+              {visibleLessons?.map((lesson, i) => {
                 const status = getStatus(lesson.id, i, progress ?? {});
                 return (
                   <FadeInView key={lesson.id} delay={500 + i * 100} animation="slideUp">

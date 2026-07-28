@@ -1,28 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
-import { fetchAdminList, createAdminItem, publishContent, checkVocabularyDuplicate } from '@/services/admin-service';
+import { fetchAdminList } from '@/services/admin-service';
 import { Button } from '@/components/ui';
 import { FontSize, Spacing, BorderRadius } from '@/constants/theme';
 
 export default function AdminVocabularyScreen() {
   const { colors } = useThemeStore();
-  const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-vocabulary', search, page],
     queryFn: () => fetchAdminList('vocabulary', { search: search || undefined }, page, 30),
-  });
-
-  const createMutation = useMutation({
-    mutationFn: async () => {
-      return createAdminItem('vocabulary', { chinese: '新词', pinyin: 'xīn cí', meaning_vi: 'từ mới', status: 'draft', level: 'starter' });
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-vocabulary'] }),
   });
 
   return (
@@ -33,7 +25,6 @@ export default function AdminVocabularyScreen() {
         </TouchableOpacity>
         <View style={styles.headerRow}>
           <Text style={[styles.title, { color: colors.text }]}>Vocabulary</Text>
-          <Button title="+ Thêm từ" variant="primary" size="sm" onPress={() => createMutation.mutate()} />
         </View>
         <Text style={[styles.total, { color: colors.textTertiary }]}>{data?.total ?? 0} từ vựng</Text>
       </View>

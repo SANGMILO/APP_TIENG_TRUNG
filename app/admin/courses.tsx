@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Activity
 import { router } from 'expo-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
-import { fetchAdminList, createAdminItem, updateAdminItem, publishContent } from '@/services/admin-service';
-import { Button } from '@/components/ui';
+import { fetchAdminList, publishContent } from '@/services/admin-service';
 import { FontSize, Spacing, BorderRadius } from '@/constants/theme';
 
 export default function AdminCoursesScreen() {
@@ -16,11 +15,6 @@ export default function AdminCoursesScreen() {
   const { data, isLoading } = useQuery({
     queryKey: ['admin-courses', statusFilter, search],
     queryFn: () => fetchAdminList('courses', { status: statusFilter || undefined, search: search || undefined }),
-  });
-
-  const createMutation = useMutation({
-    mutationFn: () => createAdminItem('courses', { title: 'Khóa học mới', status: 'draft', level: 'starter', order_index: (data?.total ?? 0) + 1 }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-courses'] }),
   });
 
   const publishMutation = useMutation({
@@ -38,7 +32,6 @@ export default function AdminCoursesScreen() {
         </TouchableOpacity>
         <View style={styles.headerRow}>
           <Text style={[styles.title, { color: colors.text }]}>Courses</Text>
-          <Button title="+ Tạo mới" variant="primary" size="sm" onPress={() => createMutation.mutate()} loading={createMutation.isPending} />
         </View>
       </View>
 

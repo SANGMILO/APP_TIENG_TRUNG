@@ -93,7 +93,7 @@ export default function WelcomeScreen() {
               delay={200 + index * 200}
               duration={800}
             >
-              <AnimatedPressable scaleValue={0.98} activeOpacity={1}>
+              <View>
                 <View style={[styles.featureCard, { backgroundColor: colors.card }]}>
                   <View style={[styles.featureIconCircle, { backgroundColor: feature.bgColor }]}>
                     <Ionicons name={feature.ionIcon} size={24} color={feature.iconColor} />
@@ -107,7 +107,7 @@ export default function WelcomeScreen() {
                     </Text>
                   </View>
                 </View>
-              </AnimatedPressable>
+              </View>
             </FadeInView>
           ))}
         </View>

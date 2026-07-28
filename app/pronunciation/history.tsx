@@ -16,7 +16,7 @@ export default function PronunciationHistoryScreen() {
   const { profile } = useAuthStore();
   const insets = useSafeAreaInsets();
 
-  const { data: attempts, isLoading } = useQuery({
+  const { data: attempts, isLoading, isError, refetch } = useQuery({
     queryKey: ['pronunciation-history'],
     queryFn: async () => {
       if (!profile) return [];
@@ -41,6 +41,14 @@ export default function PronunciationHistoryScreen() {
 
       {isLoading ? (
         <View style={styles.center}><ActivityIndicator size="large" color={colors.primary} /></View>
+      ) : isError ? (
+        <EmptyState
+          iconName="cloud-offline-outline"
+          title="Không thể tải lịch sử phát âm"
+          description="Kiểm tra kết nối rồi thử lại."
+          actionLabel="Thử lại"
+          onAction={() => { void refetch(); }}
+        />
       ) : (
         <FlatList
           data={attempts}

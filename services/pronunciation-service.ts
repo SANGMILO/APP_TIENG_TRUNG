@@ -74,26 +74,6 @@ export async function assessPronunciation(
       const normalized = await normalizeAudioForPronunciation(input.audioUri);
       audioBuffer = normalized.buffer;
 
-      // Development debug: log normalization metadata
-      if (__DEV__) {
-        console.log('[Pronunciation] Normalized audio:', {
-          mimeType: normalized.mimeType,
-          sampleRate: normalized.sampleRate,
-          channels: normalized.channels,
-          bitsPerSample: normalized.bitsPerSample,
-          outputByteSize: audioBuffer.byteLength,
-          outputDurationSec: (audioBuffer.byteLength - 44) / (normalized.sampleRate * normalized.channels * (normalized.bitsPerSample / 8)),
-        });
-
-        // Debug playback: create blob URL for manual verification
-        try {
-          const debugBlob = new Blob([audioBuffer], { type: 'audio/wav' });
-          const debugUrl = URL.createObjectURL(debugBlob);
-          console.log('[Pronunciation] Debug WAV playback URL:', debugUrl);
-          // Revoke after 60 seconds
-          setTimeout(() => URL.revokeObjectURL(debugUrl), 60000);
-        } catch {}
-      }
     } else if (input.audio instanceof Blob) {
       const tempUrl = URL.createObjectURL(input.audio);
       try {

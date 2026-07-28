@@ -79,10 +79,9 @@ export function AudioPlayer({
           onPlayEnd?.();
         }
       });
-    } catch (err) {
+    } catch {
       setIsLoading(false);
       setError(true);
-      console.error('Audio play error:', err);
     }
   };
 

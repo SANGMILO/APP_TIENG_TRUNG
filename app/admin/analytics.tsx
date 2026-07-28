@@ -4,13 +4,13 @@ import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { fetchAdminDashboard } from '@/services/admin-service';
-import { supabase } from '@/lib/supabase';
+import { EmptyState } from '@/components/ui';
 import { FontSize, Spacing, BorderRadius } from '@/constants/theme';
 
 export default function AdminAnalyticsScreen() {
   const { colors } = useThemeStore();
 
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading, isError, refetch } = useQuery({
     queryKey: ['admin-analytics'],
     queryFn: fetchAdminDashboard,
   });
@@ -22,7 +22,15 @@ export default function AdminAnalyticsScreen() {
       </TouchableOpacity>
       <Text style={[styles.title, { color: colors.text }]}>Analytics</Text>
 
-      {isLoading ? <ActivityIndicator color={colors.primary} /> : stats ? (
+      {isLoading ? <ActivityIndicator color={colors.primary} /> : isError ? (
+        <EmptyState
+          iconName="cloud-offline-outline"
+          title="Không thể tải analytics"
+          description="Kiểm tra quyền truy cập hoặc kết nối rồi thử lại."
+          actionLabel="Thử lại"
+          onAction={() => { void refetch(); }}
+        />
+      ) : stats ? (
         <View style={styles.metricsGrid}>
           <MetricCard label="Total Users" value={stats.totalUsers} colors={colors} />
           <MetricCard label="Active Today" value={stats.activeToday} colors={colors} />
@@ -34,7 +42,7 @@ export default function AdminAnalyticsScreen() {
       ) : null}
 
       <Text style={[styles.note, { color: colors.textTertiary }]}>
-        Detailed analytics with time ranges, charts, and per-content metrics will be available with production data.
+        Các chỉ số trên được tổng hợp trực tiếp từ dữ liệu hệ thống hiện tại.
       </Text>
     </ScrollView>
   );

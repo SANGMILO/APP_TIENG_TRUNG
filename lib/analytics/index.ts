@@ -2,29 +2,32 @@ import { IAnalyticsProvider, AnalyticsEvent, AnalyticsProperties } from './types
 
 export type { IAnalyticsProvider, AnalyticsEvent, AnalyticsProperties };
 
-/**
- * Console-based analytics for development.
- * Replace with actual provider (Mixpanel, Amplitude, etc.) for production.
- */
-class DevAnalyticsProvider implements IAnalyticsProvider {
-  track(event: AnalyticsEvent, properties?: AnalyticsProperties): void {
-    if (__DEV__) {
-      console.log(`[Analytics] ${event}`, properties);
-    }
-  }
-
-  identify(userId: string, traits?: AnalyticsProperties): void {
-    if (__DEV__) {
-      console.log(`[Analytics] Identify: ${userId}`, traits);
-    }
-  }
-
-  reset(): void {
-    if (__DEV__) {
-      console.log('[Analytics] Reset');
-    }
-  }
+class NoopAnalyticsProvider implements IAnalyticsProvider {
+  track(_event: AnalyticsEvent, _properties?: AnalyticsProperties): void {}
+  identify(_userId: string, _traits?: AnalyticsProperties): void {}
+  reset(): void {}
 }
 
-// Singleton analytics instance
-export const analytics: IAnalyticsProvider = new DevAnalyticsProvider();
+const noopProvider = new NoopAnalyticsProvider();
+let configuredProvider: IAnalyticsProvider = noopProvider;
+
+/**
+ * Installs an owner-approved analytics provider. Until then, analytics is
+ * intentionally silent and never writes identity, learning content, or traits
+ * to the console.
+ */
+export function configureAnalyticsProvider(provider?: IAnalyticsProvider): void {
+  configuredProvider = provider ?? noopProvider;
+}
+
+export const analytics: IAnalyticsProvider = {
+  track(event, properties) {
+    configuredProvider.track(event, properties);
+  },
+  identify(userId, traits) {
+    configuredProvider.identify(userId, traits);
+  },
+  reset() {
+    configuredProvider.reset();
+  },
+};

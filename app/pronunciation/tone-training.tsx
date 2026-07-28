@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { supabase } from '@/lib/supabase';
-import { Button, ProgressBar } from '@/components/ui';
+import { Button, EmptyState, ProgressBar } from '@/components/ui';
 import { AudioPlayer } from '@/components/media';
 import { FontSize, Spacing, BorderRadius, Shadow, FontWeight } from '@/constants/theme';
 
@@ -28,7 +28,7 @@ export default function ToneTrainingScreen() {
   const [total, setTotal] = useState(0);
   const [completed, setCompleted] = useState(false);
 
-  const { data: syllables, isLoading } = useQuery({
+  const { data: syllables, isLoading, isError, refetch } = useQuery({
     queryKey: ['tone-syllables'],
     queryFn: async () => {
       const { data, error } = await supabase.from('tone_syllables').select('*').order('difficulty').limit(10);
@@ -63,6 +63,20 @@ export default function ToneTrainingScreen() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.center}><ActivityIndicator size="large" color={colors.primary} /></View>
+      </SafeAreaView>
+    );
+  }
+
+  if (isError) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <EmptyState
+          iconName="cloud-offline-outline"
+          title="Không thể tải bài luyện thanh điệu"
+          description="Kiểm tra kết nối rồi thử lại."
+          actionLabel="Thử lại"
+          onAction={() => { void refetch(); }}
+        />
       </SafeAreaView>
     );
   }

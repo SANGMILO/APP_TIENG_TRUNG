@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
-import { FadeInView, AnimatedPressable, GlassCard, ProgressBar } from '@/components/ui';
+import { FadeInView, AnimatedPressable, EmptyState } from '@/components/ui';
 import { FontSize, Spacing, BorderRadius, Shadow, FontWeight } from '@/constants/theme';
 
 export default function PronunciationScreen() {
@@ -15,7 +15,7 @@ export default function PronunciationScreen() {
   const { profile } = useAuthStore();
   const insets = useSafeAreaInsets();
 
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading, isError, refetch } = useQuery({
     queryKey: ['pronunciation-stats'],
     queryFn: async () => {
       if (!profile) return { totalAttempts: 0, avgScore: 0, todayAttempts: 0 };
@@ -44,6 +44,14 @@ export default function PronunciationScreen() {
         {/* Stats */}
         {isLoading ? (
           <ActivityIndicator size="small" color={colors.primary} style={{ marginVertical: Spacing.xl }} />
+        ) : isError ? (
+          <EmptyState
+            iconName="cloud-offline-outline"
+            title="Không thể tải thống kê phát âm"
+            description="Kiểm tra kết nối rồi thử lại."
+            actionLabel="Thử lại"
+            onAction={() => { void refetch(); }}
+          />
         ) : (
           <FadeInView delay={100} animation="slideUp">
             <View style={styles.statsRow}>

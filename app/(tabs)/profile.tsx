@@ -337,6 +337,18 @@ export default function ProfileScreen() {
               colors={colors}
             />
             <SettingRow
+              iconName="podium-outline"
+              title="Bảng xếp hạng"
+              onPress={() => router.push('/gamification/leaderboard')}
+              colors={colors}
+            />
+            <SettingRow
+              iconName="storefront-outline"
+              title="Cửa hàng"
+              onPress={() => router.push('/gamification/shop')}
+              colors={colors}
+            />
+            <SettingRow
               iconName="shield-outline"
               title="Quyền riêng tư"
               onPress={() => router.push('/privacy')}
