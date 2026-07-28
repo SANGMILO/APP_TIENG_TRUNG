@@ -1,0 +1,590 @@
+{
+  "schemaVersion": 1,
+  "batchKey": "batch-08-practical",
+  "version": 1,
+  "migrationName": "20260729170000_content_batch_08_practical",
+  "description": "Practical Chinese Conversation core curriculum; review-stage pending qualified linguistic approval.",
+  "courses": [
+    {
+      "slug": "practical-conversation",
+      "title": "Practical Chinese Conversation",
+      "titleZh": "实用汉语会话",
+      "descriptionVi": "Hội thoại thực dụng cho các tình huống hằng ngày.",
+      "level": "beginner",
+      "orderIndex": 8,
+      "status": "review",
+      "estimatedMinutes": 78,
+      "objectives": [
+        "Mở và duy trì hội thoại",
+        "Xử lý yêu cầu thường ngày",
+        "Phản hồi lịch sự và tự nhiên"
+      ],
+      "units": [
+        {
+          "slug": "practical-nen-tang",
+          "title": "Nền tảng",
+          "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+          "orderIndex": 1,
+          "status": "review",
+          "objectives": [
+            "Mở và duy trì hội thoại",
+            "Xử lý yêu cầu thường ngày"
+          ],
+          "chapters": [
+            {
+              "slug": "practical-nen-tang-chapter",
+              "title": "Khái niệm cốt lõi",
+              "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Mở và duy trì hội thoại",
+                "Xử lý yêu cầu thường ngày"
+              ],
+              "lessons": [
+                {
+                  "slug": "hen-gap",
+                  "title": "约时间 — Hẹn gặp",
+                  "descriptionVi": "Thống nhất thời gian và địa điểm.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Hẹn gặp rõ ràng"
+                  ],
+                  "culturalNote": "吧 không dùng khi cần mệnh lệnh dứt khoát.",
+                  "reviewVocabularyKeys": [],
+                  "reviewGrammarKeys": [],
+                  "vocabulary": [
+                    {
+                      "key": "practical:方便",
+                      "chinese": "方便",
+                      "pinyin": "fāngbiàn",
+                      "meaningVi": "tiện",
+                      "meaningEn": "convenient",
+                      "partOfSpeech": "tính từ",
+                      "level": "beginner",
+                      "category": "hen-gap",
+                      "status": "review",
+                      "exampleSentence": "你明天下午方便吗？",
+                      "examplePinyin": "Nǐ míngtiān xiàwǔ fāngbiàn ma?",
+                      "exampleMeaningVi": "Chiều mai bạn có tiện không?"
+                    },
+                    {
+                      "key": "practical:见面",
+                      "chinese": "见面",
+                      "pinyin": "jiànmiàn",
+                      "meaningVi": "gặp mặt",
+                      "meaningEn": "meet",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "hen-gap",
+                      "status": "review",
+                      "exampleSentence": "我们周末见面吧。",
+                      "examplePinyin": "Wǒmen zhōumò jiànmiàn ba.",
+                      "exampleMeaningVi": "Cuối tuần chúng ta gặp nhau nhé."
+                    },
+                    {
+                      "key": "practical:确定",
+                      "chinese": "确定",
+                      "pinyin": "quèdìng",
+                      "meaningVi": "xác định",
+                      "meaningEn": "confirm",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "hen-gap",
+                      "status": "review",
+                      "exampleSentence": "时间确定以后告诉我。",
+                      "examplePinyin": "Shíjiān quèdìng yǐhòu gàosu wǒ.",
+                      "exampleMeaningVi": "Sau khi chốt thời gian hãy báo tôi."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "practical:hen-gap",
+                      "title": "Đề nghị với 吧",
+                      "pattern": "câu đề nghị + 吧",
+                      "explanationVi": "吧 làm đề nghị mềm và thân thiện.",
+                      "exampleChinese": "我们下午三点见面吧。",
+                      "examplePinyin": "Wǒmen xiàwǔ sān diǎn jiànmiàn ba.",
+                      "exampleMeaningVi": "Chúng ta gặp nhau lúc ba giờ chiều nhé.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "practical:方便",
+                    "distractorKeys": [
+                      "practical:见面",
+                      "practical:确定"
+                    ],
+                    "sentenceTokens": [
+                      "我们",
+                      "下午",
+                      "三点",
+                      "见面",
+                      "吧",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "我们下午三点见面吧。",
+                    "translationPromptVi": "Chúng ta gặp nhau lúc ba giờ chiều nhé.",
+                    "translationAnswerZh": "我们下午三点见面吧。",
+                    "grammarQuestion": "Câu nào là một lời đề nghị tự nhiên?",
+                    "grammarOptions": [
+                      "我们下午三点见面吧。",
+                      "。吧见面三点下午我们",
+                      "下午三点见面吧。我们"
+                    ],
+                    "grammarCorrect": "我们下午三点见面吧。",
+                    "grammarExplanationVi": "吧 làm đề nghị mềm và thân thiện.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "practical:hen-gap",
+                    "speakingTextZh": "我们下午三点见面吧。",
+                    "speakingPinyin": "Wǒmen xiàwǔ sān diǎn jiànmiàn ba."
+                  }
+                },
+                {
+                  "slug": "goi-dien",
+                  "title": "打电话 — Gọi điện",
+                  "descriptionVi": "Mở đầu và chuyển cuộc gọi.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Xác nhận người nghe qua điện thoại"
+                  ],
+                  "culturalNote": "喂 trong cuộc gọi đọc wéi thanh 2.",
+                  "reviewVocabularyKeys": [
+                    "practical:方便",
+                    "practical:见面",
+                    "practical:确定"
+                  ],
+                  "reviewGrammarKeys": [
+                    "practical:hen-gap"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "practical:接",
+                      "chinese": "接",
+                      "pinyin": "jiē",
+                      "meaningVi": "nghe, nhận",
+                      "meaningEn": "answer; receive",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "goi-dien",
+                      "status": "review",
+                      "exampleSentence": "他现在不能接电话。",
+                      "examplePinyin": "Tā xiànzài bù néng jiē diànhuà.",
+                      "exampleMeaningVi": "Bây giờ anh ấy không thể nghe điện thoại."
+                    },
+                    {
+                      "key": "practical:稍等",
+                      "chinese": "稍等",
+                      "pinyin": "shāoděng",
+                      "meaningVi": "xin chờ một chút",
+                      "meaningEn": "wait a moment",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "goi-dien",
+                      "status": "review",
+                      "exampleSentence": "请稍等，我帮您转接。",
+                      "examplePinyin": "Qǐng shāoděng, wǒ bāng nín zhuǎnjiē.",
+                      "exampleMeaningVi": "Xin chờ một chút, tôi sẽ chuyển máy."
+                    },
+                    {
+                      "key": "practical:留言",
+                      "chinese": "留言",
+                      "pinyin": "liúyán",
+                      "meaningVi": "để lại lời nhắn",
+                      "meaningEn": "leave a message",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "beginner",
+                      "category": "goi-dien",
+                      "status": "review",
+                      "exampleSentence": "您需要留言吗？",
+                      "examplePinyin": "Nín xūyào liúyán ma?",
+                      "exampleMeaningVi": "Ngài có cần để lại lời nhắn không?"
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "practical:goi-dien",
+                      "title": "Cách tự giới thiệu qua điện thoại",
+                      "pattern": "喂，您好，我是…",
+                      "explanationVi": "Nêu tên sau lời chào để người nghe nhanh chóng xác định người gọi.",
+                      "exampleChinese": "喂，您好，我是小林。",
+                      "examplePinyin": "Wéi, nín hǎo, wǒ shì Xiǎolín.",
+                      "exampleMeaningVi": "A lô, xin chào, tôi là Tiểu Lâm.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "practical:接",
+                    "distractorKeys": [
+                      "practical:稍等",
+                      "practical:留言"
+                    ],
+                    "sentenceTokens": [
+                      "喂，",
+                      "您好，",
+                      "我",
+                      "是",
+                      "小林",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "喂，您好，我是小林。",
+                    "translationPromptVi": "A lô, xin chào, tôi là Tiểu Lâm.",
+                    "translationAnswerZh": "喂，您好，我是小林。",
+                    "grammarQuestion": "Câu mở đầu điện thoại nào tự nhiên?",
+                    "grammarOptions": [
+                      "喂，您好，我是小林。",
+                      "。小林是我您好，喂，",
+                      "您好，我是小林。喂，"
+                    ],
+                    "grammarCorrect": "喂，您好，我是小林。",
+                    "grammarExplanationVi": "Nêu tên sau lời chào để người nghe nhanh chóng xác định người gọi.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "practical:goi-dien",
+                    "speakingTextZh": "喂，您好，我是小林。",
+                    "speakingPinyin": "Wéi, nín hǎo, wǒ shì Xiǎolín."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "practical-van-dung",
+          "title": "Vận dụng",
+          "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+          "orderIndex": 2,
+          "status": "review",
+          "objectives": [
+            "Xử lý yêu cầu thường ngày",
+            "Phản hồi lịch sự và tự nhiên"
+          ],
+          "chapters": [
+            {
+              "slug": "practical-van-dung-chapter",
+              "title": "Ngữ cảnh thực tế",
+              "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Xử lý yêu cầu thường ngày",
+                "Phản hồi lịch sự và tự nhiên"
+              ],
+              "lessons": [
+                {
+                  "slug": "nho-giup",
+                  "title": "能帮个忙吗？— Nhờ giúp",
+                  "descriptionVi": "Đưa ra yêu cầu lịch sự.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Nhờ giúp và cảm ơn"
+                  ],
+                  "culturalNote": "Thêm 一下 làm hành động nghe nhẹ hơn.",
+                  "reviewVocabularyKeys": [
+                    "practical:接",
+                    "practical:稍等",
+                    "practical:留言"
+                  ],
+                  "reviewGrammarKeys": [
+                    "practical:goi-dien"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "practical:帮忙",
+                      "chinese": "帮忙",
+                      "pinyin": "bāngmáng",
+                      "meaningVi": "giúp đỡ",
+                      "meaningEn": "help",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "nho-giup",
+                      "status": "review",
+                      "exampleSentence": "你能帮我一个忙吗？",
+                      "examplePinyin": "Nǐ néng bāng wǒ yí ge máng ma?",
+                      "exampleMeaningVi": "Bạn có thể giúp tôi một việc không?"
+                    },
+                    {
+                      "key": "practical:麻烦",
+                      "chinese": "麻烦",
+                      "pinyin": "máfan",
+                      "meaningVi": "phiền; làm phiền",
+                      "meaningEn": "trouble",
+                      "partOfSpeech": "động từ/tính từ",
+                      "level": "beginner",
+                      "category": "nho-giup",
+                      "status": "review",
+                      "exampleSentence": "麻烦你再说一遍。",
+                      "examplePinyin": "Máfan nǐ zài shuō yí biàn.",
+                      "exampleMeaningVi": "Phiền bạn nói lại một lần."
+                    },
+                    {
+                      "key": "practical:当然",
+                      "chinese": "当然",
+                      "pinyin": "dāngrán",
+                      "meaningVi": "tất nhiên",
+                      "meaningEn": "of course",
+                      "partOfSpeech": "phó từ",
+                      "level": "beginner",
+                      "category": "nho-giup",
+                      "status": "review",
+                      "exampleSentence": "当然可以，没问题。",
+                      "examplePinyin": "Dāngrán kěyǐ, méi wèntí.",
+                      "exampleMeaningVi": "Tất nhiên được, không vấn đề."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "practical:nho-giup",
+                      "title": "Yêu cầu lịch sự với 能…吗",
+                      "pattern": "能 + động từ + 吗",
+                      "explanationVi": "Dạng câu hỏi khả năng làm yêu cầu bớt trực tiếp.",
+                      "exampleChinese": "你能帮我拿一下吗？",
+                      "examplePinyin": "Nǐ néng bāng wǒ ná yíxià ma?",
+                      "exampleMeaningVi": "Bạn có thể giúp tôi cầm một chút không?",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "practical:帮忙",
+                    "distractorKeys": [
+                      "practical:麻烦",
+                      "practical:当然"
+                    ],
+                    "sentenceTokens": [
+                      "你",
+                      "能",
+                      "帮",
+                      "我",
+                      "拿",
+                      "一下",
+                      "吗",
+                      "？"
+                    ],
+                    "sentenceAnswerZh": "你能帮我拿一下吗？",
+                    "translationPromptVi": "Bạn có thể giúp tôi cầm một chút không?",
+                    "translationAnswerZh": "你能帮我拿一下吗？",
+                    "grammarQuestion": "Câu nhờ giúp nào lịch sự?",
+                    "grammarOptions": [
+                      "你能帮我拿一下吗？",
+                      "？吗一下拿我帮能你",
+                      "能帮我拿一下吗？你"
+                    ],
+                    "grammarCorrect": "你能帮我拿一下吗？",
+                    "grammarExplanationVi": "Dạng câu hỏi khả năng làm yêu cầu bớt trực tiếp.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "practical:nho-giup",
+                    "speakingTextZh": "你能帮我拿一下吗？",
+                    "speakingPinyin": "Nǐ néng bāng wǒ ná yíxià ma?"
+                  }
+                },
+                {
+                  "slug": "xu-ly-hieu-lam",
+                  "title": "不好意思，我没听清 — Hiểu lầm",
+                  "descriptionVi": "Yêu cầu làm rõ mà không gây căng thẳng.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Sửa hiểu lầm lịch sự"
+                  ],
+                  "culturalNote": "Không dùng 不听清 để phủ định một kết quả đã xảy ra.",
+                  "reviewVocabularyKeys": [
+                    "practical:帮忙",
+                    "practical:麻烦",
+                    "practical:当然"
+                  ],
+                  "reviewGrammarKeys": [
+                    "practical:nho-giup"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "practical:听清",
+                      "chinese": "听清",
+                      "pinyin": "tīngqīng",
+                      "meaningVi": "nghe rõ",
+                      "meaningEn": "hear clearly",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "xu-ly-hieu-lam",
+                      "status": "review",
+                      "exampleSentence": "刚才我没听清地址。",
+                      "examplePinyin": "Gāngcái wǒ méi tīngqīng dìzhǐ.",
+                      "exampleMeaningVi": "Lúc nãy tôi không nghe rõ địa chỉ."
+                    },
+                    {
+                      "key": "practical:误会",
+                      "chinese": "误会",
+                      "pinyin": "wùhuì",
+                      "meaningVi": "hiểu lầm",
+                      "meaningEn": "misunderstand",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "beginner",
+                      "category": "xu-ly-hieu-lam",
+                      "status": "review",
+                      "exampleSentence": "对不起，这是一个误会。",
+                      "examplePinyin": "Duìbuqǐ, zhè shì yí ge wùhuì.",
+                      "exampleMeaningVi": "Xin lỗi, đây là một sự hiểu lầm."
+                    },
+                    {
+                      "key": "practical:解释",
+                      "chinese": "解释",
+                      "pinyin": "jiěshì",
+                      "meaningVi": "giải thích",
+                      "meaningEn": "explain",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "xu-ly-hieu-lam",
+                      "status": "review",
+                      "exampleSentence": "请让我解释一下。",
+                      "examplePinyin": "Qǐng ràng wǒ jiěshì yíxià.",
+                      "exampleMeaningVi": "Xin hãy để tôi giải thích một chút."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "practical:xu-ly-hieu-lam",
+                      "title": "Phủ định kết quả với 没",
+                      "pattern": "没 + động từ + bổ ngữ kết quả",
+                      "explanationVi": "没 phủ định việc đạt được kết quả trong quá khứ.",
+                      "exampleChinese": "不好意思，我没听清。",
+                      "examplePinyin": "Bù hǎoyìsi, wǒ méi tīngqīng.",
+                      "exampleMeaningVi": "Xin lỗi, tôi chưa nghe rõ.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "practical:听清",
+                    "distractorKeys": [
+                      "practical:误会",
+                      "practical:解释"
+                    ],
+                    "sentenceTokens": [
+                      "不好意思",
+                      "，",
+                      "我",
+                      "没",
+                      "听清",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "不好意思，我没听清。",
+                    "translationPromptVi": "Xin lỗi, tôi chưa nghe rõ.",
+                    "translationAnswerZh": "不好意思，我没听清。",
+                    "grammarQuestion": "Câu nào nói chưa nghe rõ?",
+                    "grammarOptions": [
+                      "不好意思，我没听清。",
+                      "。听清没我，不好意思",
+                      "，我没听清。不好意思"
+                    ],
+                    "grammarCorrect": "不好意思，我没听清。",
+                    "grammarExplanationVi": "没 phủ định việc đạt được kết quả trong quá khứ.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "practical:xu-ly-hieu-lam",
+                    "speakingTextZh": "不好意思，我没听清。",
+                    "speakingPinyin": "Bù hǎoyìsi, wǒ méi tīngqīng."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "practical-on-tap",
+          "title": "Ôn tập",
+          "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+          "orderIndex": 3,
+          "status": "review",
+          "objectives": [
+            "Ôn từ vựng",
+            "Ôn mẫu câu"
+          ],
+          "chapters": [
+            {
+              "slug": "practical-on-tap-chapter",
+              "title": "Củng cố lộ trình",
+              "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Ôn từ vựng",
+                "Ôn mẫu câu"
+              ],
+              "lessons": [
+                {
+                  "slug": "practical-review",
+                  "title": "Ôn tập Practical Chinese Conversation",
+                  "descriptionVi": "Củng cố từ vựng, mẫu câu và khả năng diễn đạt của toàn khóa.",
+                  "orderIndex": 1,
+                  "xpReward": 30,
+                  "status": "review",
+                  "lessonType": "review",
+                  "estimatedMinutes": 18,
+                  "objectives": [
+                    "Vận dụng lại từ vựng trọng tâm",
+                    "Tự kiểm tra mẫu câu đã học"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "practical:听清",
+                    "practical:误会",
+                    "practical:解释"
+                  ],
+                  "reviewGrammarKeys": [
+                    "practical:xu-ly-hieu-lam"
+                  ],
+                  "vocabulary": [],
+                  "grammar": [],
+                  "practice": {
+                    "targetKey": "practical:听清",
+                    "distractorKeys": [
+                      "practical:误会",
+                      "practical:解释"
+                    ],
+                    "sentenceTokens": [
+                      "不好意思",
+                      "，",
+                      "我",
+                      "没",
+                      "听清",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "不好意思，我没听清。",
+                    "translationPromptVi": "Xin lỗi, tôi chưa nghe rõ.",
+                    "translationAnswerZh": "不好意思，我没听清。",
+                    "grammarQuestion": "Câu nào nói chưa nghe rõ?",
+                    "grammarOptions": [
+                      "不好意思，我没听清。",
+                      "。听清没我，不好意思",
+                      "，我没听清。不好意思"
+                    ],
+                    "grammarCorrect": "不好意思，我没听清。",
+                    "grammarExplanationVi": "没 phủ định việc đạt được kết quả trong quá khứ.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "practical:xu-ly-hieu-lam",
+                    "speakingTextZh": "不好意思，我没听清。",
+                    "speakingPinyin": "Bù hǎoyìsi, wǒ méi tīngqīng."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
