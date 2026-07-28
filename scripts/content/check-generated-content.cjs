@@ -9,7 +9,7 @@ const specDir = path.join(rootDir, 'content', 'specs');
 
 if (require('fs').existsSync(specDir)) {
   const specs = require('fs').readdirSync(specDir)
-    .filter((name) => name.endsWith('.cjs'))
+    .filter((name) => name.endsWith('.cjs') && !name.startsWith('_'))
     .sort();
   for (const spec of specs) {
     const relativeSpec = path.relative(rootDir, path.join(specDir, spec));

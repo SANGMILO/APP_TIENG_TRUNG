@@ -17,7 +17,7 @@ function parseArgs(argv) {
 }
 
 function vocabulary(courseKey, level, status, lessonSlug, row) {
-  const [chinese, pinyin, meaningVi, meaningEn, partOfSpeech, sentence, sentencePinyin, sentenceVi] = row;
+  const [chinese, pinyin, meaningVi, meaningEn, partOfSpeech, sentence, sentencePinyin, sentenceVi, metadata] = row;
   return {
     key: `${courseKey}:${chinese}`,
     chinese,
@@ -31,6 +31,7 @@ function vocabulary(courseKey, level, status, lessonSlug, row) {
     exampleSentence: sentence,
     examplePinyin: sentencePinyin,
     exampleMeaningVi: sentenceVi,
+    ...(metadata ?? {}),
   };
 }
 
@@ -50,6 +51,10 @@ function grammar(courseKey, level, status, lesson) {
 }
 
 function practice(targetKey, distractorKeys, lesson, grammarKey) {
+  const wrong = lesson.grammar.wrong ?? [
+    [...lesson.tokens].reverse().join(''),
+    [...lesson.tokens.slice(1), lesson.tokens[0]].join(''),
+  ];
   return {
     targetKey,
     distractorKeys,
@@ -58,7 +63,7 @@ function practice(targetKey, distractorKeys, lesson, grammarKey) {
     translationPromptVi: lesson.grammar.meaningVi,
     translationAnswerZh: lesson.grammar.correct,
     grammarQuestion: lesson.grammar.question,
-    grammarOptions: [lesson.grammar.correct, ...lesson.grammar.wrong],
+    grammarOptions: [lesson.grammar.correct, ...wrong],
     grammarCorrect: lesson.grammar.correct,
     grammarExplanationVi: lesson.grammar.explanationVi,
     grammarActivityType: lesson.grammar.activityType ?? 'grammar_selection',
@@ -95,6 +100,7 @@ function build(spec) {
       reviewGrammarKeys: previousGrammarKeys,
       vocabulary: words,
       grammar: [grammarRow],
+      ...(lesson.characters ? { characters: lesson.characters } : {}),
       practice: practice(keys[0], keys.slice(1), lesson, grammarRow.key),
     });
     previousVocabularyKeys = keys;
