@@ -547,16 +547,43 @@ Stitch migration remains the visual source of truth.
     real devices; the format path is now deterministic and unit-tested
   - Dependency advisories require upstream Expo/Jest-compatible releases; no
     runtime high/critical advisory or safe compatible remediation is available
-- Commit: pending
+- Commit: `df3ed8b` (`chore: harden release dependencies and admin publishing`)
 
 ### Phase 11 — Hosted deployment and database testing
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: local Docker availability to be verified
+- Status: COMPLETE
+- Files:
+  - `AUTONOMOUS_COMPLETION_PLAN.md`
+- Migrations:
+  - `20260729080000_admin_publish_hardening.sql`
+- Deployments:
+  - Applied migration `20260729080000` to the linked Supabase project
+  - No Edge Functions changed in Phase 10, so none were redeployed
+- Validation:
+  - Pre-push migration list showed exactly `20260729080000` pending
+  - `supabase db push --dry-run` named only the expected migration
+  - Destructive SQL scan found no drop/truncate/delete/reset operation
+  - Post-push local/remote histories match through `20260729080000`
+  - A fresh hosted schema dump independently confirmed the hardened function
+    body, empty search path, authenticated-only publish grant, and revoked
+    trigger-helper access; the temporary dump was removed
+  - Local pgTAP: 9 files / 219 assertions passed
+  - Hosted function list: all five functions active with JWT verification
+- Result:
+  - Editors can continue preparing content, but only admins/super-admins can
+    publish through the server
+  - Missing and archived targets cannot create invalid versions
+  - Concurrent publication for one entity is serialized by its row lock
+  - Internal gamification trigger helpers are no longer inherited Data API RPCs
+- Blockers:
+  - Linked pgTAP was attempted but the Supabase CLI temporary login role lacks
+    `USAGE` on the hosted `extensions` schema where pgTAP is installed. The
+    suite therefore ran zero hosted assertions. A transaction-local extension
+    preamble and self-grant were both attempted and rejected by that role.
+    Production extension grants were not broadened merely to satisfy QA.
+  - The Supabase CLI emitted the known non-fatal pg-delta certificate-cache
+    warning after apply; matching history and the fresh hosted schema dump
+    independently confirmed success
 - Commit: pending
 
 ### Phase 12 — Full product QA
