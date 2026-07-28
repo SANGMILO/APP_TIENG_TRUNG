@@ -1,33 +1,43 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import * as Crypto from 'expo-crypto';
 import { useThemeStore } from '@/stores/theme-store';
 import { Button } from '@/components/ui';
-import { VideoQuestion } from '@/services/video-service';
+import { VideoAnswerResult, VideoQuestion } from '@/services/video-service';
 import { FontSize, Spacing, BorderRadius } from '@/constants/theme';
 
 interface VideoQuestionOverlayProps {
   question: VideoQuestion;
-  onAnswer: (answer: string, isCorrect: boolean) => void;
+  onSubmit: (answer: string, attemptId: string) => Promise<VideoAnswerResult>;
   onContinue: () => void;
 }
 
-export function VideoQuestionOverlay({ question, onAnswer, onContinue }: VideoQuestionOverlayProps) {
+export function VideoQuestionOverlay({ question, onSubmit, onContinue }: VideoQuestionOverlayProps) {
   const { colors } = useThemeStore();
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const attemptIdRef = useRef(Crypto.randomUUID());
 
   const options = question.options || [];
-  const correctIndex = options.indexOf(question.correct_answer);
 
-  const handleSelect = (index: number) => {
-    if (answered) return;
+  const persistAnswer = async (index: number) => {
+    if (answered || saving) return;
     setSelected(index);
-    setAnswered(true);
-    const isCorrect = options[index] === question.correct_answer;
-    onAnswer(options[index], isCorrect);
+    setSaving(true);
+    setError('');
+    try {
+      const result = await onSubmit(options[index], attemptIdRef.current);
+      setIsCorrect(result.is_correct);
+      setAnswered(true);
+    } catch (reason: unknown) {
+      setError(getErrorMessage(reason));
+    } finally {
+      setSaving(false);
+    }
   };
-
-  const isCorrect = selected !== null && options[selected] === question.correct_answer;
 
   return (
     <View style={[styles.overlay, { backgroundColor: colors.background + 'F5' }]}>
@@ -39,21 +49,39 @@ export function VideoQuestionOverlay({ question, onAnswer, onContinue }: VideoQu
           {options.map((opt: string, i: number) => {
             let bg = colors.surface;
             let border = colors.border;
-            if (answered && i === correctIndex) { bg = colors.successLight; border = colors.success; }
-            else if (answered && i === selected && !isCorrect) { bg = colors.errorLight; border = colors.error; }
+            if (answered && i === selected && isCorrect) { bg = colors.successLight; border = colors.success; }
+            else if (answered && i === selected) { bg = colors.errorLight; border = colors.error; }
 
             return (
               <TouchableOpacity
                 key={i}
                 style={[styles.option, { backgroundColor: bg, borderColor: border }]}
-                onPress={() => handleSelect(i)}
-                disabled={answered}
+                onPress={() => { void persistAnswer(i); }}
+                disabled={answered || saving || Boolean(error)}
               >
                 <Text style={[styles.optionText, { color: colors.text }]}>{opt}</Text>
               </TouchableOpacity>
             );
           })}
         </View>
+
+        {saving ? (
+          <Text style={[styles.savingText, { color: colors.textSecondary }]}>
+            Đang lưu câu trả lời...
+          </Text>
+        ) : null}
+
+        {error && selected !== null ? (
+          <View style={styles.feedback}>
+            <Text style={[styles.explanation, { color: colors.error }]}>{error}</Text>
+            <Button
+              title="Thử lưu lại"
+              variant="outline"
+              size="md"
+              onPress={() => { void persistAnswer(selected); }}
+            />
+          </View>
+        ) : null}
 
         {answered && (
           <View style={styles.feedback}>
@@ -81,5 +109,18 @@ const styles = StyleSheet.create({
   optionText: { fontSize: FontSize.base, fontWeight: '500' },
   feedback: { alignItems: 'center', gap: Spacing.sm },
   feedbackText: { fontSize: FontSize.lg, fontWeight: '600' },
+  savingText: { fontSize: FontSize.sm, textAlign: 'center' },
   explanation: { fontSize: FontSize.md, textAlign: 'center' },
 });
+
+function getErrorMessage(reason: unknown) {
+  if (
+    typeof reason === 'object'
+    && reason !== null
+    && 'message' in reason
+    && typeof reason.message === 'string'
+  ) {
+    return reason.message;
+  }
+  return 'Không thể lưu câu trả lời. Vui lòng thử lại.';
+}

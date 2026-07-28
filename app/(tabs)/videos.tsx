@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
+import { hasPotentialPlayableSource } from '@/services/video-service';
 import { FadeInView, AnimatedPressable, EmptyState } from '@/components/ui';
 import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
 import { Shadow, FontWeight, FontFamily } from '@/constants/theme';
@@ -27,11 +28,17 @@ export default function VideosScreen() {
   const { data: videos, isLoading, isError, refetch } = useQuery({
     queryKey: ['videos', selectedLevel],
     queryFn: async () => {
-      let query = supabase.from('videos').select('*').eq('status', 'published').order('created_at', { ascending: false }).limit(30);
+      let query = supabase
+        .from('videos')
+        .select('*')
+        .eq('status', 'published')
+        .eq('is_premium', false)
+        .order('created_at', { ascending: false })
+        .limit(30);
       if (selectedLevel !== 'all') query = query.eq('level', selectedLevel);
       const { data, error } = await query;
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []).filter((item: any) => hasPotentialPlayableSource(item));
     },
   });
 
@@ -41,14 +48,23 @@ export default function VideosScreen() {
       if (!profile) return [];
       const { data, error } = await supabase
         .from('user_video_progress')
-        .select('video_id, progress_percent, last_position_ms, videos:video_id (id, title, level, category, duration_seconds, is_premium, thumbnail_url)')
+        .select(`
+          video_id, progress_percent, last_position_ms,
+          videos:video_id (
+            id, title, level, category, duration_seconds, is_premium,
+            thumbnail_url, video_url, video_path, external_url,
+            playback_type, processing_status, status, source_type
+          )
+        `)
         .eq('user_id', profile.id)
         .is('completed_at', null)
         .gt('last_position_ms', 0)
         .order('last_watched_at', { ascending: false })
         .limit(5);
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []).filter(
+        (item: any) => item.videos && hasPotentialPlayableSource(item.videos),
+      );
     },
     enabled: !!profile,
   });

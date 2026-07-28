@@ -85,16 +85,57 @@ Stitch migration remains the visual source of truth.
 - Blockers:
   - P1 content: published lessons 2–5 currently have no exercise content; the app
     reports this honestly and does not fabricate lesson data
-- Commit: pending
+- Commit: `792967f` (`fix: make lesson progression transactional`)
 
 ### Phase 2 — Real video playback and progress
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: pending audit
+- Status: COMPLETE
+- Files:
+  - `app/(tabs)/videos.tsx`
+  - `app/videos/[id].tsx`
+  - `components/video/VideoQuestionOverlay.tsx`
+  - `services/video-service.ts`
+  - `supabase/functions/_shared/video-playback-authorization.ts`
+  - `supabase/functions/video-playback-url/index.ts`
+  - `__tests__/authoritative-video-progress.test.ts`
+  - `__tests__/video-service.test.ts`
+  - `supabase/tests/authoritative_video_progress.test.sql`
+- Migrations:
+  - `20260729020000_authoritative_video_progress.sql`
+- Deployments:
+  - Migration `20260729020000` applied to the linked Supabase project
+  - Edge Function `video-playback-url` deployed as active version 1 with JWT
+    verification enabled
+  - Remote schema independently dumped and verified; temporary dump removed
+- Validation:
+  - Local database recreated from all migrations successfully
+  - pgTAP: 4 files / 88 assertions passed
+  - TypeScript: 0 errors
+  - Jest: 19 suites / 254 tests passed
+  - Expo Web: 48 routes exported
+  - Hosted migration list: local and remote matched through `20260729020000`
+  - Edge Function unauthenticated production smoke: correctly returned HTTP 401
+- Result:
+  - Replaced simulated playback time with real `expo-video` player events
+  - Restores persisted playback position and records bounded, idempotent events
+  - Preserves monotonic furthest position and cumulative watch time server-side
+  - Scores interactive questions on the server without exposing answer keys
+  - Completes videos and awards XP only after server-derived eligibility checks
+  - Supports direct media and authenticated private-storage signed URLs
+  - Premium media remains blocked until an authoritative entitlement model exists
+  - Saved-video action is functional on the detail screen
+  - Catalog and continue-watching sections hide entries with no usable source
+- Blockers:
+  - P1 content/configuration: all currently published seeded videos have no media
+    URL or storage object path, so no honest authenticated playback smoke is
+    possible until real media is uploaded and linked
+  - P1 product/backend: no subscription or entitlement source exists; premium
+    videos are intentionally unavailable rather than relying on a client flag
+  - Local standalone `deno check` is unavailable because Deno is not installed;
+    the Supabase deployment bundler accepted the function
+  - Supabase CLI emitted a non-fatal pg-delta temporary certificate cache warning
+    after migration apply; migration history and a fresh remote schema dump
+    independently confirmed the hosted schema
 - Commit: pending
 
 ### Phase 3 — Review SRS and mistake practice
