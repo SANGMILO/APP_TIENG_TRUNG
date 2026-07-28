@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Audio } from 'expo-av';
+import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeStore } from '@/stores/theme-store';
 import { FontFamily, FontSize, Spacing, BorderRadius, Shadow } from '@/constants/theme';
@@ -27,30 +27,39 @@ export function AudioPlayer({
   variant = 'default',
 }: AudioPlayerProps) {
   const { colors } = useThemeStore();
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [speedIndex, setSpeedIndex] = useState(1); // 1x default
-  const soundRef = useRef<Audio.Sound | null>(null);
-
-  const cleanup = useCallback(async () => {
-    if (soundRef.current) {
-      try {
-        await soundRef.current.unloadAsync();
-      } catch {}
-      soundRef.current = null;
-    }
-  }, []);
+  const finishHandledRef = useRef(false);
+  const player = useAudioPlayer(uri ?? null, { updateInterval: 100 });
+  const status = useAudioPlayerStatus(player);
+  const isPlaying = status.playing;
 
   useEffect(() => {
-    return () => { cleanup(); };
-  }, [cleanup]);
-
-  useEffect(() => {
+    finishHandledRef.current = false;
+    setError(false);
     if (autoPlay && uri) {
-      play();
+      player.playbackRate = SPEEDS[speedIndex];
+      player.shouldCorrectPitch = true;
+      player.play();
     }
-  }, [uri, autoPlay]);
+  }, [autoPlay, player, uri]);
+
+  useEffect(() => {
+    setIsLoading(Boolean(uri) && (status.isBuffering || !status.isLoaded));
+    if (status.error) setError(true);
+    if (status.didJustFinish && !finishHandledRef.current) {
+      finishHandledRef.current = true;
+      onPlayEnd?.();
+    }
+  }, [
+    onPlayEnd,
+    status.didJustFinish,
+    status.error,
+    status.isBuffering,
+    status.isLoaded,
+    uri,
+  ]);
 
   const play = async () => {
     if (!uri) {
@@ -62,23 +71,17 @@ export function AudioPlayer({
     setIsLoading(true);
 
     try {
-      await cleanup();
-
-      const { sound } = await Audio.Sound.createAsync(
-        { uri },
-        { shouldPlay: true, rate: SPEEDS[speedIndex], shouldCorrectPitch: true }
-      );
-
-      soundRef.current = sound;
-      setIsPlaying(true);
+      if (status.didJustFinish || (
+        status.duration > 0
+        && status.currentTime >= status.duration
+      )) {
+        await player.seekTo(0);
+      }
+      finishHandledRef.current = false;
+      player.playbackRate = SPEEDS[speedIndex];
+      player.shouldCorrectPitch = true;
+      player.play();
       setIsLoading(false);
-
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && status.didJustFinish) {
-          setIsPlaying(false);
-          onPlayEnd?.();
-        }
-      });
     } catch {
       setIsLoading(false);
       setError(true);
@@ -87,17 +90,16 @@ export function AudioPlayer({
 
   const handlePress = () => {
     if (isPlaying) {
-      soundRef.current?.pauseAsync();
-      setIsPlaying(false);
+      player.pause();
     } else {
-      play();
+      void play();
     }
   };
 
   const cycleSpeed = () => {
     const next = (speedIndex + 1) % SPEEDS.length;
     setSpeedIndex(next);
-    soundRef.current?.setRateAsync(SPEEDS[next], true);
+    player.setPlaybackRate(SPEEDS[next], 'high');
   };
 
   const iconSize = size === 'sm' ? 16 : size === 'lg' ? 28 : 22;

@@ -488,16 +488,65 @@ Stitch migration remains the visual source of truth.
     consent policy
   - P1 product/admin UX: course and vocabulary creation remain hidden until real
     validated edit forms exist; one-click placeholder creation was removed
-- Commit: pending
+- Commit: `53eba02` (`fix: remove dead interactions and placeholder actions`)
 
 ### Phase 10 — Dependency, Expo, security, and quality audit
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending audit
-- Deployments: pending
-- Validation: pending
-- Blockers: pending audit
+- Status: COMPLETE
+- Files:
+  - `package.json`
+  - `package-lock.json`
+  - `app.json`
+  - `components/media/AudioPlayer.tsx`
+  - `hooks/useAudioRecorder.ts`
+  - `utils/audio-normalize.ts`
+  - `utils/pcm-wav.ts`
+  - `OWNER_ACTION_REQUIRED.md`
+  - `RELEASE_BLOCKERS.md`
+  - `__tests__/expo-quality.test.ts`
+  - `__tests__/pcm-wav.test.ts`
+  - `__tests__/security-audit.test.ts`
+  - `supabase/tests/admin_publish_hardening.test.sql`
+- Migrations:
+  - `20260729080000_admin_publish_hardening.sql` (validated locally; pending
+    hosted deployment in Phase 11)
+- Deployments: none
+- Validation:
+  - Expo Doctor: 20/20 checks passed
+  - TypeScript: 0 errors
+  - Jest: 30 suites / 300 tests passed
+  - pgTAP: 9 files / 219 assertions passed
+  - Expo Web: 51 routes exported
+  - Database lint: no security findings; two unused parameters remain only in
+    revoked legacy compatibility functions
+  - `git diff --check`: passed
+  - `.env`, `.env.local`, `dist`, and Supabase local state remain ignored
+  - No client service-role/provider secret references or token/code logging found
+- Result:
+  - Replaced unmaintained `expo-av` with Expo-compatible `expo-audio` and aligned
+    Jest 29 tooling with Expo SDK 57
+  - Native microphone capture now uses Expo's PCM stream and encodes a real
+    16 kHz mono WAV, avoiding Android's non-WAV MediaRecorder containers
+  - Web MediaRecorder normalization and audio player behavior remain intact
+  - The safe non-forced audit update reduced findings from 34 to 32
+  - All 21 remaining high findings are development-only Jest transitive tooling;
+    npm's proposed fixes are breaking Jest downgrades
+  - The 11 remaining moderate findings are Expo CLI/config/prebuild transitive
+    tooling; npm's proposed aggregate fix incorrectly downgrades Expo 57 to 46
+  - Live RLS/grant inspection confirmed all 46 SECURITY DEFINER functions use
+    an empty search path and sensitive economy/profile writes remain protected
+  - Service-role Edge Functions authenticate and bind operations to the caller
+    before database reads/writes
+  - Publishing now matches the admin-only client contract, rejects missing and
+    archived targets, serializes version creation, and removes Data API access
+    from internal trigger helpers
+  - OAuth/recovery callback destinations are fixed application routes rather
+    than user-controlled redirect parameters
+- Blockers:
+  - Physical Android/iOS microphone, interruption, and playback QA still requires
+    real devices; the format path is now deterministic and unit-tested
+  - Dependency advisories require upstream Expo/Jest-compatible releases; no
+    runtime high/critical advisory or safe compatible remediation is available
 - Commit: pending
 
 ### Phase 11 — Hosted deployment and database testing

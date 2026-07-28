@@ -1,13 +1,54 @@
 /**
  * useAudioRecorder hook
  * Manages microphone recording with state machine pattern
- * Works on Web + Android + iOS via expo-av
+ * Works on Web + Android + iOS via expo-audio
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Audio } from 'expo-av';
+import {
+  AudioModule,
+  AudioQuality,
+  IOSOutputFormat,
+  setAudioModeAsync,
+  useAudioPlayer,
+  useAudioRecorder as useExpoAudioRecorder,
+  useAudioStream,
+  type AudioStreamBuffer,
+  type RecordingOptions,
+} from 'expo-audio';
 import { Platform } from 'react-native';
 import { RecordingState } from '@/lib/speech';
+import {
+  encodePcm16ChunksAsWav,
+  type Pcm16Chunk,
+  wavArrayBufferToDataUri,
+} from '@/utils/pcm-wav';
+
+const SPEECH_RECORDING_OPTIONS: RecordingOptions = {
+  extension: '.wav',
+  sampleRate: 16000,
+  numberOfChannels: 1,
+  bitRate: 256000,
+  android: {
+    extension: '.m4a',
+    outputFormat: 'mpeg4',
+    audioEncoder: 'aac',
+    sampleRate: 16000,
+  },
+  ios: {
+    extension: '.wav',
+    outputFormat: IOSOutputFormat.LINEARPCM,
+    audioQuality: AudioQuality.HIGH,
+    sampleRate: 16000,
+    linearPCMBitDepth: 16,
+    linearPCMIsBigEndian: false,
+    linearPCMIsFloat: false,
+  },
+  web: {
+    mimeType: 'audio/webm',
+    bitsPerSecond: 128000,
+  },
+};
 
 export interface RecorderResult {
   uri: string;
@@ -43,42 +84,65 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}): UseAudi
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const recordingRef = useRef<Audio.Recording | null>(null);
-  const playbackRef = useRef<Audio.Sound | null>(null);
+  const recorder = useExpoAudioRecorder(SPEECH_RECORDING_OPTIONS);
+  const playbackPlayer = useAudioPlayer(null);
+  const recordingActiveRef = useRef(false);
+  const pcmChunksRef = useRef<Pcm16Chunk[]>([]);
+  const capturePcmBuffer = useCallback((buffer: AudioStreamBuffer) => {
+    pcmChunksRef.current.push({
+      data: buffer.data.slice(0),
+      sampleRate: buffer.sampleRate,
+      channels: buffer.channels,
+    });
+  }, []);
+  const { stream: pcmStream } = useAudioStream({
+    sampleRate: 16000,
+    channels: 1,
+    encoding: 'int16',
+    onBuffer: capturePcmBuffer,
+  });
+  const stopRecordingRef = useRef<() => Promise<RecorderResult | null>>(
+    async () => null,
+  );
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<number>(0);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      cleanup();
-    };
-  }, []);
 
   const cleanup = useCallback(async () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-    if (recordingRef.current) {
+    if (recordingActiveRef.current) {
       try {
-        await recordingRef.current.stopAndUnloadAsync();
+        if (Platform.OS === 'web') {
+          await recorder.stop();
+        } else {
+          pcmStream.stop();
+        }
       } catch {}
-      recordingRef.current = null;
+      recordingActiveRef.current = false;
     }
-    if (playbackRef.current) {
-      try {
-        await playbackRef.current.unloadAsync();
-      } catch {}
-      playbackRef.current = null;
-    }
-  }, []);
+    playbackPlayer.pause();
+    try {
+      await setAudioModeAsync({
+        allowsRecording: false,
+        playsInSilentMode: true,
+      });
+    } catch {}
+  }, [pcmStream, playbackPlayer, recorder]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      void cleanup();
+    };
+  }, [cleanup]);
 
   const requestPermission = useCallback(async (): Promise<boolean> => {
     setState('requesting_permission');
     try {
-      const { status } = await Audio.requestPermissionsAsync();
-      if (status !== 'granted') {
+      const permission = await AudioModule.requestRecordingPermissionsAsync();
+      if (!permission.granted) {
         setPermissionDenied(true);
         setState('error');
         setError('Cần quyền truy cập micro để luyện phát âm.');
@@ -101,40 +165,19 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}): UseAudi
 
     try {
       // Configure audio mode for recording
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
+      await setAudioModeAsync({
+        allowsRecording: true,
+        playsInSilentMode: true,
       });
 
-      // Create recording with settings optimized for speech
-      const { recording } = await Audio.Recording.createAsync(
-        {
-          android: {
-            extension: '.wav',
-            outputFormat: Audio.AndroidOutputFormat.DEFAULT,
-            audioEncoder: Audio.AndroidAudioEncoder.DEFAULT,
-            sampleRate: 16000,
-            numberOfChannels: 1,
-            bitRate: 256000,
-          },
-          ios: {
-            extension: '.wav',
-            audioQuality: Audio.IOSAudioQuality.HIGH,
-            sampleRate: 16000,
-            numberOfChannels: 1,
-            bitRate: 256000,
-            linearPCMBitDepth: 16,
-            linearPCMIsBigEndian: false,
-            linearPCMIsFloat: false,
-          },
-          web: {
-            mimeType: 'audio/webm',
-            bitsPerSecond: 128000,
-          },
-        }
-      );
-
-      recordingRef.current = recording;
+      if (Platform.OS === 'web') {
+        await recorder.prepareToRecordAsync();
+        recorder.record();
+      } else {
+        pcmChunksRef.current = [];
+        await pcmStream.start();
+      }
+      recordingActiveRef.current = true;
       startTimeRef.current = Date.now();
       setDurationMs(0);
       setRecordingUri(null);
@@ -147,14 +190,15 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}): UseAudi
 
         // Auto-stop at max duration
         if (elapsed >= maxDurationMs) {
-          stopRecording();
+          void stopRecordingRef.current();
         }
       }, 100);
     } catch {
+      await cleanup();
       setState('error');
       setError('Không thể bắt đầu thu âm. Vui lòng thử lại.');
     }
-  }, [maxDurationMs, requestPermission]);
+  }, [cleanup, maxDurationMs, pcmStream, recorder, requestPermission]);
 
   const stopRecording = useCallback(async (): Promise<RecorderResult | null> => {
     if (timerRef.current) {
@@ -162,22 +206,32 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}): UseAudi
       timerRef.current = null;
     }
 
-    if (!recordingRef.current) {
+    if (!recordingActiveRef.current) {
       setState('idle');
       return null;
     }
 
     try {
-      await recordingRef.current.stopAndUnloadAsync();
-      const uri = recordingRef.current.getURI();
+      let uri: string | null;
+      if (Platform.OS === 'web') {
+        await recorder.stop();
+        uri = recorder.uri;
+      } else {
+        pcmStream.stop();
+        uri = pcmChunksRef.current.length > 0
+          ? wavArrayBufferToDataUri(
+              encodePcm16ChunksAsWav(pcmChunksRef.current),
+            )
+          : null;
+      }
       const finalDuration = Date.now() - startTimeRef.current;
 
-      recordingRef.current = null;
+      recordingActiveRef.current = false;
 
       // Reset audio mode
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-        playsInSilentModeIOS: true,
+      await setAudioModeAsync({
+        allowsRecording: false,
+        playsInSilentMode: true,
       });
 
       if (!uri) {
@@ -201,66 +255,45 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}): UseAudi
       onRecordingComplete?.(result);
       return result;
     } catch {
+      await cleanup();
       setState('error');
       setError('Lỗi khi dừng thu âm.');
       return null;
     }
-  }, [onRecordingComplete]);
+  }, [cleanup, onRecordingComplete, pcmStream, recorder]);
+
+  stopRecordingRef.current = stopRecording;
 
   const cancelRecording = useCallback(async () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-    if (recordingRef.current) {
-      try {
-        await recordingRef.current.stopAndUnloadAsync();
-      } catch {}
-      recordingRef.current = null;
-    }
+    await cleanup();
+    pcmChunksRef.current = [];
     setRecordingUri(null);
     setDurationMs(0);
     setState('idle');
-  }, []);
+  }, [cleanup]);
 
   const playRecording = useCallback(async () => {
     if (!recordingUri) return;
 
     try {
-      if (playbackRef.current) {
-        await playbackRef.current.unloadAsync();
-      }
-
-      const { sound } = await Audio.Sound.createAsync(
-        { uri: recordingUri },
-        { shouldPlay: true }
-      );
-
-      playbackRef.current = sound;
-
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && status.didJustFinish) {
-          playbackRef.current = null;
-        }
-      });
+      playbackPlayer.replace(recordingUri);
+      playbackPlayer.play();
     } catch {
       setState('error');
       setError('Không thể phát lại bản thu. Vui lòng thử lại.');
     }
-  }, [recordingUri]);
+  }, [playbackPlayer, recordingUri]);
 
   const stopPlayback = useCallback(async () => {
-    if (playbackRef.current) {
-      try {
-        await playbackRef.current.stopAsync();
-        await playbackRef.current.unloadAsync();
-      } catch {}
-      playbackRef.current = null;
-    }
-  }, []);
+    playbackPlayer.pause();
+    try {
+      await playbackPlayer.seekTo(0);
+    } catch {}
+  }, [playbackPlayer]);
 
   const reset = useCallback(() => {
-    cleanup();
+    void cleanup();
+    pcmChunksRef.current = [];
     setRecordingUri(null);
     setDurationMs(0);
     setError(null);

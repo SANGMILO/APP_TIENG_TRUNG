@@ -4,7 +4,7 @@
  * Required because:
  * - Web MediaRecorder outputs WebM/Opus
  * - Azure Speech requires WAV PCM or supported format
- * - iOS/Android expo-av already output WAV, but we validate anyway
+ * - iOS/Android expo-audio are configured for WAV, but we validate anyway
  */
 
 import { Platform } from 'react-native';
@@ -80,16 +80,6 @@ async function webDecodeAndEncodeWav(inputBuffer: ArrayBuffer): Promise<Normaliz
     throw new Error(`Failed to decode audio: ${err}`);
   }
 
-  // Log source metadata for debugging
-  if (typeof __DEV__ !== 'undefined' && __DEV__) {
-    console.log('[AudioNormalize] Source:', {
-      sourceSampleRate: audioBuffer.sampleRate,
-      sourceDuration: audioBuffer.duration,
-      sourceChannels: audioBuffer.numberOfChannels,
-      sourceFrames: audioBuffer.length,
-    });
-  }
-
   // Get mono channel data (mix down if stereo)
   let samples: Float32Array;
   if (audioBuffer.numberOfChannels === 1) {
@@ -110,31 +100,6 @@ async function webDecodeAndEncodeWav(inputBuffer: ArrayBuffer): Promise<Normaliz
   let finalSamples = samples;
   if (audioBuffer.sampleRate !== targetSampleRate) {
     finalSamples = resample(samples, audioBuffer.sampleRate, targetSampleRate);
-  }
-
-  const outputDuration = finalSamples.length / targetSampleRate;
-
-  if (typeof __DEV__ !== 'undefined' && __DEV__) {
-    // Compute signal metrics
-    let peak = 0;
-    let sumSquares = 0;
-    let zeroCount = 0;
-    for (let i = 0; i < finalSamples.length; i++) {
-      const abs = Math.abs(finalSamples[i]);
-      if (abs > peak) peak = abs;
-      sumSquares += finalSamples[i] * finalSamples[i];
-      if (finalSamples[i] === 0) zeroCount++;
-    }
-    const rms = Math.sqrt(sumSquares / finalSamples.length);
-    console.log('[AudioNormalize] Output:', {
-      outputSampleRate: targetSampleRate,
-      outputDuration,
-      outputChannels: targetChannels,
-      outputFrames: finalSamples.length,
-      peakAmplitude: peak.toFixed(4),
-      rmsAmplitude: rms.toFixed(4),
-      zeroSampleRatio: (zeroCount / finalSamples.length).toFixed(4),
-    });
   }
 
   // Encode as WAV PCM16

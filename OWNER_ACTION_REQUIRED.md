@@ -1,152 +1,86 @@
-# Owner Action Required — Production Deployment
+# Owner Action Required
 
-Bạn cần thực hiện các bước sau để đưa Mandarin Master vào hoạt động.
-Không cần kiến thức lập trình cho hầu hết các bước.
-Sử dụng terminal/command line cho các lệnh deploy.
+Status reviewed: 2026-07-29
 
----
+The repository, linked Supabase project, and active Edge Functions already exist.
+Do not create a replacement project or rerun historical seed data against the
+hosted database.
 
-## 1. SUPABASE (Bắt buộc)
+## 1. Configure the Missing AI Provider Secret
 
-### 1.1 Tạo Project
-1. Đăng ký tại https://supabase.com
-2. Tạo project mới (region: Singapore hoặc Southeast Asia)
-3. Ghi lại:
-   - Project URL (ví dụ: `https://abc123.supabase.co`)
-   - Anon Key (trong Settings → API)
-   - Service Role Key (trong Settings → API) — **KHÔNG chia sẻ**
+Required for AI Tutor chat, voice transcription, and voice synthesis:
 
-### 1.2 Cập nhật .env
-```
-EXPO_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
-```
+1. Create an OpenAI API key in the owner-controlled OpenAI project.
+2. Add `OPENAI_API_KEY` in Supabase Dashboard → Project Settings → Edge
+   Functions → Secrets. Do not paste the key into this repository or chat.
+3. Optionally configure `OPENAI_MODEL`, `OPENAI_STT_MODEL`,
+   `OPENAI_TTS_MODEL`, and `OPENAI_TTS_VOICE`; the code has safe defaults.
+4. Confirm the project has a spending limit and billing alerts.
+5. With a non-production test account, run:
+   - one AI chat response;
+   - one voice transcription;
+   - one voice synthesis;
+   - one retry after a simulated network interruption.
 
-### 1.3 Deploy Database
-```bash
-cd mandarin-master
-npx supabase login
-npx supabase link --project-ref YOUR_PROJECT_REF
-npx supabase db push
-```
+Until the secret exists, these actions remain disabled through the deployed
+capability check and do not report false success.
 
-### 1.4 Chạy Seed Data
-Vào Supabase Dashboard → SQL Editor → chạy file:
-`supabase/seed/001_course_data.sql`
+## 2. Supply Real Learning Content
 
-### 1.5 Tạo Admin Account
-1. Đăng ký tài khoản qua app
-2. Vào Supabase Dashboard → Table Editor → profiles
-3. Tìm user vừa đăng ký
-4. Đổi `role` thành `super_admin`
+Content work is required before beta:
 
----
+- Add real exercises to published lessons 2–5.
+- Upload or link real media for published videos.
+- Keep video storage objects private and use the existing signed playback path.
+- Do not substitute demo rows or invented media URLs.
+- Validate one complete lesson and one complete video with a test account after
+  publishing.
 
-## 2. OPENAI (Bắt buộc cho AI Tutor + Voice)
+The one-click placeholder creation controls were intentionally removed. Use an
+approved admin/content workflow or reviewed SQL/import tooling for production
+content.
 
-### 2.1 Lấy API Key
-1. Đăng ký tại https://platform.openai.com
-2. Tạo API Key tại API Keys section
-3. Nạp credit (tối thiểu $5-10 cho testing)
+## 3. Make Product and Operations Decisions
 
-### 2.2 Set Secret
-```bash
-npx supabase secrets set OPENAI_API_KEY=sk-your-key-here
-npx supabase secrets set OPENAI_MODEL=gpt-4o-mini
-npx supabase secrets set OPENAI_TTS_VOICE=alloy
-```
+The following features remain hidden or inactive until their rules are defined:
 
----
+- premium subscription and video entitlement;
+- hearts loss/recovery;
+- XP boost consumption and multipliers;
+- league promotion/demotion;
+- weekly quest completion;
+- queued account-deletion retention, cancellation, and processing ownership.
 
-## 3. AZURE SPEECH (Bắt buộc cho Pronunciation)
+Document the rules before asking engineering to expose these features. Account
+deletion processing must use a privileged server-side runbook or protected Edge
+Function; never place a service-role key in the app.
 
-### 3.1 Tạo Resource
-1. Đăng ký Azure tại https://portal.azure.com
-2. Tạo "Speech Services" resource (Free F0 tier)
-3. Region: East Asia
-4. Lấy Key 1 từ Keys and Endpoint
+## 4. Configure Native Release Accounts
 
-### 3.2 Set Secret
-```bash
-npx supabase secrets set AZURE_SPEECH_KEY=your-key
-npx supabase secrets set AZURE_SPEECH_REGION=eastasia
-```
+1. Replace placeholder EAS project/submission values with owner-controlled
+   credentials.
+2. Create Android and iOS preview builds.
+3. Test microphone permissions, audio recording/playback, OAuth callbacks,
+   SecureStore session persistence, deep links, and push-token registration on
+   physical devices.
+4. Configure Apple Sign-In only after the Apple capability, Services ID,
+   key/team identifiers, and Supabase provider are ready. Keep the button hidden
+   until the end-to-end test passes.
 
----
+## 5. Finish Delivery and Compliance
 
-## 4. DEPLOY EDGE FUNCTIONS
+- Configure and test the push delivery provider.
+- Choose analytics/crash reporting only after approving consent and privacy
+  handling.
+- Supply final app icons and store assets.
+- Obtain legal review for Terms and Privacy.
+- Validate store Data Safety/App Privacy disclosures, including account
+  deletion and AI/voice data handling.
 
-```bash
-npx supabase functions deploy pronunciation-assess
-npx supabase functions deploy ai-tutor-chat
-npx supabase functions deploy voice-transcribe
-npx supabase functions deploy voice-synthesize
-```
+## Secret Safety
 
----
-
-## 5. EXPO / EAS (Bắt buộc cho Android/iOS)
-
-### 5.1 Setup
-```bash
-npm install -g eas-cli
-eas login
-eas init
-```
-
-### 5.2 Cập nhật eas.json
-Thay `YOUR_EAS_PROJECT_ID` trong app.json bằng project ID thật.
-
-### 5.3 Android Build
-```bash
-eas build --platform android --profile preview
-```
-Cài APK lên device thật để test.
-
-### 5.4 iOS Build
-```bash
-eas build --platform ios --profile preview
-```
-Cần Apple Developer Account ($99/năm).
-
----
-
-## 6. WEB DEPLOYMENT
-
-### Option A: Expo Hosting
-```bash
-npx expo export --platform web
-# Deploy dist/ folder
-```
-
-### Option B: Vercel/Netlify
-Upload thư mục `dist/` sau khi build.
-Cấu hình: SPA fallback (mọi route → index.html)
-
----
-
-## 7. GOOGLE PLAY (Tùy chọn)
-
-1. Google Play Developer Account ($25 one-time)
-2. Tạo app trong Play Console
-3. Upload AAB từ `eas build --platform android --profile production`
-4. Điền: Data Safety, Privacy Policy URL, Delete Account URL
-
----
-
-## 8. APP STORE (Tùy chọn)
-
-1. Apple Developer Account ($99/năm)
-2. App Store Connect → New App
-3. Upload via TestFlight (EAS submit hoặc Transporter)
-4. Điền: Privacy Policy, App Privacy, Review Notes
-
----
-
-## QUAN TRỌNG — KHÔNG LÀM
-
-- ❌ Không gửi API key qua chat/email
-- ❌ Không commit .env có secret vào Git
-- ❌ Không dùng Service Role Key ở frontend
-- ❌ Không deploy production trước khi test preview build
-- ❌ Không submit App Store trước khi TestFlight qua QA
+- `.env`, `.env.local`, and `.env.production` are ignored.
+- Only public Supabase URL/publishable values belong in the client environment.
+- Provider and service-role secrets belong only in Supabase-managed secrets.
+- Never include tokens, passwords, authorization codes, or private keys in
+  commits, logs, screenshots, issue text, or the completion report.
