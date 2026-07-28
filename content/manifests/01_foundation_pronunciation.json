@@ -1,0 +1,763 @@
+{
+  "schemaVersion": 1,
+  "batchKey": "batch-01-foundation-pronunciation",
+  "version": 1,
+  "migrationName": "20260729100000_content_batch_01_foundation_pronunciation",
+  "description": "Complete the published Chinese From Zero path and add a review-stage pronunciation path.",
+  "legacyExerciseRepairs": [
+    {
+      "id": "e0000000-0000-0000-0000-000000000003",
+      "expectedExerciseType": "listening",
+      "exerciseType": "multiple_choice",
+      "question": "Chọn pinyin đúng của “你好”.",
+      "correctAnswer": "nǐ hǎo",
+      "explanationVi": "你好 đọc là nǐ hǎo: cả hai âm tiết đều mang thanh 3 ở dạng từ điển.",
+      "data": {
+        "activity_type": "pronunciation_choice",
+        "legacy_audio_repair": true
+      },
+      "options": [
+        { "text": "nǐ hǎo", "correct": true },
+        { "text": "nǐ hào", "correct": false },
+        { "text": "ní hǎo", "correct": false },
+        { "text": "nì hǎo", "correct": false }
+      ]
+    }
+  ],
+  "courses": [
+    {
+      "slug": "chinese-from-zero",
+      "existingId": "c0000000-0000-0000-0000-000000000001",
+      "title": "Chinese From Zero",
+      "titleZh": "零基础中文",
+      "descriptionVi": "Khóa nền tảng giúp người Việt đọc pinyin, chào hỏi và xử lý các tình huống hằng ngày đầu tiên bằng tiếng Trung.",
+      "level": "starter",
+      "status": "published",
+      "orderIndex": 1,
+      "objectives": [
+        "Đọc pinyin và nhận biết bốn thanh điệu",
+        "Chào hỏi, tự giới thiệu và nói thông tin cá nhân",
+        "Dùng số, thời gian và mẫu câu sinh hoạt cơ bản"
+      ],
+      "estimatedMinutes": 130,
+      "units": [
+        {
+          "slug": "nhap-mon-tieng-trung",
+          "existingId": "a0000001-0000-0000-0000-000000000001",
+          "title": "Nhập môn tiếng Trung",
+          "descriptionVi": "Chào hỏi, tên, số đếm, thanh điệu và tự giới thiệu.",
+          "orderIndex": 1,
+          "status": "published",
+          "objectives": [
+            "Thực hiện hội thoại mở đầu ngắn",
+            "Nhận biết số và thanh điệu cơ bản"
+          ],
+          "chapters": [
+            {
+              "slug": "chao-hoi",
+              "existingId": "c0000002-0000-0000-0000-000000000001",
+              "title": "Chào hỏi và giới thiệu",
+              "descriptionVi": "Các mẫu câu đầu tiên để làm quen và giới thiệu bản thân.",
+              "orderIndex": 1,
+              "status": "published",
+              "objectives": [
+                "Chào và tạm biệt đúng ngữ cảnh",
+                "Nói tên, quốc tịch và vai trò cơ bản"
+              ],
+              "lessons": [
+                {
+                  "slug": "xin-chao",
+                  "existingId": "10000000-0000-0000-0000-000000000001",
+                  "title": "你好 - Xin chào",
+                  "descriptionVi": "Chào hỏi, cảm ơn và tạm biệt trong giao tiếp đầu tiên.",
+                  "orderIndex": 1,
+                  "xpReward": 15,
+                  "status": "published",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 8,
+                  "exerciseOrderOffset": 6,
+                  "existingExerciseTypes": ["vocabulary", "multiple_choice", "multiple_choice", "translation", "sentence_builder", "speaking"],
+                  "objectives": ["Dùng 你好, 谢谢 và 再见 đúng tình huống"],
+                  "culturalNote": "你好 phù hợp trong nhiều tình huống trung tính; với người quen, người Trung Quốc cũng thường chào bằng câu hỏi gắn với hoàn cảnh.",
+                  "vocabulary": [
+                    { "key": "foundation:你", "existingId": "f0000000-0000-0000-0000-000000000001", "chinese": "你", "pinyin": "nǐ", "meaningVi": "bạn, anh/chị", "meaningEn": "you", "partOfSpeech": "đại từ", "level": "starter", "category": "greetings", "hskLevel": 1, "status": "published", "exampleSentence": "你好吗？", "examplePinyin": "Nǐ hǎo ma?", "exampleMeaningVi": "Bạn có khỏe không?" },
+                    { "key": "foundation:好", "existingId": "f0000000-0000-0000-0000-000000000002", "chinese": "好", "pinyin": "hǎo", "meaningVi": "tốt, khỏe", "meaningEn": "good", "partOfSpeech": "tính từ", "level": "starter", "category": "greetings", "hskLevel": 1, "status": "published", "exampleSentence": "我很好。", "examplePinyin": "Wǒ hěn hǎo.", "exampleMeaningVi": "Tôi rất khỏe." },
+                    { "key": "foundation:你好", "existingId": "f0000000-0000-0000-0000-000000000003", "chinese": "你好", "pinyin": "nǐ hǎo", "meaningVi": "xin chào", "meaningEn": "hello", "partOfSpeech": "cụm từ", "level": "starter", "category": "greetings", "hskLevel": 1, "status": "published", "exampleSentence": "你好，我叫小明。", "examplePinyin": "Nǐ hǎo, wǒ jiào Xiǎomíng.", "exampleMeaningVi": "Xin chào, tôi tên là Tiểu Minh." },
+                    { "key": "foundation:再见", "existingId": "f0000000-0000-0000-0000-000000000009", "chinese": "再见", "pinyin": "zàijiàn", "meaningVi": "tạm biệt", "meaningEn": "goodbye", "partOfSpeech": "cụm từ", "level": "starter", "category": "greetings", "hskLevel": 1, "status": "published", "exampleSentence": "明天见，再见！", "examplePinyin": "Míngtiān jiàn, zàijiàn!", "exampleMeaningVi": "Hẹn gặp ngày mai, tạm biệt!" },
+                    { "key": "foundation:谢谢", "existingId": "f0000000-0000-0000-0000-000000000010", "chinese": "谢谢", "pinyin": "xièxie", "meaningVi": "cảm ơn", "meaningEn": "thank you", "partOfSpeech": "động từ", "level": "starter", "category": "greetings", "hskLevel": 1, "status": "published", "exampleSentence": "谢谢你的帮助。", "examplePinyin": "Xièxie nǐ de bāngzhù.", "exampleMeaningVi": "Cảm ơn sự giúp đỡ của bạn." }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:greeting-sequence", "title": "Trình tự chào hỏi", "pattern": "你好 + thông tin mở đầu", "explanationVi": "Dùng 你好 để mở đầu, sau đó mới nói tên hoặc mục đích giao tiếp.", "exampleChinese": "你好，我叫安。", "examplePinyin": "Nǐ hǎo, wǒ jiào Ān.", "exampleMeaningVi": "Xin chào, tôi tên An.", "level": "starter", "status": "published", "usageNote": "Không dùng 再见 để mở đầu cuộc gặp." }
+                  ],
+                  "characters": [
+                    { "key": "character:你", "character": "你", "pinyin": "nǐ", "meaningVi": "bạn", "radical": "亻", "strokeCount": 7, "level": "starter", "status": "published", "componentBreakdown": { "left": "亻 (người)", "right": "尔 (gợi âm)" }, "commonWords": ["你好", "你们"] },
+                    { "key": "character:好", "character": "好", "pinyin": "hǎo", "meaningVi": "tốt", "radical": "女", "strokeCount": 6, "level": "starter", "status": "published", "componentBreakdown": { "left": "女", "right": "子" }, "commonWords": ["你好", "好吃"] }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:你好",
+                    "distractorKeys": ["foundation:再见", "foundation:谢谢", "foundation:好"],
+                    "sentenceTokens": ["你好", "，", "我", "叫", "小明", "。"],
+                    "grammarQuestion": "Câu nào mở đầu một lời giới thiệu tự nhiên?",
+                    "grammarOptions": ["你好，我叫安。", "再见，我叫安。", "谢谢，我叫安。"],
+                    "grammarCorrect": "你好，我叫安。",
+                    "grammarExplanationVi": "你好 mở đầu cuộc gặp; 再见 dùng khi chia tay.",
+                    "grammarKey": "foundation:greeting-sequence"
+                  }
+                },
+                {
+                  "slug": "toi-ten-la",
+                  "existingId": "10000000-0000-0000-0000-000000000002",
+                  "title": "我叫... - Tôi tên là...",
+                  "descriptionVi": "Hỏi và nói tên bằng 叫, 是 và 什么.",
+                  "orderIndex": 2,
+                  "xpReward": 15,
+                  "status": "published",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 10,
+                  "objectives": ["Hỏi tên và tự giới thiệu bằng câu hoàn chỉnh"],
+                  "reviewVocabularyKeys": ["foundation:你", "foundation:好", "foundation:你好", "foundation:再见", "foundation:谢谢"],
+                  "reviewGrammarKeys": ["foundation:greeting-sequence"],
+                  "reviewCharacterKeys": ["character:你", "character:好"],
+                  "vocabulary": [
+                    { "key": "foundation:我", "existingId": "f0000000-0000-0000-0000-000000000004", "chinese": "我", "pinyin": "wǒ", "meaningVi": "tôi", "meaningEn": "I; me", "partOfSpeech": "đại từ", "level": "starter", "category": "pronouns", "hskLevel": 1, "status": "published", "exampleSentence": "我是学生。", "examplePinyin": "Wǒ shì xuésheng.", "exampleMeaningVi": "Tôi là học sinh." },
+                    { "key": "foundation:叫", "existingId": "f0000000-0000-0000-0000-000000000005", "chinese": "叫", "pinyin": "jiào", "meaningVi": "gọi là, tên là", "meaningEn": "to be called", "partOfSpeech": "động từ", "level": "starter", "category": "introductions", "hskLevel": 1, "status": "published", "exampleSentence": "我叫兰。", "examplePinyin": "Wǒ jiào Lán.", "exampleMeaningVi": "Tôi tên Lan." },
+                    { "key": "foundation:是", "existingId": "f0000000-0000-0000-0000-000000000006", "chinese": "是", "pinyin": "shì", "meaningVi": "là", "meaningEn": "to be", "partOfSpeech": "động từ", "level": "starter", "category": "grammar", "hskLevel": 1, "status": "published", "exampleSentence": "他是老师。", "examplePinyin": "Tā shì lǎoshī.", "exampleMeaningVi": "Anh ấy là giáo viên." },
+                    { "key": "foundation:什么", "existingId": "f0000000-0000-0000-0000-000000000007", "chinese": "什么", "pinyin": "shénme", "meaningVi": "gì, cái gì", "meaningEn": "what", "partOfSpeech": "đại từ nghi vấn", "level": "starter", "category": "questions", "hskLevel": 1, "status": "published", "exampleSentence": "这是什么？", "examplePinyin": "Zhè shì shénme?", "exampleMeaningVi": "Đây là gì?" },
+                    { "key": "foundation:名字", "existingId": "f0000000-0000-0000-0000-000000000008", "chinese": "名字", "pinyin": "míngzi", "meaningVi": "tên", "meaningEn": "name", "partOfSpeech": "danh từ", "level": "starter", "category": "introductions", "hskLevel": 1, "status": "published", "exampleSentence": "你的名字是什么？", "examplePinyin": "Nǐ de míngzi shì shénme?", "exampleMeaningVi": "Tên bạn là gì?" }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:called-name", "title": "Nói tên với 叫", "pattern": "Chủ ngữ + 叫 + tên", "explanationVi": "叫 đứng trước tên khi giới thiệu một người được gọi là gì.", "exampleChinese": "我叫兰。", "examplePinyin": "Wǒ jiào Lán.", "exampleMeaningVi": "Tôi tên Lan.", "level": "starter", "status": "published", "usageNote": "Không thêm 是 giữa 叫 và tên." }
+                  ],
+                  "characters": [
+                    { "key": "character:我", "character": "我", "pinyin": "wǒ", "meaningVi": "tôi", "radical": "戈", "strokeCount": 7, "level": "starter", "status": "published", "componentBreakdown": { "note": "Chữ độc thể; học theo thứ tự nét chuẩn." }, "commonWords": ["我们", "自我"] }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:名字",
+                    "distractorKeys": ["foundation:我", "foundation:叫", "foundation:是"],
+                    "sentenceTokens": ["我", "叫", "兰", "。"],
+                    "grammarQuestion": "Câu nào có nghĩa “Tôi tên Lan”?",
+                    "grammarOptions": ["我叫兰。", "我是叫兰。", "我兰叫。"],
+                    "grammarCorrect": "我叫兰。",
+                    "grammarExplanationVi": "Trật tự đúng là chủ ngữ 我 + 叫 + tên 兰.",
+                    "grammarKey": "foundation:called-name"
+                  }
+                },
+                {
+                  "slug": "so-dem-1-10",
+                  "existingId": "10000000-0000-0000-0000-000000000003",
+                  "title": "数字 1-10 - Số đếm",
+                  "descriptionVi": "Đếm từ một đến mười và đặt số trước lượng từ.",
+                  "orderIndex": 3,
+                  "xpReward": 15,
+                  "status": "published",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 12,
+                  "objectives": ["Đọc, nghe và dùng số từ 1 đến 10"],
+                  "reviewVocabularyKeys": ["foundation:我", "foundation:叫", "foundation:是", "foundation:什么", "foundation:名字"],
+                  "reviewGrammarKeys": ["foundation:called-name"],
+                  "reviewCharacterKeys": ["character:我"],
+                  "vocabulary": [
+                    { "key": "foundation:一", "existingId": "f0000000-0000-0000-0000-000000000011", "chinese": "一", "pinyin": "yī", "meaningVi": "một", "meaningEn": "one", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "我有一个朋友。", "examplePinyin": "Wǒ yǒu yí ge péngyou.", "exampleMeaningVi": "Tôi có một người bạn." },
+                    { "key": "foundation:二", "existingId": "f0000000-0000-0000-0000-000000000012", "chinese": "二", "pinyin": "èr", "meaningVi": "hai", "meaningEn": "two", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "二月很冷。", "examplePinyin": "Èryuè hěn lěng.", "exampleMeaningVi": "Tháng Hai rất lạnh." },
+                    { "key": "foundation:三", "existingId": "f0000000-0000-0000-0000-000000000013", "chinese": "三", "pinyin": "sān", "meaningVi": "ba", "meaningEn": "three", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "我买三个苹果。", "examplePinyin": "Wǒ mǎi sān ge píngguǒ.", "exampleMeaningVi": "Tôi mua ba quả táo." },
+                    { "key": "foundation:四", "existingId": "f0000000-0000-0000-0000-000000000014", "chinese": "四", "pinyin": "sì", "meaningVi": "bốn", "meaningEn": "four", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "汉语有四个声调。", "examplePinyin": "Hànyǔ yǒu sì ge shēngdiào.", "exampleMeaningVi": "Tiếng Trung có bốn thanh điệu." },
+                    { "key": "foundation:五", "existingId": "f0000000-0000-0000-0000-000000000015", "chinese": "五", "pinyin": "wǔ", "meaningVi": "năm", "meaningEn": "five", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "我们五点见。", "examplePinyin": "Wǒmen wǔ diǎn jiàn.", "exampleMeaningVi": "Chúng ta gặp nhau lúc năm giờ." },
+                    { "key": "foundation:六", "existingId": "f0000000-0000-0000-0000-000000000016", "chinese": "六", "pinyin": "liù", "meaningVi": "sáu", "meaningEn": "six", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "她六岁。", "examplePinyin": "Tā liù suì.", "exampleMeaningVi": "Cô bé sáu tuổi." },
+                    { "key": "foundation:七", "existingId": "f0000000-0000-0000-0000-000000000017", "chinese": "七", "pinyin": "qī", "meaningVi": "bảy", "meaningEn": "seven", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "一周有七天。", "examplePinyin": "Yì zhōu yǒu qī tiān.", "exampleMeaningVi": "Một tuần có bảy ngày." },
+                    { "key": "foundation:八", "existingId": "f0000000-0000-0000-0000-000000000018", "chinese": "八", "pinyin": "bā", "meaningVi": "tám", "meaningEn": "eight", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "现在八点。", "examplePinyin": "Xiànzài bā diǎn.", "exampleMeaningVi": "Bây giờ là tám giờ." },
+                    { "key": "foundation:九", "existingId": "f0000000-0000-0000-0000-000000000019", "chinese": "九", "pinyin": "jiǔ", "meaningVi": "chín", "meaningEn": "nine", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "商店九点开门。", "examplePinyin": "Shāngdiàn jiǔ diǎn kāimén.", "exampleMeaningVi": "Cửa hàng mở cửa lúc chín giờ." },
+                    { "key": "foundation:十", "existingId": "f0000000-0000-0000-0000-000000000020", "chinese": "十", "pinyin": "shí", "meaningVi": "mười", "meaningEn": "ten", "partOfSpeech": "số từ", "level": "starter", "category": "numbers", "hskLevel": 1, "status": "published", "exampleSentence": "请等十分钟。", "examplePinyin": "Qǐng děng shí fēnzhōng.", "exampleMeaningVi": "Vui lòng đợi mười phút." }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:number-measure", "title": "Số + lượng từ + danh từ", "pattern": "Số + 个 + danh từ", "explanationVi": "Trong tiếng Trung, số thường đứng trước lượng từ rồi mới đến danh từ.", "exampleChinese": "我有三个朋友。", "examplePinyin": "Wǒ yǒu sān ge péngyou.", "exampleMeaningVi": "Tôi có ba người bạn.", "level": "starter", "status": "published", "usageNote": "个 là lượng từ thông dụng; nhiều danh từ có lượng từ riêng." }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:一",
+                    "distractorKeys": ["foundation:二", "foundation:三", "foundation:十"],
+                    "sentenceTokens": ["我", "有", "一", "个", "朋友", "。"],
+                    "grammarQuestion": "Cụm nào có trật tự đúng?",
+                    "grammarOptions": ["三个人", "个三人", "人三个"],
+                    "grammarCorrect": "三个人",
+                    "grammarExplanationVi": "Trật tự là số 三 + lượng từ 个 + danh từ 人.",
+                    "grammarKey": "foundation:number-measure"
+                  }
+                },
+                {
+                  "slug": "bon-thanh-dieu",
+                  "existingId": "10000000-0000-0000-0000-000000000004",
+                  "title": "声调 - Thanh điệu",
+                  "descriptionVi": "Nhận biết tên gọi và đường nét của bốn thanh điệu.",
+                  "orderIndex": 4,
+                  "xpReward": 20,
+                  "status": "published",
+                  "lessonType": "pronunciation",
+                  "estimatedMinutes": 12,
+                  "objectives": ["Phân biệt bốn thanh điệu qua ký hiệu pinyin"],
+                  "reviewVocabularyKeys": ["foundation:一", "foundation:二", "foundation:三", "foundation:四", "foundation:五", "foundation:六", "foundation:七", "foundation:八", "foundation:九", "foundation:十"],
+                  "reviewGrammarKeys": ["foundation:number-measure"],
+                  "vocabulary": [
+                    { "key": "foundation:声调", "chinese": "声调", "pinyin": "shēngdiào", "meaningVi": "thanh điệu", "meaningEn": "tone", "partOfSpeech": "danh từ", "level": "starter", "category": "pronunciation", "hskLevel": null, "status": "published", "exampleSentence": "汉语有四个声调。", "examplePinyin": "Hànyǔ yǒu sì ge shēngdiào.", "exampleMeaningVi": "Tiếng Trung có bốn thanh điệu." },
+                    { "key": "foundation:第一声", "chinese": "第一声", "pinyin": "dì yī shēng", "meaningVi": "thanh thứ nhất", "meaningEn": "first tone", "partOfSpeech": "cụm danh từ", "level": "starter", "category": "pronunciation", "hskLevel": null, "status": "published", "exampleSentence": "“妈”读第一声。", "examplePinyin": "“Mā” dú dì yī shēng.", "exampleMeaningVi": "“妈” đọc thanh thứ nhất." },
+                    { "key": "foundation:第二声", "chinese": "第二声", "pinyin": "dì èr shēng", "meaningVi": "thanh thứ hai", "meaningEn": "second tone", "partOfSpeech": "cụm danh từ", "level": "starter", "category": "pronunciation", "hskLevel": null, "status": "published", "exampleSentence": "“麻”读第二声。", "examplePinyin": "“Má” dú dì èr shēng.", "exampleMeaningVi": "“麻” đọc thanh thứ hai." },
+                    { "key": "foundation:第三声", "chinese": "第三声", "pinyin": "dì sān shēng", "meaningVi": "thanh thứ ba", "meaningEn": "third tone", "partOfSpeech": "cụm danh từ", "level": "starter", "category": "pronunciation", "hskLevel": null, "status": "published", "exampleSentence": "“马”读第三声。", "examplePinyin": "“Mǎ” dú dì sān shēng.", "exampleMeaningVi": "“马” đọc thanh thứ ba." },
+                    { "key": "foundation:第四声", "chinese": "第四声", "pinyin": "dì sì shēng", "meaningVi": "thanh thứ tư", "meaningEn": "fourth tone", "partOfSpeech": "cụm danh từ", "level": "starter", "category": "pronunciation", "hskLevel": null, "status": "published", "exampleSentence": "“骂”读第四声。", "examplePinyin": "“Mà” dú dì sì shēng.", "exampleMeaningVi": "“骂” đọc thanh thứ tư." }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:ordinal-di", "title": "Số thứ tự với 第", "pattern": "第 + số", "explanationVi": "Thêm 第 trước số để tạo số thứ tự.", "exampleChinese": "这是第一课。", "examplePinyin": "Zhè shì dì yī kè.", "exampleMeaningVi": "Đây là bài thứ nhất.", "level": "starter", "status": "published", "usageNote": "第 không cần lượng từ khi chỉ thứ tự bài hoặc lần." }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:声调",
+                    "distractorKeys": ["foundation:第一声", "foundation:第二声", "foundation:第四声"],
+                    "sentenceTokens": ["汉语", "有", "四", "个", "声调", "。"],
+                    "grammarQuestion": "“Bài thứ nhất” nói thế nào?",
+                    "grammarOptions": ["第一课", "一第课", "课第一"],
+                    "grammarCorrect": "第一课",
+                    "grammarExplanationVi": "第 đặt trước số: 第一, sau đó là danh từ 课.",
+                    "grammarKey": "foundation:ordinal-di"
+                  }
+                },
+                {
+                  "slug": "tu-gioi-thieu",
+                  "existingId": "10000000-0000-0000-0000-000000000005",
+                  "title": "自我介绍 - Tự giới thiệu",
+                  "descriptionVi": "Ghép lời chào, tên, quốc tịch và vai trò thành đoạn giới thiệu.",
+                  "orderIndex": 5,
+                  "xpReward": 20,
+                  "status": "published",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": ["Tự giới thiệu bằng ba câu ngắn, rõ ràng"],
+                  "reviewVocabularyKeys": ["foundation:声调", "foundation:第一声", "foundation:第二声", "foundation:第三声", "foundation:第四声"],
+                  "reviewGrammarKeys": ["foundation:ordinal-di"],
+                  "vocabulary": [
+                    { "key": "foundation:人", "chinese": "人", "pinyin": "rén", "meaningVi": "người", "meaningEn": "person", "partOfSpeech": "danh từ", "level": "starter", "category": "identity", "hskLevel": 1, "status": "published", "exampleSentence": "他是中国人。", "examplePinyin": "Tā shì Zhōngguó rén.", "exampleMeaningVi": "Anh ấy là người Trung Quốc." },
+                    { "key": "foundation:越南", "chinese": "越南", "pinyin": "Yuènán", "meaningVi": "Việt Nam", "meaningEn": "Vietnam", "partOfSpeech": "danh từ riêng", "level": "starter", "category": "identity", "hskLevel": null, "status": "published", "exampleSentence": "我来自越南。", "examplePinyin": "Wǒ láizì Yuènán.", "exampleMeaningVi": "Tôi đến từ Việt Nam." },
+                    { "key": "foundation:中国", "chinese": "中国", "pinyin": "Zhōngguó", "meaningVi": "Trung Quốc", "meaningEn": "China", "partOfSpeech": "danh từ riêng", "level": "starter", "category": "identity", "hskLevel": 1, "status": "published", "exampleSentence": "北京在中国。", "examplePinyin": "Běijīng zài Zhōngguó.", "exampleMeaningVi": "Bắc Kinh ở Trung Quốc." },
+                    { "key": "foundation:学生", "chinese": "学生", "pinyin": "xuésheng", "meaningVi": "học sinh, sinh viên", "meaningEn": "student", "partOfSpeech": "danh từ", "level": "starter", "category": "identity", "hskLevel": 1, "status": "published", "exampleSentence": "我是大学生。", "examplePinyin": "Wǒ shì dàxuéshēng.", "exampleMeaningVi": "Tôi là sinh viên đại học." },
+                    { "key": "foundation:也", "chinese": "也", "pinyin": "yě", "meaningVi": "cũng", "meaningEn": "also", "partOfSpeech": "phó từ", "level": "starter", "category": "grammar", "hskLevel": 1, "status": "published", "exampleSentence": "我也是学生。", "examplePinyin": "Wǒ yě shì xuésheng.", "exampleMeaningVi": "Tôi cũng là sinh viên." }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:also-ye", "title": "Phó từ 也", "pattern": "Chủ ngữ + 也 + động từ/tính từ", "explanationVi": "也 đứng trước vị ngữ để biểu thị “cũng”.", "exampleChinese": "我也是学生。", "examplePinyin": "Wǒ yě shì xuésheng.", "exampleMeaningVi": "Tôi cũng là sinh viên.", "level": "starter", "status": "published", "usageNote": "Không đặt 也 sau 是 trong mẫu câu này." }
+                  ],
+                  "characters": [
+                    { "key": "character:中", "character": "中", "pinyin": "zhōng", "meaningVi": "giữa, trung", "radical": "丨", "strokeCount": 4, "level": "starter", "status": "published", "componentBreakdown": { "note": "Nét dọc đi qua giữa khung." }, "commonWords": ["中国", "中文"] },
+                    { "key": "character:国", "character": "国", "pinyin": "guó", "meaningVi": "nước, quốc gia", "radical": "囗", "strokeCount": 8, "level": "starter", "status": "published", "componentBreakdown": { "outside": "囗", "inside": "玉" }, "commonWords": ["中国", "国家"] }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:越南",
+                    "distractorKeys": ["foundation:中国", "foundation:学生", "foundation:人"],
+                    "sentenceTokens": ["我", "是", "越南", "人", "。"],
+                    "grammarQuestion": "Câu nào có nghĩa “Tôi cũng là sinh viên”?",
+                    "grammarOptions": ["我也是学生。", "我是也学生。", "也我是学生。"],
+                    "grammarCorrect": "我也是学生。",
+                    "grammarExplanationVi": "也 đứng sau chủ ngữ 我 và trước vị ngữ 是学生.",
+                    "grammarKey": "foundation:also-ye"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "sinh-hoat-co-ban",
+          "title": "Sinh hoạt cơ bản",
+          "descriptionVi": "Gia đình, thời gian, hoạt động trong ngày và mua đồ ăn.",
+          "orderIndex": 2,
+          "status": "published",
+          "objectives": ["Trao đổi thông tin gia đình", "Nói giờ và hoạt động quen thuộc"],
+          "chapters": [
+            {
+              "slug": "gia-dinh-va-thoi-gian",
+              "title": "Gia đình và thời gian",
+              "descriptionVi": "Nói về người thân và mốc thời gian đơn giản.",
+              "orderIndex": 1,
+              "status": "published",
+              "objectives": ["Giới thiệu người thân", "Hỏi và nói thời gian"],
+              "lessons": [
+                {
+                  "slug": "gia-dinh",
+                  "title": "我的家人 - Gia đình tôi",
+                  "descriptionVi": "Từ vựng gia đình và sở hữu với 的.",
+                  "orderIndex": 1,
+                  "xpReward": 20,
+                  "status": "published",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 12,
+                  "unlockForUsersWhoCompletedLessonId": "10000000-0000-0000-0000-000000000005",
+                  "objectives": ["Giới thiệu người thân bằng mẫu 我的..."],
+                  "reviewVocabularyKeys": ["foundation:人", "foundation:越南", "foundation:中国", "foundation:学生", "foundation:也"],
+                  "reviewGrammarKeys": ["foundation:also-ye"],
+                  "reviewCharacterKeys": ["character:中", "character:国"],
+                  "vocabulary": [
+                    { "key": "foundation:家", "chinese": "家", "pinyin": "jiā", "meaningVi": "nhà, gia đình", "meaningEn": "home; family", "partOfSpeech": "danh từ", "level": "starter", "category": "family", "hskLevel": 1, "status": "published", "exampleSentence": "我家在河内。", "examplePinyin": "Wǒ jiā zài Hénèi.", "exampleMeaningVi": "Nhà tôi ở Hà Nội." },
+                    { "key": "foundation:家人", "chinese": "家人", "pinyin": "jiārén", "meaningVi": "người nhà", "meaningEn": "family member", "partOfSpeech": "danh từ", "level": "starter", "category": "family", "hskLevel": null, "status": "published", "exampleSentence": "这是我的家人。", "examplePinyin": "Zhè shì wǒ de jiārén.", "exampleMeaningVi": "Đây là người nhà của tôi." },
+                    { "key": "foundation:爸爸", "chinese": "爸爸", "pinyin": "bàba", "meaningVi": "bố", "meaningEn": "father", "partOfSpeech": "danh từ", "level": "starter", "category": "family", "hskLevel": 1, "status": "published", "exampleSentence": "我爸爸是医生。", "examplePinyin": "Wǒ bàba shì yīshēng.", "exampleMeaningVi": "Bố tôi là bác sĩ." },
+                    { "key": "foundation:妈妈", "chinese": "妈妈", "pinyin": "māma", "meaningVi": "mẹ", "meaningEn": "mother", "partOfSpeech": "danh từ", "level": "starter", "category": "family", "hskLevel": 1, "status": "published", "exampleSentence": "妈妈今天休息。", "examplePinyin": "Māma jīntiān xiūxi.", "exampleMeaningVi": "Hôm nay mẹ nghỉ." },
+                    { "key": "foundation:朋友", "chinese": "朋友", "pinyin": "péngyou", "meaningVi": "bạn bè", "meaningEn": "friend", "partOfSpeech": "danh từ", "level": "starter", "category": "relationships", "hskLevel": 1, "status": "published", "exampleSentence": "兰是我的朋友。", "examplePinyin": "Lán shì wǒ de péngyou.", "exampleMeaningVi": "Lan là bạn của tôi." }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:possession-de", "title": "Sở hữu với 的", "pattern": "Người sở hữu + 的 + danh từ", "explanationVi": "的 nối người sở hữu với sự vật hoặc người thuộc về họ.", "exampleChinese": "这是我的朋友。", "examplePinyin": "Zhè shì wǒ de péngyou.", "exampleMeaningVi": "Đây là bạn của tôi.", "level": "starter", "status": "published", "usageNote": "Trong khẩu ngữ, 的 đôi khi được lược với quan hệ thân thuộc như 我妈妈." }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:家人",
+                    "distractorKeys": ["foundation:爸爸", "foundation:妈妈", "foundation:朋友"],
+                    "sentenceTokens": ["这", "是", "我", "的", "家人", "。"],
+                    "sentenceAnswerZh": "这是我的家人。",
+                    "grammarQuestion": "Cụm nào có nghĩa “bạn của tôi”?",
+                    "grammarOptions": ["我的朋友", "我朋友的", "的我朋友"],
+                    "grammarCorrect": "我的朋友",
+                    "grammarExplanationVi": "Người sở hữu 我 đứng trước 的, sau đó là 朋友.",
+                    "grammarKey": "foundation:possession-de"
+                  }
+                },
+                {
+                  "slug": "ngay-gio",
+                  "title": "现在几点？ - Bây giờ mấy giờ?",
+                  "descriptionVi": "Nói hôm nay, ngày mai và giờ phút.",
+                  "orderIndex": 2,
+                  "xpReward": 20,
+                  "status": "published",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 12,
+                  "objectives": ["Hỏi và trả lời giờ hiện tại"],
+                  "reviewVocabularyKeys": ["foundation:家", "foundation:家人", "foundation:爸爸", "foundation:妈妈", "foundation:朋友"],
+                  "reviewGrammarKeys": ["foundation:possession-de"],
+                  "vocabulary": [
+                    { "key": "foundation:今天", "chinese": "今天", "pinyin": "jīntiān", "meaningVi": "hôm nay", "meaningEn": "today", "partOfSpeech": "danh từ thời gian", "level": "starter", "category": "time", "hskLevel": 1, "status": "published", "exampleSentence": "今天是星期一。", "examplePinyin": "Jīntiān shì Xīngqīyī.", "exampleMeaningVi": "Hôm nay là thứ Hai." },
+                    { "key": "foundation:明天", "chinese": "明天", "pinyin": "míngtiān", "meaningVi": "ngày mai", "meaningEn": "tomorrow", "partOfSpeech": "danh từ thời gian", "level": "starter", "category": "time", "hskLevel": 1, "status": "published", "exampleSentence": "明天我们见面。", "examplePinyin": "Míngtiān wǒmen jiànmiàn.", "exampleMeaningVi": "Ngày mai chúng ta gặp nhau." },
+                    { "key": "foundation:现在", "chinese": "现在", "pinyin": "xiànzài", "meaningVi": "bây giờ", "meaningEn": "now", "partOfSpeech": "danh từ thời gian", "level": "starter", "category": "time", "hskLevel": 1, "status": "published", "exampleSentence": "现在八点。", "examplePinyin": "Xiànzài bā diǎn.", "exampleMeaningVi": "Bây giờ là tám giờ." },
+                    { "key": "foundation:点", "chinese": "点", "pinyin": "diǎn", "meaningVi": "giờ (khi nói thời gian)", "meaningEn": "o'clock", "partOfSpeech": "lượng từ thời gian", "level": "starter", "category": "time", "hskLevel": 1, "status": "published", "exampleSentence": "我七点起床。", "examplePinyin": "Wǒ qī diǎn qǐchuáng.", "exampleMeaningVi": "Tôi thức dậy lúc bảy giờ." },
+                    { "key": "foundation:分钟", "chinese": "分钟", "pinyin": "fēnzhōng", "meaningVi": "phút", "meaningEn": "minute", "partOfSpeech": "danh từ", "level": "starter", "category": "time", "hskLevel": 1, "status": "published", "exampleSentence": "请等五分钟。", "examplePinyin": "Qǐng děng wǔ fēnzhōng.", "exampleMeaningVi": "Vui lòng đợi năm phút." }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:time-before-verb", "title": "Thời gian đứng trước động từ", "pattern": "Chủ ngữ + thời gian + động từ", "explanationVi": "Mốc giờ thường đứng sau chủ ngữ và trước hành động.", "exampleChinese": "我七点起床。", "examplePinyin": "Wǒ qī diǎn qǐchuáng.", "exampleMeaningVi": "Tôi thức dậy lúc bảy giờ.", "level": "starter", "status": "published", "usageNote": "Từ chỉ ngày như 今天 có thể đứng đầu câu hoặc sau chủ ngữ." }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:现在",
+                    "distractorKeys": ["foundation:今天", "foundation:明天", "foundation:分钟"],
+                    "sentenceTokens": ["现在", "八", "点", "。"],
+                    "grammarQuestion": "Câu nào có trật tự tự nhiên?",
+                    "grammarOptions": ["我七点起床。", "我起床七点。", "七起床我点。"],
+                    "grammarCorrect": "我七点起床。",
+                    "grammarExplanationVi": "Mốc thời gian 七点 đứng trước động từ 起床.",
+                    "grammarKey": "foundation:time-before-verb"
+                  }
+                }
+              ]
+            },
+            {
+              "slug": "hoat-dong-va-mua-sam",
+              "title": "Hoạt động và mua sắm",
+              "descriptionVi": "Nói hoạt động trong ngày, gọi đồ uống và hỏi giá.",
+              "orderIndex": 2,
+              "status": "published",
+              "objectives": ["Mô tả thói quen", "Hỏi giá món ăn, đồ uống"],
+              "lessons": [
+                {
+                  "slug": "hoat-dong-hang-ngay",
+                  "title": "我的一天 - Một ngày của tôi",
+                  "descriptionVi": "Các động từ sinh hoạt và trình tự hoạt động.",
+                  "orderIndex": 1,
+                  "xpReward": 20,
+                  "status": "published",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 12,
+                  "objectives": ["Nói bốn hoạt động quen thuộc trong ngày"],
+                  "reviewVocabularyKeys": ["foundation:今天", "foundation:明天", "foundation:现在", "foundation:点", "foundation:分钟"],
+                  "reviewGrammarKeys": ["foundation:time-before-verb"],
+                  "vocabulary": [
+                    { "key": "foundation:起床", "chinese": "起床", "pinyin": "qǐchuáng", "meaningVi": "thức dậy, rời giường", "meaningEn": "get up", "partOfSpeech": "động từ", "level": "starter", "category": "daily_routine", "hskLevel": 1, "status": "published", "exampleSentence": "我每天六点起床。", "examplePinyin": "Wǒ měitiān liù diǎn qǐchuáng.", "exampleMeaningVi": "Mỗi ngày tôi thức dậy lúc sáu giờ." },
+                    { "key": "foundation:吃饭", "chinese": "吃饭", "pinyin": "chīfàn", "meaningVi": "ăn cơm, dùng bữa", "meaningEn": "eat a meal", "partOfSpeech": "động từ", "level": "starter", "category": "daily_routine", "hskLevel": 1, "status": "published", "exampleSentence": "我们十二点吃饭。", "examplePinyin": "Wǒmen shí'èr diǎn chīfàn.", "exampleMeaningVi": "Chúng tôi ăn lúc mười hai giờ." },
+                    { "key": "foundation:学习", "chinese": "学习", "pinyin": "xuéxí", "meaningVi": "học tập", "meaningEn": "study", "partOfSpeech": "động từ", "level": "starter", "category": "daily_routine", "hskLevel": 1, "status": "published", "exampleSentence": "我学习汉语。", "examplePinyin": "Wǒ xuéxí Hànyǔ.", "exampleMeaningVi": "Tôi học tiếng Trung." },
+                    { "key": "foundation:工作", "chinese": "工作", "pinyin": "gōngzuò", "meaningVi": "làm việc, công việc", "meaningEn": "work", "partOfSpeech": "động từ/danh từ", "level": "starter", "category": "daily_routine", "hskLevel": 1, "status": "published", "exampleSentence": "爸爸在银行工作。", "examplePinyin": "Bàba zài yínháng gōngzuò.", "exampleMeaningVi": "Bố làm việc ở ngân hàng." },
+                    { "key": "foundation:睡觉", "chinese": "睡觉", "pinyin": "shuìjiào", "meaningVi": "đi ngủ", "meaningEn": "sleep", "partOfSpeech": "động từ", "level": "starter", "category": "daily_routine", "hskLevel": 1, "status": "published", "exampleSentence": "我十点睡觉。", "examplePinyin": "Wǒ shí diǎn shuìjiào.", "exampleMeaningVi": "Tôi đi ngủ lúc mười giờ." }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:first-then", "title": "Trình tự 先...再...", "pattern": "先 + hành động 1 + 再 + hành động 2", "explanationVi": "先...再... diễn tả làm việc thứ nhất rồi mới làm việc thứ hai.", "exampleChinese": "我先学习，再睡觉。", "examplePinyin": "Wǒ xiān xuéxí, zài shuìjiào.", "exampleMeaningVi": "Tôi học trước, rồi đi ngủ.", "level": "starter", "status": "published", "usageNote": "再 ở đây chỉ bước tiếp theo, không phải nghĩa “lại”." }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:学习",
+                    "distractorKeys": ["foundation:工作", "foundation:睡觉", "foundation:吃饭"],
+                    "sentenceTokens": ["我", "学习", "汉语", "。"],
+                    "grammarQuestion": "Câu nào diễn tả “học trước rồi đi ngủ”?",
+                    "grammarOptions": ["先学习，再睡觉。", "再学习，先睡觉。", "学习先睡觉再。"],
+                    "grammarCorrect": "先学习，再睡觉。",
+                    "grammarExplanationVi": "先 đánh dấu hành động đầu; 再 giới thiệu hành động tiếp theo.",
+                    "grammarKey": "foundation:first-then"
+                  }
+                },
+                {
+                  "slug": "do-an-va-gia-ca",
+                  "title": "多少钱？ - Bao nhiêu tiền?",
+                  "descriptionVi": "Gọi món đơn giản và hỏi giá.",
+                  "orderIndex": 2,
+                  "xpReward": 20,
+                  "status": "published",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 12,
+                  "objectives": ["Hỏi giá và nói nhu cầu mua món cơ bản"],
+                  "reviewVocabularyKeys": ["foundation:起床", "foundation:吃饭", "foundation:学习", "foundation:工作", "foundation:睡觉"],
+                  "reviewGrammarKeys": ["foundation:first-then"],
+                  "vocabulary": [
+                    { "key": "foundation:米饭", "chinese": "米饭", "pinyin": "mǐfàn", "meaningVi": "cơm", "meaningEn": "cooked rice", "partOfSpeech": "danh từ", "level": "starter", "category": "food", "hskLevel": 1, "status": "published", "exampleSentence": "我想吃米饭。", "examplePinyin": "Wǒ xiǎng chī mǐfàn.", "exampleMeaningVi": "Tôi muốn ăn cơm." },
+                    { "key": "foundation:水", "chinese": "水", "pinyin": "shuǐ", "meaningVi": "nước", "meaningEn": "water", "partOfSpeech": "danh từ", "level": "starter", "category": "food", "hskLevel": 1, "status": "published", "exampleSentence": "请给我一杯水。", "examplePinyin": "Qǐng gěi wǒ yì bēi shuǐ.", "exampleMeaningVi": "Vui lòng cho tôi một cốc nước." },
+                    { "key": "foundation:茶", "chinese": "茶", "pinyin": "chá", "meaningVi": "trà", "meaningEn": "tea", "partOfSpeech": "danh từ", "level": "starter", "category": "food", "hskLevel": 1, "status": "published", "exampleSentence": "这杯茶很好喝。", "examplePinyin": "Zhè bēi chá hěn hǎohē.", "exampleMeaningVi": "Cốc trà này rất ngon." },
+                    { "key": "foundation:多少钱", "chinese": "多少钱", "pinyin": "duōshao qián", "meaningVi": "bao nhiêu tiền", "meaningEn": "how much money", "partOfSpeech": "cụm nghi vấn", "level": "starter", "category": "shopping", "hskLevel": 1, "status": "published", "exampleSentence": "这杯茶多少钱？", "examplePinyin": "Zhè bēi chá duōshao qián?", "exampleMeaningVi": "Cốc trà này bao nhiêu tiền?" },
+                    { "key": "foundation:买", "chinese": "买", "pinyin": "mǎi", "meaningVi": "mua", "meaningEn": "buy", "partOfSpeech": "động từ", "level": "starter", "category": "shopping", "hskLevel": 1, "status": "published", "exampleSentence": "我买两瓶水。", "examplePinyin": "Wǒ mǎi liǎng píng shuǐ.", "exampleMeaningVi": "Tôi mua hai chai nước." }
+                  ],
+                  "grammar": [
+                    { "key": "foundation:how-much", "title": "Hỏi giá với 多少钱", "pattern": "Danh từ + 多少钱？", "explanationVi": "Đặt 多少钱 sau món đồ để hỏi giá.", "exampleChinese": "这杯茶多少钱？", "examplePinyin": "Zhè bēi chá duōshao qián?", "exampleMeaningVi": "Cốc trà này bao nhiêu tiền?", "level": "starter", "status": "published", "usageNote": "Có thể nói ngắn gọn 多少钱？ khi món đồ đã rõ." }
+                  ],
+                  "practice": {
+                    "targetKey": "foundation:多少钱",
+                    "distractorKeys": ["foundation:米饭", "foundation:水", "foundation:买"],
+                    "sentenceTokens": ["这", "杯", "茶", "多少", "钱", "？"],
+                    "sentenceAnswerZh": "这杯茶多少钱？",
+                    "grammarQuestion": "Muốn hỏi giá cốc trà, dùng câu nào?",
+                    "grammarOptions": ["这杯茶多少钱？", "这杯茶什么人？", "这杯茶几点？"],
+                    "grammarCorrect": "这杯茶多少钱？",
+                    "grammarExplanationVi": "多少钱 là cụm nghi vấn về giá tiền.",
+                    "grammarKey": "foundation:how-much"
+                  }
+                },
+                {
+                  "slug": "on-tap-nen-tang",
+                  "title": "复习 - Ôn tập nền tảng",
+                  "descriptionVi": "Ôn giới thiệu, thời gian, sinh hoạt và mua sắm.",
+                  "orderIndex": 3,
+                  "xpReward": 25,
+                  "status": "published",
+                  "lessonType": "review",
+                  "estimatedMinutes": 15,
+                  "objectives": ["Kết hợp từ và mẫu câu của toàn khóa vào hội thoại ngắn"],
+                  "reviewVocabularyKeys": ["foundation:米饭", "foundation:水", "foundation:茶", "foundation:多少钱", "foundation:买", "foundation:学习", "foundation:工作", "foundation:今天", "foundation:家人", "foundation:越南"],
+                  "reviewGrammarKeys": ["foundation:how-much", "foundation:first-then", "foundation:time-before-verb", "foundation:possession-de", "foundation:called-name"],
+                  "practice": {
+                    "targetKey": "foundation:买",
+                    "distractorKeys": ["foundation:学习", "foundation:工作", "foundation:睡觉"],
+                    "translationPromptVi": "Tôi là sinh viên Việt Nam.",
+                    "translationAnswerZh": "我是越南学生。",
+                    "translationExplanationVi": "我是... giới thiệu vai trò; 越南 đứng trước 学生 để bổ nghĩa.",
+                    "acceptableAnswers": ["我是越南学生。", "我是越南的学生。"],
+                    "sentenceTokens": ["我", "是", "越南", "学生", "。"],
+                    "sentenceAnswerZh": "我是越南学生。",
+                    "grammarQuestion": "Câu nào hỏi giá đúng?",
+                    "grammarOptions": ["这杯茶多少钱？", "这杯茶什么名字？", "这杯茶几个人？"],
+                    "grammarCorrect": "这杯茶多少钱？",
+                    "grammarExplanationVi": "多少钱 dùng để hỏi giá.",
+                    "grammarActivityType": "reading_comprehension",
+                    "grammarPassage": "兰想买一杯茶。她先问价格。",
+                    "speakingTextZh": "你好，我叫兰。我是越南学生。",
+                    "speakingPinyin": "Nǐ hǎo, wǒ jiào Lán. Wǒ shì Yuènán xuésheng."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "chinese-pronunciation-tones",
+      "title": "Chinese Pronunciation and Tones",
+      "titleZh": "汉语语音与声调",
+      "descriptionVi": "Lộ trình phát âm có hệ thống: âm tiết pinyin, thanh mẫu, vận mẫu, bốn thanh, biến điệu và các âm khó.",
+      "level": "beginner",
+      "status": "review",
+      "orderIndex": 9,
+      "objectives": [
+        "Phân tích cấu tạo một âm tiết pinyin",
+        "Phân biệt và phát âm bốn thanh điệu",
+        "Áp dụng biến điệu của thanh 3, 一 và 不"
+      ],
+      "estimatedMinutes": 100,
+      "units": [
+        {
+          "slug": "he-thong-pinyin",
+          "title": "Hệ thống pinyin",
+          "descriptionVi": "Cấu tạo âm tiết, thanh mẫu và vận mẫu.",
+          "orderIndex": 1,
+          "status": "review",
+          "objectives": ["Nhận biết các thành phần của pinyin", "Đọc nhóm âm môi và vận mẫu cơ bản"],
+          "chapters": [
+            {
+              "slug": "cau-tao-am-tiet",
+              "title": "Cấu tạo âm tiết",
+              "descriptionVi": "Thanh mẫu, vận mẫu và âm tiết hoàn chỉnh.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": ["Phân tách âm tiết pinyin"],
+              "lessons": [
+                {
+                  "slug": "pinyin-thanh-mau-van-mau",
+                  "title": "拼音、声母、韵母",
+                  "descriptionVi": "Ba khái niệm nền tảng để đọc pinyin.",
+                  "orderIndex": 1,
+                  "xpReward": 20,
+                  "status": "review",
+                  "lessonType": "pronunciation",
+                  "estimatedMinutes": 12,
+                  "objectives": ["Phân biệt thanh mẫu, vận mẫu và âm tiết"],
+                  "vocabulary": [
+                    { "key": "pronunciation:拼音", "chinese": "拼音", "pinyin": "pīnyīn", "meaningVi": "pinyin, hệ thống phiên âm", "meaningEn": "pinyin", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation", "hskLevel": null, "status": "review", "exampleSentence": "学习拼音能帮助我们读准汉字。", "examplePinyin": "Xuéxí pīnyīn néng bāngzhù wǒmen dú zhǔn Hànzì.", "exampleMeaningVi": "Học pinyin giúp chúng ta đọc chữ Hán chính xác." },
+                    { "key": "pronunciation:声母", "chinese": "声母", "pinyin": "shēngmǔ", "meaningVi": "thanh mẫu, phụ âm đầu", "meaningEn": "initial", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation", "hskLevel": null, "status": "review", "exampleSentence": "“b”是一个声母。", "examplePinyin": "“b” shì yí ge shēngmǔ.", "exampleMeaningVi": "“b” là một thanh mẫu." },
+                    { "key": "pronunciation:韵母", "chinese": "韵母", "pinyin": "yùnmǔ", "meaningVi": "vận mẫu, phần vần", "meaningEn": "final", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation", "hskLevel": null, "status": "review", "exampleSentence": "“ang”是一个韵母。", "examplePinyin": "“ang” shì yí ge yùnmǔ.", "exampleMeaningVi": "“ang” là một vận mẫu." },
+                    { "key": "pronunciation:音节", "chinese": "音节", "pinyin": "yīnjié", "meaningVi": "âm tiết", "meaningEn": "syllable", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation", "hskLevel": null, "status": "review", "exampleSentence": "“mā”是一个音节。", "examplePinyin": "“mā” shì yí ge yīnjié.", "exampleMeaningVi": "“mā” là một âm tiết." }
+                  ],
+                  "grammar": [
+                    { "key": "pronunciation:syllable-structure", "title": "Cấu tạo âm tiết pinyin", "pattern": "thanh mẫu + vận mẫu + thanh điệu", "explanationVi": "Nhiều âm tiết gồm thanh mẫu đứng trước, vận mẫu đứng sau và dấu thanh đặt trên nguyên âm chính.", "exampleChinese": "妈：m + a + thanh 1", "examplePinyin": "Mā: m + a + dì yī shēng.", "exampleMeaningVi": "妈 gồm thanh mẫu m, vận mẫu a và thanh 1.", "level": "beginner", "status": "review", "usageNote": "Một số âm tiết không có thanh mẫu, ví dụ 安 ān." }
+                  ],
+                  "practice": {
+                    "targetKey": "pronunciation:拼音",
+                    "distractorKeys": ["pronunciation:声母", "pronunciation:韵母", "pronunciation:音节"],
+                    "sentenceTokens": ["学习", "拼音", "很", "重要", "。"],
+                    "sentenceAnswerZh": "学习拼音很重要。",
+                    "grammarQuestion": "Trong âm tiết mā, “m” là thành phần nào?",
+                    "grammarOptions": ["声母", "韵母", "声调"],
+                    "grammarCorrect": "声母",
+                    "grammarExplanationVi": "m đứng đầu âm tiết nên là thanh mẫu.",
+                    "grammarKey": "pronunciation:syllable-structure"
+                  }
+                },
+                {
+                  "slug": "am-moi-b-p-m-f",
+                  "title": "b、p、m、f và độ bật hơi",
+                  "descriptionVi": "Luyện các âm môi qua từ đơn quen thuộc.",
+                  "orderIndex": 2,
+                  "xpReward": 20,
+                  "status": "review",
+                  "lessonType": "pronunciation",
+                  "estimatedMinutes": 12,
+                  "objectives": ["Phân biệt b/p và giữ vị trí môi của m/f"],
+                  "reviewVocabularyKeys": ["pronunciation:拼音", "pronunciation:声母", "pronunciation:韵母", "pronunciation:音节"],
+                  "reviewGrammarKeys": ["pronunciation:syllable-structure"],
+                  "vocabulary": [
+                    { "key": "pronunciation:白", "chinese": "白", "pinyin": "bái", "meaningVi": "trắng", "meaningEn": "white", "partOfSpeech": "tính từ", "level": "beginner", "category": "pronunciation_bpmf", "hskLevel": 1, "status": "review", "exampleSentence": "这张纸是白色的。", "examplePinyin": "Zhè zhāng zhǐ shì báisè de.", "exampleMeaningVi": "Tờ giấy này màu trắng." },
+                    { "key": "pronunciation:跑", "chinese": "跑", "pinyin": "pǎo", "meaningVi": "chạy", "meaningEn": "run", "partOfSpeech": "động từ", "level": "beginner", "category": "pronunciation_bpmf", "hskLevel": 2, "status": "review", "exampleSentence": "他每天跑步。", "examplePinyin": "Tā měitiān pǎobù.", "exampleMeaningVi": "Anh ấy chạy bộ mỗi ngày." },
+                    { "key": "pronunciation:米", "chinese": "米", "pinyin": "mǐ", "meaningVi": "gạo", "meaningEn": "rice grain", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation_bpmf", "hskLevel": 1, "status": "review", "exampleSentence": "这袋米很香。", "examplePinyin": "Zhè dài mǐ hěn xiāng.", "exampleMeaningVi": "Túi gạo này rất thơm." },
+                    { "key": "pronunciation:发", "chinese": "发", "pinyin": "fā", "meaningVi": "phát, gửi", "meaningEn": "send; issue", "partOfSpeech": "động từ", "level": "beginner", "category": "pronunciation_bpmf", "hskLevel": 2, "status": "review", "exampleSentence": "我给你发消息。", "examplePinyin": "Wǒ gěi nǐ fā xiāoxi.", "exampleMeaningVi": "Tôi gửi tin nhắn cho bạn." }
+                  ],
+                  "grammar": [
+                    { "key": "pronunciation:aspiration-bp", "title": "Phân biệt b và p", "pattern": "b không bật hơi mạnh; p bật hơi", "explanationVi": "Đặt mảnh giấy trước miệng: p làm giấy chuyển động rõ hơn b.", "exampleChinese": "白 bái / 跑 pǎo", "examplePinyin": "Bái / pǎo.", "exampleMeaningVi": "trắng / chạy", "level": "beginner", "status": "review", "usageNote": "Khác biệt chính là độ bật hơi, không phải hữu thanh/vô thanh như một số ngôn ngữ." }
+                  ],
+                  "practice": {
+                    "targetKey": "pronunciation:跑",
+                    "distractorKeys": ["pronunciation:白", "pronunciation:米", "pronunciation:发"],
+                    "sentenceTokens": ["他", "每天", "跑步", "。"],
+                    "sentenceAnswerZh": "他每天跑步。",
+                    "grammarQuestion": "Âm nào bật hơi mạnh hơn?",
+                    "grammarOptions": ["p", "b", "m"],
+                    "grammarCorrect": "p",
+                    "grammarExplanationVi": "p là âm bật hơi; b không bật hơi mạnh.",
+                    "grammarKey": "pronunciation:aspiration-bp"
+                  }
+                }
+              ]
+            },
+            {
+              "slug": "van-mau-va-bon-thanh",
+              "title": "Vận mẫu và bốn thanh",
+              "descriptionVi": "Nguyên âm cơ bản và đối lập mā–má–mǎ–mà.",
+              "orderIndex": 2,
+              "status": "review",
+              "objectives": ["Đọc vận mẫu đơn", "Nghe và phát âm đường nét bốn thanh"],
+              "lessons": [
+                {
+                  "slug": "van-mau-don",
+                  "title": "a、o、e、i、u、ü",
+                  "descriptionVi": "Luyện khẩu hình qua các từ có vận mẫu đơn.",
+                  "orderIndex": 1,
+                  "xpReward": 20,
+                  "status": "review",
+                  "lessonType": "pronunciation",
+                  "estimatedMinutes": 14,
+                  "objectives": ["Giữ đúng khẩu hình sáu vận mẫu đơn"],
+                  "reviewVocabularyKeys": ["pronunciation:白", "pronunciation:跑", "pronunciation:米", "pronunciation:发"],
+                  "reviewGrammarKeys": ["pronunciation:aspiration-bp"],
+                  "vocabulary": [
+                    { "key": "pronunciation:阿姨", "chinese": "阿姨", "pinyin": "āyí", "meaningVi": "cô, dì", "meaningEn": "aunt", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation_finals", "hskLevel": 2, "status": "review", "exampleSentence": "阿姨住在上海。", "examplePinyin": "Āyí zhù zài Shànghǎi.", "exampleMeaningVi": "Dì sống ở Thượng Hải." },
+                    { "key": "pronunciation:饿", "chinese": "饿", "pinyin": "è", "meaningVi": "đói", "meaningEn": "hungry", "partOfSpeech": "tính từ", "level": "beginner", "category": "pronunciation_finals", "hskLevel": 1, "status": "review", "exampleSentence": "我有点儿饿。", "examplePinyin": "Wǒ yǒudiǎnr è.", "exampleMeaningVi": "Tôi hơi đói." },
+                    { "key": "pronunciation:衣服", "chinese": "衣服", "pinyin": "yīfu", "meaningVi": "quần áo", "meaningEn": "clothes", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation_finals", "hskLevel": 1, "status": "review", "exampleSentence": "这件衣服很合适。", "examplePinyin": "Zhè jiàn yīfu hěn héshì.", "exampleMeaningVi": "Bộ quần áo này rất vừa." },
+                    { "key": "pronunciation:乌云", "chinese": "乌云", "pinyin": "wūyún", "meaningVi": "mây đen", "meaningEn": "dark cloud", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation_finals", "hskLevel": null, "status": "review", "exampleSentence": "天上有很多乌云。", "examplePinyin": "Tiānshang yǒu hěn duō wūyún.", "exampleMeaningVi": "Trên trời có nhiều mây đen." },
+                    { "key": "pronunciation:女儿", "chinese": "女儿", "pinyin": "nǚ'ér", "meaningVi": "con gái", "meaningEn": "daughter", "partOfSpeech": "danh từ", "level": "beginner", "category": "pronunciation_finals", "hskLevel": 1, "status": "review", "exampleSentence": "她女儿今年十岁。", "examplePinyin": "Tā nǚ'ér jīnnián shí suì.", "exampleMeaningVi": "Con gái cô ấy năm nay mười tuổi." }
+                  ],
+                  "grammar": [
+                    { "key": "pronunciation:umlaut-u", "title": "Khẩu hình ü", "pattern": "i + môi tròn", "explanationVi": "Giữ lưỡi như khi đọc i rồi làm tròn môi; không đọc thành u.", "exampleChinese": "女 nǚ", "examplePinyin": "Nǚ.", "exampleMeaningVi": "nữ, con gái", "level": "beginner", "status": "review", "usageNote": "Sau j, q, x, y, hai chấm thường bị lược trong chữ viết pinyin." }
+                  ],
+                  "practice": {
+                    "targetKey": "pronunciation:女儿",
+                    "distractorKeys": ["pronunciation:阿姨", "pronunciation:衣服", "pronunciation:乌云"],
+                    "sentenceTokens": ["她", "女儿", "十", "岁", "。"],
+                    "sentenceAnswerZh": "她女儿十岁。",
+                    "grammarQuestion": "Âm ü được tạo bằng cách nào?",
+                    "grammarOptions": ["Giữ lưỡi như i và làm tròn môi", "Đọc giống u tiếng Việt", "Mở miệng như a"],
+                    "grammarCorrect": "Giữ lưỡi như i và làm tròn môi",
+                    "grammarExplanationVi": "ü có vị trí lưỡi gần i nhưng môi tròn.",
+                    "grammarKey": "pronunciation:umlaut-u"
+                  }
+                },
+                {
+                  "slug": "ma-ma-ma-ma",
+                  "title": "mā、má、mǎ、mà",
+                  "descriptionVi": "Bốn thanh tạo bốn nghĩa khác nhau.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "tone_practice",
+                  "estimatedMinutes": 15,
+                  "objectives": ["Phát âm rõ bốn đường nét thanh điệu"],
+                  "reviewVocabularyKeys": ["pronunciation:阿姨", "pronunciation:饿", "pronunciation:衣服", "pronunciation:乌云", "pronunciation:女儿"],
+                  "reviewGrammarKeys": ["pronunciation:umlaut-u"],
+                  "vocabulary": [
+                    { "key": "pronunciation:妈", "chinese": "妈", "pinyin": "mā", "meaningVi": "mẹ", "meaningEn": "mom", "partOfSpeech": "danh từ", "level": "beginner", "category": "tones", "hskLevel": 1, "status": "review", "exampleSentence": "我妈今天很忙。", "examplePinyin": "Wǒ mā jīntiān hěn máng.", "exampleMeaningVi": "Hôm nay mẹ tôi rất bận." },
+                    { "key": "pronunciation:麻", "chinese": "麻", "pinyin": "má", "meaningVi": "tê; cây gai", "meaningEn": "numb; hemp", "partOfSpeech": "tính từ/danh từ", "level": "beginner", "category": "tones", "hskLevel": null, "status": "review", "exampleSentence": "我的腿有点儿麻。", "examplePinyin": "Wǒ de tuǐ yǒudiǎnr má.", "exampleMeaningVi": "Chân tôi hơi tê." },
+                    { "key": "pronunciation:马", "chinese": "马", "pinyin": "mǎ", "meaningVi": "ngựa", "meaningEn": "horse", "partOfSpeech": "danh từ", "level": "beginner", "category": "tones", "hskLevel": 2, "status": "review", "exampleSentence": "草原上有一匹马。", "examplePinyin": "Cǎoyuán shang yǒu yì pǐ mǎ.", "exampleMeaningVi": "Trên thảo nguyên có một con ngựa." },
+                    { "key": "pronunciation:骂", "chinese": "骂", "pinyin": "mà", "meaningVi": "mắng", "meaningEn": "scold", "partOfSpeech": "động từ", "level": "beginner", "category": "tones", "hskLevel": 4, "status": "review", "exampleSentence": "请不要骂人。", "examplePinyin": "Qǐng bú yào mà rén.", "exampleMeaningVi": "Xin đừng mắng người khác." }
+                  ],
+                  "grammar": [
+                    { "key": "pronunciation:four-tone-contours", "title": "Đường nét bốn thanh", "pattern": "cao ngang / đi lên / hạ rồi lên / đi xuống", "explanationVi": "Thanh 1 giữ cao; thanh 2 đi lên; thanh 3 hạ thấp rồi lên khi đọc riêng; thanh 4 rơi nhanh.", "exampleChinese": "妈、麻、马、骂", "examplePinyin": "Mā, má, mǎ, mà.", "exampleMeaningVi": "mẹ, tê, ngựa, mắng", "level": "beginner", "status": "review", "usageNote": "Trong chuỗi lời nói, thanh 3 thường không lên đầy đủ." }
+                  ],
+                  "practice": {
+                    "targetKey": "pronunciation:马",
+                    "distractorKeys": ["pronunciation:妈", "pronunciation:麻", "pronunciation:骂"],
+                    "sentenceTokens": ["草原", "上", "有", "一", "匹", "马", "。"],
+                    "grammarQuestion": "Pinyin nào biểu thị thanh 4?",
+                    "grammarOptions": ["mà", "mā", "má", "mǎ"],
+                    "grammarCorrect": "mà",
+                    "grammarExplanationVi": "Dấu huyền trong pinyin (à) biểu thị thanh 4 đi xuống.",
+                    "grammarKey": "pronunciation:four-tone-contours"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "bien-dieu-va-am-kho",
+          "title": "Biến điệu và âm khó",
+          "descriptionVi": "Thanh 3 liên tiếp, 一, 不 và nhóm âm đầu dễ nhầm.",
+          "orderIndex": 2,
+          "status": "review",
+          "objectives": ["Áp dụng biến điệu trong cụm từ", "Phân biệt zh/ch/sh/r với z/c/s"],
+          "chapters": [
+            {
+              "slug": "bien-dieu",
+              "title": "Biến điệu thường gặp",
+              "descriptionVi": "Đọc tự nhiên thanh 3, 一 và 不 trong câu.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": ["Đọc biến điệu theo âm tiết kế tiếp"],
+              "lessons": [
+                {
+                  "slug": "yi-bu-thanh-ba",
+                  "title": "你好、一个、不要",
+                  "descriptionVi": "Ba quy tắc biến điệu có tần suất cao.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "tone_practice",
+                  "estimatedMinutes": 15,
+                  "objectives": ["Đọc tự nhiên 你好, 一个, 不要"],
+                  "reviewVocabularyKeys": ["pronunciation:妈", "pronunciation:麻", "pronunciation:马", "pronunciation:骂"],
+                  "reviewGrammarKeys": ["pronunciation:four-tone-contours"],
+                  "vocabulary": [
+                    { "key": "pronunciation:一起", "chinese": "一起", "pinyin": "yìqǐ", "meaningVi": "cùng nhau", "meaningEn": "together", "partOfSpeech": "phó từ", "level": "beginner", "category": "tone_sandhi", "hskLevel": 1, "status": "review", "exampleSentence": "我们一起学习吧。", "examplePinyin": "Wǒmen yìqǐ xuéxí ba.", "exampleMeaningVi": "Chúng ta cùng học nhé." },
+                    { "key": "pronunciation:一个", "chinese": "一个", "pinyin": "yí ge", "meaningVi": "một (cái/người)", "meaningEn": "one", "partOfSpeech": "cụm số lượng", "level": "beginner", "category": "tone_sandhi", "hskLevel": 1, "status": "review", "exampleSentence": "我有一个问题。", "examplePinyin": "Wǒ yǒu yí ge wèntí.", "exampleMeaningVi": "Tôi có một câu hỏi." },
+                    { "key": "pronunciation:不要", "chinese": "不要", "pinyin": "bú yào", "meaningVi": "đừng; không muốn", "meaningEn": "do not; do not want", "partOfSpeech": "cụm động từ", "level": "beginner", "category": "tone_sandhi", "hskLevel": 1, "status": "review", "exampleSentence": "不要担心。", "examplePinyin": "Bú yào dānxīn.", "exampleMeaningVi": "Đừng lo." },
+                    { "key": "pronunciation:很好", "chinese": "很好", "pinyin": "hén hǎo", "meaningVi": "rất tốt", "meaningEn": "very good", "partOfSpeech": "cụm tính từ", "level": "beginner", "category": "tone_sandhi", "hskLevel": 1, "status": "review", "exampleSentence": "你的发音很好。", "examplePinyin": "Nǐ de fāyīn hén hǎo.", "exampleMeaningVi": "Phát âm của bạn rất tốt." },
+                    { "key": "pronunciation:不是", "chinese": "不是", "pinyin": "bú shì", "meaningVi": "không phải", "meaningEn": "is not", "partOfSpeech": "cụm động từ", "level": "beginner", "category": "tone_sandhi", "hskLevel": 1, "status": "review", "exampleSentence": "这不是我的书。", "examplePinyin": "Zhè bú shì wǒ de shū.", "exampleMeaningVi": "Đây không phải sách của tôi." }
+                  ],
+                  "grammar": [
+                    { "key": "pronunciation:tone-sandhi-core", "title": "Biến điệu cốt lõi", "pattern": "3+3 → 2+3; 一/不 đổi theo thanh sau", "explanationVi": "Âm tiết thanh 3 đầu tiên đổi gần thanh 2 trước một thanh 3 khác. 一 và 不 đổi thanh theo âm tiết theo sau.", "exampleChinese": "你好、一个、不要", "examplePinyin": "Ní hǎo, yí ge, bú yào.", "exampleMeaningVi": "xin chào, một cái, đừng", "level": "beginner", "status": "review", "usageNote": "Chính tả pinyin thường giữ dấu thanh từ điển cho từ như 你好; phần pinyin phát âm có thể ghi biến điệu khi giảng âm." }
+                  ],
+                  "practice": {
+                    "targetKey": "pronunciation:不要",
+                    "distractorKeys": ["pronunciation:一起", "pronunciation:一个", "pronunciation:不是"],
+                    "sentenceTokens": ["不要", "担心", "。"],
+                    "grammarQuestion": "Trong lời nói tự nhiên, 不要 đọc thế nào?",
+                    "grammarOptions": ["bú yào", "bù yào", "bǔ yào"],
+                    "grammarCorrect": "bú yào",
+                    "grammarExplanationVi": "不 đổi thành thanh 2 trước âm tiết thanh 4 要.",
+                    "grammarKey": "pronunciation:tone-sandhi-core"
+                  }
+                },
+                {
+                  "slug": "zh-ch-sh-r",
+                  "title": "zh、ch、sh、r",
+                  "descriptionVi": "Luyện nhóm âm đầu uốn lưỡi qua từ có tần suất cao.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "pronunciation",
+                  "estimatedMinutes": 15,
+                  "objectives": ["Đặt đầu lưỡi đúng cho zh, ch, sh, r"],
+                  "reviewVocabularyKeys": ["pronunciation:一起", "pronunciation:一个", "pronunciation:不要", "pronunciation:很好", "pronunciation:不是", "foundation:是", "foundation:人"],
+                  "reviewGrammarKeys": ["pronunciation:tone-sandhi-core"],
+                  "vocabulary": [
+                    { "key": "pronunciation:知道", "chinese": "知道", "pinyin": "zhīdao", "meaningVi": "biết", "meaningEn": "know", "partOfSpeech": "động từ", "level": "beginner", "category": "retroflex_initials", "hskLevel": 2, "status": "review", "exampleSentence": "我知道他的名字。", "examplePinyin": "Wǒ zhīdao tā de míngzi.", "exampleMeaningVi": "Tôi biết tên anh ấy." },
+                    { "key": "pronunciation:吃", "chinese": "吃", "pinyin": "chī", "meaningVi": "ăn", "meaningEn": "eat", "partOfSpeech": "động từ", "level": "beginner", "category": "retroflex_initials", "hskLevel": 1, "status": "review", "exampleSentence": "我们去吃面条吧。", "examplePinyin": "Wǒmen qù chī miàntiáo ba.", "exampleMeaningVi": "Chúng ta đi ăn mì nhé." },
+                    { "key": "pronunciation:热", "chinese": "热", "pinyin": "rè", "meaningVi": "nóng", "meaningEn": "hot", "partOfSpeech": "tính từ", "level": "beginner", "category": "retroflex_initials", "hskLevel": 1, "status": "review", "exampleSentence": "今天太热了。", "examplePinyin": "Jīntiān tài rè le.", "exampleMeaningVi": "Hôm nay nóng quá." },
+                    { "key": "pronunciation:西", "chinese": "西", "pinyin": "xī", "meaningVi": "phía tây", "meaningEn": "west", "partOfSpeech": "danh từ phương vị", "level": "beginner", "category": "initial_contrast", "hskLevel": 2, "status": "review", "exampleSentence": "太阳从西边落下。", "examplePinyin": "Tàiyáng cóng xībian luòxia.", "exampleMeaningVi": "Mặt trời lặn ở phía tây." }
+                  ],
+                  "grammar": [
+                    { "key": "pronunciation:retroflex-position", "title": "Vị trí đầu lưỡi của zh/ch/sh/r", "pattern": "đầu lưỡi hơi cong về sau, không chạm quá mạnh", "explanationVi": "Nhóm zh/ch/sh/r dùng vị trí uốn lưỡi; ch bật hơi mạnh hơn zh.", "exampleChinese": "知道、吃、热", "examplePinyin": "Zhīdao, chī, rè.", "exampleMeaningVi": "biết, ăn, nóng", "level": "beginner", "status": "review", "usageNote": "Không thêm nguyên âm rời sau zh/ch/sh/r; i trong zhi/chi/shi/ri là âm đặc biệt." }
+                  ],
+                  "practice": {
+                    "targetKey": "pronunciation:知道",
+                    "distractorKeys": ["pronunciation:吃", "pronunciation:热", "pronunciation:西"],
+                    "sentenceTokens": ["我", "知道", "他", "的", "名字", "。"],
+                    "grammarQuestion": "Âm nào bật hơi trong cặp zh/ch?",
+                    "grammarOptions": ["ch", "zh", "Cả hai như nhau"],
+                    "grammarCorrect": "ch",
+                    "grammarExplanationVi": "ch bật hơi; zh không bật hơi mạnh.",
+                    "grammarKey": "pronunciation:retroflex-position"
+                  }
+                }
+              ]
+            },
+            {
+              "slug": "on-tap-phat-am",
+              "title": "Ôn tập phát âm",
+              "descriptionVi": "Tổng hợp pinyin, bốn thanh và biến điệu.",
+              "orderIndex": 2,
+              "status": "review",
+              "objectives": ["Đọc đoạn ngắn với thanh điệu ổn định"],
+              "lessons": [
+                {
+                  "slug": "on-tap-pinyin-thanh-dieu",
+                  "title": "语音复习 - Ôn pinyin và thanh điệu",
+                  "descriptionVi": "Ôn âm môi, vận mẫu, bốn thanh, biến điệu và âm uốn lưỡi.",
+                  "orderIndex": 1,
+                  "xpReward": 30,
+                  "status": "review",
+                  "lessonType": "review",
+                  "estimatedMinutes": 18,
+                  "objectives": ["Đọc một đoạn giới thiệu ngắn với pinyin chuẩn"],
+                  "reviewVocabularyKeys": ["pronunciation:知道", "pronunciation:吃", "pronunciation:热", "pronunciation:西", "pronunciation:拼音", "pronunciation:跑", "pronunciation:女儿", "pronunciation:马", "pronunciation:不要", "foundation:你好"],
+                  "reviewGrammarKeys": ["pronunciation:retroflex-position", "pronunciation:tone-sandhi-core", "pronunciation:four-tone-contours", "pronunciation:umlaut-u", "pronunciation:aspiration-bp", "pronunciation:syllable-structure"],
+                  "practice": {
+                    "targetKey": "pronunciation:知道",
+                    "distractorKeys": ["pronunciation:吃", "pronunciation:热", "pronunciation:西"],
+                    "translationPromptVi": "Phát âm của bạn rất tốt.",
+                    "translationAnswerZh": "你的发音很好。",
+                    "translationExplanationVi": "发音 là “phát âm”; 很好 đọc tự nhiên với biến điệu thanh 3.",
+                    "sentenceTokens": ["你", "的", "发音", "很", "好", "。"],
+                    "sentenceAnswerZh": "你的发音很好。",
+                    "grammarQuestion": "Cách đọc tự nhiên nào đúng với 不要?",
+                    "grammarOptions": ["bú yào", "bù yào", "bū yào"],
+                    "grammarCorrect": "bú yào",
+                    "grammarExplanationVi": "不 đổi thành thanh 2 trước thanh 4.",
+                    "grammarActivityType": "reading_comprehension",
+                    "grammarPassage": "兰学习拼音。她每天练习声调，现在发音很好。",
+                    "speakingTextZh": "你好，我叫兰。我们一起学习拼音吧。",
+                    "speakingPinyin": "Nǐ hǎo, wǒ jiào Lán. Wǒmen yìqǐ xuéxí pīnyīn ba."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

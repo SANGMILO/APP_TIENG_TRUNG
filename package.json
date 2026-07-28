@@ -59,6 +59,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build:web": "expo export --platform web",
+    "content:validate": "node scripts/content/validate-content.cjs",
+    "content:check-generated": "node scripts/content/check-generated-content.cjs",
+    "content:report": "node scripts/content/generate-content-reports.cjs",
     "lint": "expo lint",
     "ts:check": "tsc --noEmit",
     "test": "jest"

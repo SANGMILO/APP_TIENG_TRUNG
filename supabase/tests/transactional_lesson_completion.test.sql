@@ -112,6 +112,35 @@ VALUES (
   '10000000-0000-0000-0000-000000000001'
 );
 
+-- Newly imported speaking exercises require the same trusted assessment path.
+-- Keep this dynamic so additive curriculum batches do not make the security
+-- contract test depend on a fixed exercise count.
+INSERT INTO public.pronunciation_attempts (
+  user_id,
+  reference_text,
+  recognized_text,
+  overall_score,
+  accuracy_score,
+  fluency_score,
+  completeness_score,
+  exercise_id,
+  lesson_id
+)
+SELECT
+  '21000000-0000-0000-0000-000000000001',
+  exercise.correct_answer,
+  exercise.correct_answer,
+  90,
+  90,
+  90,
+  90,
+  exercise.id,
+  exercise.lesson_id
+FROM public.exercises AS exercise
+WHERE exercise.lesson_id = '10000000-0000-0000-0000-000000000001'
+  AND exercise.exercise_type = 'speaking'
+  AND exercise.id <> 'e0000000-0000-0000-0000-000000000006';
+
 SELECT lives_ok(
   $$
     SELECT public.complete_lesson_transactional(
@@ -153,7 +182,14 @@ SELECT is(
 
 SELECT ok(
   (
-    SELECT ABS(progress.score - (500.0 / 6.0)) < 0.01
+    SELECT ABS(
+      progress.score
+      - (
+        SELECT (COUNT(*) - 1) * 100.0 / COUNT(*)
+        FROM public.exercises AS exercise
+        WHERE exercise.lesson_id = progress.lesson_id
+      )
+    ) < 0.01
     FROM public.user_lesson_progress AS progress
     WHERE progress.user_id = '21000000-0000-0000-0000-000000000001'
       AND progress.lesson_id = '10000000-0000-0000-0000-000000000001'
@@ -180,7 +216,11 @@ SELECT is(
     WHERE attempt.user_id = '21000000-0000-0000-0000-000000000001'
       AND attempt.completion_id = '21000000-0000-0000-0000-000000000010'
   ),
-  6,
+  (
+    SELECT COUNT(*)::INTEGER
+    FROM public.exercises AS exercise
+    WHERE exercise.lesson_id = '10000000-0000-0000-0000-000000000001'
+  ),
   'one exercise attempt is stored for every exercise'
 );
 
@@ -255,7 +295,19 @@ SELECT ok(
   (
     SELECT
       progress.current_lesson_id = '10000000-0000-0000-0000-000000000002'
-      AND ABS(progress.percent_complete - 20) < 0.01
+      AND ABS(
+        progress.percent_complete
+        - (
+          SELECT 100.0 / COUNT(*)
+          FROM public.lessons AS lesson
+          JOIN public.chapters AS chapter ON chapter.id = lesson.chapter_id
+          JOIN public.units AS unit ON unit.id = chapter.unit_id
+          WHERE unit.course_id = progress.course_id
+            AND unit.status = 'published'
+            AND chapter.status = 'published'
+            AND lesson.status = 'published'
+        )
+      ) < 0.01
     FROM public.user_course_progress AS progress
     WHERE progress.user_id = '21000000-0000-0000-0000-000000000001'
       AND progress.course_id = 'c0000000-0000-0000-0000-000000000001'
