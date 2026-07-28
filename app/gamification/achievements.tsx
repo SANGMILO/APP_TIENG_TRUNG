@@ -5,22 +5,26 @@ import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { fetchAchievements } from '@/services/gamification-service';
 import { ProgressBar, EmptyState } from '@/components/ui';
 import { FontSize, Spacing, BorderRadius, Shadow, FontWeight } from '@/constants/theme';
 
 export default function AchievementsScreen() {
   const { colors } = useThemeStore();
+  const { profile } = useAuthStore();
   const insets = useSafeAreaInsets();
 
-  const { data: achievements, isLoading } = useQuery({
-    queryKey: ['achievements'],
+  const { data: achievements, isLoading, isError, refetch } = useQuery({
+    queryKey: ['achievements', profile?.id],
     queryFn: fetchAchievements,
+    enabled: Boolean(profile),
   });
 
-  const unlocked = (achievements ?? []).filter(a => a.unlocked);
-  const locked = (achievements ?? []).filter(a => !a.unlocked && !a.is_hidden);
-  const total = (achievements ?? []).length;
+  const visibleAchievements = (achievements ?? []).filter(a => !a.is_hidden);
+  const unlocked = visibleAchievements.filter(a => a.unlocked);
+  const locked = visibleAchievements.filter(a => !a.unlocked);
+  const total = visibleAchievements.length;
   const progress = total > 0 ? (unlocked.length / total) * 100 : 0;
 
   return (
@@ -43,6 +47,14 @@ export default function AchievementsScreen() {
 
       {isLoading ? (
         <View style={styles.center}><ActivityIndicator size="large" color={colors.primary} /></View>
+      ) : isError ? (
+        <EmptyState
+          iconName="cloud-offline-outline"
+          title="Không thể tải thành tích"
+          description="Kiểm tra kết nối rồi thử lại."
+          actionLabel="Thử lại"
+          onAction={() => { void refetch(); }}
+        />
       ) : (
         <FlatList
           data={[...unlocked, ...locked]}

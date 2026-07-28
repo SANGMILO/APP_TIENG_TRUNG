@@ -54,16 +54,25 @@ export default function PrivacyPolicyScreen() {
       <Section title="5. Quyền của bạn" colors={colors}>
         Bạn có quyền:{'\n\n'}
         • Xem dữ liệu học tập của mình{'\n'}
-        • Xóa tài khoản và toàn bộ dữ liệu liên quan{'\n'}
+        • Gửi yêu cầu xóa tài khoản và dữ liệu liên quan{'\n'}
         • Tắt thông báo push{'\n'}
         • Từ chối quyền microphone
       </Section>
 
       <Section title="6. Xóa tài khoản" colors={colors}>
-        Bạn có thể xóa tài khoản bất kỳ lúc nào qua:{'\n'}
-        Cài đặt → Tài khoản → Xóa tài khoản{'\n\n'}
-        Hoặc truy cập trang web xóa tài khoản của chúng tôi.
+        Bạn có thể gửi yêu cầu từ một phiên đã xác thực. Yêu cầu được lưu lại
+        để đội vận hành xác minh và xử lý theo chính sách lưu giữ dữ liệu; ứng
+        dụng không tuyên bố tài khoản đã bị xóa trước khi quy trình hoàn tất.
       </Section>
+
+      <TouchableOpacity
+        style={[styles.deletionButton, { borderColor: colors.error }]}
+        onPress={() => router.push('/delete-account')}
+      >
+        <Text style={[styles.deletionButtonText, { color: colors.error }]}>
+          Yêu cầu xóa tài khoản
+        </Text>
+      </TouchableOpacity>
 
       <Text style={[styles.legal, { color: colors.textTertiary }]}>
         Chính sách này có thể được cập nhật. Vui lòng kiểm tra định kỳ.{'\n'}
@@ -92,4 +101,13 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: FontSize.lg, fontWeight: '600', marginBottom: Spacing.sm },
   sectionBody: { fontSize: FontSize.md, lineHeight: 24 },
   legal: { fontSize: FontSize.sm, marginTop: Spacing.xl, lineHeight: 20 },
+  deletionButton: {
+    minHeight: 48,
+    borderWidth: 1,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.xl,
+  },
+  deletionButtonText: { fontSize: FontSize.md, fontWeight: '600' },
 });

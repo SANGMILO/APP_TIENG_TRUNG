@@ -218,16 +218,61 @@ Stitch migration remains the visual source of truth.
     replay, routing, recovery, and logout regressions pass
   - P2 legal: the in-app Terms content should receive owner/legal review before
     public release
-- Commit: pending
+- Commit: `d2e3f64` (`fix: finish auth and legal flows`)
 
 ### Phase 5 — Profile, levels, achievements, account, and privacy
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: pending audit
+- Status: COMPLETE
+- Files:
+  - `app/(tabs)/profile.tsx`
+  - `app/account.tsx`
+  - `app/notification-settings.tsx`
+  - `app/delete-account.tsx`
+  - `app/privacy.tsx`
+  - `app/gamification/achievements.tsx`
+  - `app/_layout.tsx`
+  - `services/account-service.ts`
+  - `services/gamification-service.ts`
+  - `__tests__/account-deletion-migration.test.ts`
+  - `__tests__/profile-account.test.ts`
+  - `supabase/tests/account_deletion_requests.test.sql`
+- Migrations:
+  - `20260729040000_account_deletion_requests.sql`
+- Deployments:
+  - Migration `20260729040000` applied to the linked Supabase project
+  - Remote schema independently dumped and verified; temporary dump removed
+- Validation:
+  - Local database recreated from all migrations successfully
+  - pgTAP: 6 files / 132 assertions passed
+  - TypeScript: 0 errors
+  - Jest: 24 suites / 279 tests passed
+  - Expo Web: 51 routes exported
+  - Hosted migration list: local and remote matched through `20260729040000`
+- Result:
+  - Profile achievements now come from real achievement/unlock rows with earned
+    dates and honest loading, empty, and retryable error states
+  - Level progress now uses exact `level_thresholds` boundaries and handles the
+    maximum level without modulo rollover
+  - Account editing, Achievements, Notifications, and Privacy destinations work
+  - Notification preferences persist to the existing caller-owned backend model
+  - Premium management is hidden because no entitlement/subscription model exists
+  - Decorative Profile stats/achievement badges no longer imply dead actions
+  - Account deletion now creates one caller-owned, confirmation-gated, auditable
+    request and reloads its real status; failures never report success
+  - Privacy accurately describes queued deletion and links to the request flow
+- Blockers:
+  - P1 operations/product: queued deletion requests require an owner-approved
+    retention window, cancellation/support policy, processor ownership, and a
+    privileged service-role deletion runbook or protected Edge Function before
+    requests can be completed; no production user/request was used for QA
+  - P1 product/backend: no premium entitlement or subscription source exists, so
+    Premium management remains hidden
+  - P1 delivery configuration: notification preferences are functional, but
+    actual push delivery still requires device token registration and provider
+    credentials/configuration
+  - Supabase CLI emitted the same non-fatal pg-delta temporary certificate cache
+    warning after migration apply; matching history and a fresh remote schema
+    dump independently confirmed the hosted schema
 - Commit: pending
 
 ### Phase 6 — AI Tutor and voice reliability

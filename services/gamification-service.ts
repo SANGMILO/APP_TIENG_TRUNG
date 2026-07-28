@@ -98,18 +98,22 @@ export interface AchievementItem {
 }
 
 export async function fetchAchievements(): Promise<AchievementItem[]> {
-  const user = (await supabase.auth.getUser()).data.user;
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError) throw userError;
+  const user = userData.user;
   if (!user) return [];
 
-  const { data: achievements } = await supabase
+  const { data: achievements, error: achievementsError } = await supabase
     .from('achievements')
     .select('*')
     .order('requirement_value');
+  if (achievementsError) throw achievementsError;
 
-  const { data: unlocked } = await supabase
+  const { data: unlocked, error: unlockedError } = await supabase
     .from('user_achievements')
     .select('achievement_id, unlocked_at')
     .eq('user_id', user.id);
+  if (unlockedError) throw unlockedError;
 
   const unlockedMap = new Map((unlocked ?? []).map((u: any) => [u.achievement_id, u.unlocked_at]));
 
@@ -118,6 +122,92 @@ export async function fetchAchievements(): Promise<AchievementItem[]> {
     unlocked: unlockedMap.has(a.id),
     unlocked_at: unlockedMap.get(a.id) || null,
   }));
+}
+
+export interface LevelThreshold {
+  level: number;
+  xp_required: number;
+  title: string | null;
+}
+
+export interface LevelProgress {
+  level: number;
+  title: string | null;
+  currentThresholdXp: number;
+  nextLevel: number | null;
+  nextThresholdXp: number | null;
+  xpIntoLevel: number;
+  xpForLevel: number;
+  xpRemaining: number;
+  progressPercent: number;
+  isMaxLevel: boolean;
+}
+
+export async function fetchLevelThresholds(): Promise<LevelThreshold[]> {
+  const { data, error } = await supabase
+    .from('level_thresholds')
+    .select('level, xp_required, title')
+    .order('level');
+  if (error) throw error;
+  return (data ?? []) as LevelThreshold[];
+}
+
+export function calculateLevelProgress(
+  totalXp: number,
+  thresholds: LevelThreshold[],
+): LevelProgress | null {
+  if (thresholds.length === 0) return null;
+
+  const xp = Math.max(0, Math.round(totalXp));
+  const ordered = [...thresholds].sort(
+    (left, right) => left.xp_required - right.xp_required,
+  );
+  const current = ordered.reduce(
+    (match, threshold) => (
+      threshold.xp_required <= xp ? threshold : match
+    ),
+    ordered[0],
+  );
+  const next = ordered.find(
+    (threshold) => threshold.xp_required > current.xp_required,
+  ) ?? null;
+
+  if (!next) {
+    return {
+      level: current.level,
+      title: current.title,
+      currentThresholdXp: current.xp_required,
+      nextLevel: null,
+      nextThresholdXp: null,
+      xpIntoLevel: Math.max(0, xp - current.xp_required),
+      xpForLevel: 0,
+      xpRemaining: 0,
+      progressPercent: 100,
+      isMaxLevel: true,
+    };
+  }
+
+  const xpForLevel = Math.max(1, next.xp_required - current.xp_required);
+  const xpIntoLevel = Math.max(
+    0,
+    Math.min(xpForLevel, xp - current.xp_required),
+  );
+
+  return {
+    level: current.level,
+    title: current.title,
+    currentThresholdXp: current.xp_required,
+    nextLevel: next.level,
+    nextThresholdXp: next.xp_required,
+    xpIntoLevel,
+    xpForLevel,
+    xpRemaining: Math.max(0, next.xp_required - xp),
+    progressPercent: Math.max(
+      0,
+      Math.min(100, (xpIntoLevel / xpForLevel) * 100),
+    ),
+    isMaxLevel: false,
+  };
 }
 
 // ============================================

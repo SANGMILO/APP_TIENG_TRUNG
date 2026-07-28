@@ -5,15 +5,23 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
-import { FadeInView, AnimatedPressable, Avatar, ProgressBar } from '@/components/ui';
+import { FadeInView, Avatar, ProgressBar } from '@/components/ui';
 import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
+import {
+  AchievementItem,
+  calculateLevelProgress,
+  fetchAchievements,
+  fetchLevelThresholds,
+} from '@/services/gamification-service';
 import { FontSize, Spacing, BorderRadius, Shadow, FontWeight, FontFamily } from '@/constants/theme';
 
 // ─── Types ──────────────────────────────────────────────────────────────────────
@@ -32,15 +40,13 @@ interface AchievementBadgeProps {
   title: string;
   status: string;
   unlocked: boolean;
-  iconColor: string;
-  iconBgColor: string;
   colors: any;
 }
 
 interface SettingRowProps {
   iconName: string;
   title: string;
-  onPress?: () => void;
+  onPress: () => void;
   colors: any;
   isLast?: boolean;
 }
@@ -58,6 +64,25 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState('');
+  const {
+    data: achievements,
+    isLoading: achievementsLoading,
+    isError: achievementsError,
+    refetch: refetchAchievements,
+  } = useQuery({
+    queryKey: ['achievements', profile?.id],
+    queryFn: fetchAchievements,
+    enabled: Boolean(profile),
+  });
+  const {
+    data: levelThresholds,
+    isLoading: levelsLoading,
+    isError: levelsError,
+    refetch: refetchLevels,
+  } = useQuery({
+    queryKey: ['level-thresholds'],
+    queryFn: fetchLevelThresholds,
+  });
 
   const handleSignOut = async () => {
     if (isSigningOut) return;
@@ -81,11 +106,11 @@ export default function ProfileScreen() {
     }
   };
 
-  const currentLevel = profile?.current_level ?? 1;
   const totalXp = profile?.total_xp ?? 0;
-  const xpForNextLevel = currentLevel * 100;
-  const xpInCurrentLevel = totalXp % xpForNextLevel;
-  const xpProgress = xpForNextLevel > 0 ? (xpInCurrentLevel / xpForNextLevel) * 100 : 0;
+  const levelProgress = calculateLevelProgress(totalXp, levelThresholds ?? []);
+  const visibleAchievements = (achievements ?? [])
+    .filter((achievement) => !achievement.is_hidden)
+    .slice(0, 4);
 
   const memberSinceDate = profile?.created_at
     ? new Date(profile.created_at).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })
@@ -155,6 +180,7 @@ export default function ProfileScreen() {
               {/* Edit Profile Button */}
               <TouchableOpacity
                 style={[styles.editButton, { backgroundColor: colors.primary }]}
+                onPress={() => router.push('/account')}
                 activeOpacity={0.8}
               >
                 <Ionicons name="pencil" size={16} color={colors.textOnPrimary} />
@@ -207,37 +233,55 @@ export default function ProfileScreen() {
         {/* ─── 3. Level Progress Card ───────────────────────────────────── */}
         <FadeInView delay={250} animation="slideUp">
           <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <View style={styles.levelHeader}>
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.levelTitle, { color: colors.text }]}>
-                  Level {currentLevel}
+            {levelsLoading ? (
+              <ActivityIndicator color={colors.primary} style={styles.cardLoading} />
+            ) : levelsError || !levelProgress ? (
+              <TouchableOpacity
+                style={styles.compactError}
+                onPress={() => { void refetchLevels(); }}
+              >
+                <Text style={[styles.compactErrorText, { color: colors.error }]}>
+                  Không thể tải cấp độ · Thử lại
                 </Text>
-                <Text style={[styles.levelSubtitle, { color: colors.textSecondary }]}>
-                  Thiếu {xpForNextLevel - xpInCurrentLevel} XP để lên Level {currentLevel + 1}
-                </Text>
-              </View>
-              <Text style={[styles.nextLevelNumber, { color: colors.secondary }]}>
-                {currentLevel + 1}
-              </Text>
-            </View>
+              </TouchableOpacity>
+            ) : (
+              <>
+                <View style={styles.levelHeader}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.levelTitle, { color: colors.text }]}>
+                      Level {levelProgress.level}
+                      {levelProgress.title ? ` · ${levelProgress.title}` : ''}
+                    </Text>
+                    <Text style={[styles.levelSubtitle, { color: colors.textSecondary }]}>
+                      {levelProgress.isMaxLevel
+                        ? 'Bạn đã đạt cấp độ cao nhất.'
+                        : `Thiếu ${levelProgress.xpRemaining} XP để lên Level ${levelProgress.nextLevel}`}
+                    </Text>
+                  </View>
+                  <Text style={[styles.nextLevelNumber, { color: colors.secondary }]}>
+                    {levelProgress.nextLevel ?? levelProgress.level}
+                  </Text>
+                </View>
 
-            <View style={styles.progressBarContainer}>
-              <ProgressBar
-                progress={xpProgress}
-                height={16}
-                gradientColors={[colors.primary, colors.secondary]}
-                animated
-              />
-            </View>
+                <View style={styles.progressBarContainer}>
+                  <ProgressBar
+                    progress={levelProgress.progressPercent}
+                    height={16}
+                    gradientColors={[colors.primary, colors.secondary]}
+                    animated
+                  />
+                </View>
 
-            <View style={styles.progressFooter}>
-              <Text style={[styles.progressLabel, { color: colors.textSecondary }]}>
-                {xpInCurrentLevel} XP
-              </Text>
-              <Text style={[styles.progressLabel, { color: colors.textSecondary }]}>
-                {xpForNextLevel} XP
-              </Text>
-            </View>
+                <View style={styles.progressFooter}>
+                  <Text style={[styles.progressLabel, { color: colors.textSecondary }]}>
+                    {levelProgress.xpIntoLevel} XP
+                  </Text>
+                  <Text style={[styles.progressLabel, { color: colors.textSecondary }]}>
+                    {levelProgress.isMaxLevel ? 'Tối đa' : `${levelProgress.xpForLevel} XP`}
+                  </Text>
+                </View>
+              </>
+            )}
           </View>
         </FadeInView>
 
@@ -246,49 +290,43 @@ export default function ProfileScreen() {
           <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <View style={styles.sectionHeader}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>Thành Tích</Text>
-              <TouchableOpacity activeOpacity={0.7}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => router.push('/gamification/achievements')}
+              >
                 <Text style={[styles.seeAllLink, { color: colors.primary }]}>XEM TẤT CẢ</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={styles.achievementsGrid}>
-              <AchievementBadge
-                icon="trophy"
-                title="Chuỗi 7 Ngày"
-                status="Đã mở khóa"
-                unlocked={true}
-                iconColor={colors.secondary}
-                iconBgColor={colors.secondary + '20'}
-                colors={colors}
-              />
-              <AchievementBadge
-                icon="language"
-                title="100 Từ Vựng"
-                status="Đã mở khóa"
-                unlocked={true}
-                iconColor={colors.primary}
-                iconBgColor={colors.primary + '12'}
-                colors={colors}
-              />
-              <AchievementBadge
-                icon="play-circle"
-                title="Video Master"
-                status="Đã mở khóa"
-                unlocked={true}
-                iconColor={colors.jade}
-                iconBgColor={colors.jade + '15'}
-                colors={colors}
-              />
-              <AchievementBadge
-                icon="lock-closed"
-                title="Thánh Ngữ Pháp"
-                status="Còn 5 bài"
-                unlocked={false}
-                iconColor={colors.textTertiary}
-                iconBgColor={colors.surfaceElevated}
-                colors={colors}
-              />
-            </View>
+            {achievementsLoading ? (
+              <ActivityIndicator color={colors.primary} style={styles.cardLoading} />
+            ) : achievementsError ? (
+              <TouchableOpacity
+                style={styles.compactError}
+                onPress={() => { void refetchAchievements(); }}
+              >
+                <Text style={[styles.compactErrorText, { color: colors.error }]}>
+                  Không thể tải thành tích · Thử lại
+                </Text>
+              </TouchableOpacity>
+            ) : visibleAchievements.length === 0 ? (
+              <Text style={[styles.emptyAchievements, { color: colors.textSecondary }]}>
+                Chưa có thành tích nào.
+              </Text>
+            ) : (
+              <View style={styles.achievementsGrid}>
+                {visibleAchievements.map((achievement) => (
+                  <AchievementBadge
+                    key={achievement.id}
+                    icon={achievement.icon}
+                    title={achievement.title}
+                    status={getAchievementStatus(achievement)}
+                    unlocked={achievement.unlocked}
+                    colors={colors}
+                  />
+                ))}
+              </View>
+            )}
           </View>
         </FadeInView>
 
@@ -300,16 +338,19 @@ export default function ProfileScreen() {
             <SettingRow
               iconName="person-outline"
               title="Tài khoản & Hồ sơ"
+              onPress={() => router.push('/account')}
               colors={colors}
             />
             <SettingRow
               iconName="notifications-outline"
               title="Thông báo"
+              onPress={() => router.push('/notification-settings')}
               colors={colors}
             />
             <SettingRow
               iconName="shield-outline"
               title="Quyền riêng tư"
+              onPress={() => router.push('/privacy')}
               colors={colors}
             />
             <SettingRow
@@ -317,14 +358,8 @@ export default function ProfileScreen() {
               title={mode === 'dark' ? 'Chế độ tối' : 'Chế độ sáng'}
               onPress={toggleMode}
               colors={colors}
-            />
-            <SettingRow
-              iconName="diamond-outline"
-              title="Quản lý gói Premium"
-              colors={colors}
               isLast
             />
-
             {/* Sign Out Button */}
             <TouchableOpacity
               style={[
@@ -359,8 +394,7 @@ export default function ProfileScreen() {
 
 function StatCard({ icon, value, label, iconColor, iconBgColor, colors }: StatCardProps) {
   return (
-    <AnimatedPressable
-      scaleValue={0.97}
+    <View
       style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}
     >
       <View style={[styles.statIconCircle, { backgroundColor: iconBgColor }]}>
@@ -372,19 +406,26 @@ function StatCard({ icon, value, label, iconColor, iconBgColor, colors }: StatCa
         </Text>
         <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{label}</Text>
       </View>
-    </AnimatedPressable>
+    </View>
   );
 }
 
-function AchievementBadge({ icon, title, status, unlocked, iconColor, iconBgColor, colors }: AchievementBadgeProps) {
+function AchievementBadge({ icon, title, status, unlocked, colors }: AchievementBadgeProps) {
   return (
-    <AnimatedPressable
-      scaleValue={0.95}
-      disabled={!unlocked}
+    <View
       style={[styles.achievementBadge, !unlocked && styles.achievementLocked]}
     >
-      <View style={[styles.achievementIcon, { backgroundColor: iconBgColor }]}>
-        <Ionicons name={icon as any} size={28} color={iconColor} />
+      <View
+        style={[
+          styles.achievementIcon,
+          {
+            backgroundColor: unlocked
+              ? colors.secondary + '20'
+              : colors.surfaceElevated,
+          },
+        ]}
+      >
+        <Text style={styles.achievementIconText}>{icon}</Text>
       </View>
       <Text style={[styles.achievementTitle, { color: colors.text }]} numberOfLines={1}>
         {title}
@@ -392,8 +433,15 @@ function AchievementBadge({ icon, title, status, unlocked, iconColor, iconBgColo
       <Text style={[styles.achievementStatus, { color: colors.textSecondary }]}>
         {status}
       </Text>
-    </AnimatedPressable>
+    </View>
   );
+}
+
+function getAchievementStatus(achievement: AchievementItem): string {
+  if (!achievement.unlocked || !achievement.unlocked_at) {
+    return `Mục tiêu: ${achievement.requirement_value}`;
+  }
+  return `Mở ${new Date(achievement.unlocked_at).toLocaleDateString('vi-VN')}`;
 }
 
 function SettingRow({ iconName, title, onPress, colors, isLast = false }: SettingRowProps) {
@@ -654,6 +702,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12, // Stitch mb-3
   },
+  achievementIconText: { fontSize: 28 },
   achievementTitle: {
     fontSize: 12, // Stitch label-sm
     fontFamily: FontFamily.semibold,
@@ -666,6 +715,19 @@ const styles = StyleSheet.create({
     fontSize: 11, // Stitch text-xs (close to 12 but smaller)
     fontFamily: FontFamily.regular,
     textAlign: 'center',
+  },
+  cardLoading: { marginVertical: Spacing['2xl'] },
+  compactError: {
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    paddingBottom: Spacing.xl,
+  },
+  compactErrorText: { fontSize: FontSize.sm, textAlign: 'center' },
+  emptyAchievements: {
+    fontSize: FontSize.sm,
+    textAlign: 'center',
+    paddingHorizontal: Spacing.xl,
+    paddingBottom: Spacing.xl,
   },
 
   // ── Settings — Stitch: p-lg ──
