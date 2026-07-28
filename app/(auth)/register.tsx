@@ -319,25 +319,39 @@ export default function RegisterScreen() {
               control={control}
               name="agreeTerms"
               render={({ field: { onChange, value } }) => (
-                <TouchableOpacity
-                  style={styles.termsRow}
-                  onPress={() => onChange(!value)}
-                  activeOpacity={0.7}
-                >
-                  <View style={[
-                    styles.checkbox,
-                    { borderColor: errors.agreeTerms ? colors.error : colors.border },
-                    value && { backgroundColor: colors.primary, borderColor: colors.primary },
-                  ]}>
-                    {value && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
-                  </View>
+                <View style={styles.termsRow}>
+                  <TouchableOpacity
+                    onPress={() => onChange(!value)}
+                    activeOpacity={0.7}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: value }}
+                    accessibilityLabel="Đồng ý với điều khoản và chính sách quyền riêng tư"
+                  >
+                    <View style={[
+                      styles.checkbox,
+                      { borderColor: errors.agreeTerms ? colors.error : colors.border },
+                      value && { backgroundColor: colors.primary, borderColor: colors.primary },
+                    ]}>
+                      {value && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
+                    </View>
+                  </TouchableOpacity>
                   <Text style={[styles.termsText, { color: colors.textTertiary }]}>
                     Tôi đồng ý với{' '}
-                    <Text style={{ color: colors.primary, fontWeight: FontWeight.medium }}>Điều khoản sử dụng</Text>
+                    <Text
+                      style={{ color: colors.primary, fontWeight: FontWeight.medium }}
+                      onPress={() => router.push('/terms')}
+                    >
+                      Điều khoản sử dụng
+                    </Text>
                     {' '}và{' '}
-                    <Text style={{ color: colors.primary, fontWeight: FontWeight.medium }}>Chính sách quyền riêng tư</Text>
+                    <Text
+                      style={{ color: colors.primary, fontWeight: FontWeight.medium }}
+                      onPress={() => router.push('/privacy')}
+                    >
+                      Chính sách quyền riêng tư
+                    </Text>
                   </Text>
-                </TouchableOpacity>
+                </View>
               )}
             />
 
@@ -384,14 +398,6 @@ export default function RegisterScreen() {
                 <Text style={[styles.socialBtnText, { color: colors.text }]}>
                   {isGoogleLoading ? 'Đang kết nối...' : 'Đăng ký với Google'}
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.socialBtn, { borderColor: colors.border + '50' }]}
-                disabled={isLoading || isGoogleLoading}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="logo-apple" size={20} color={colors.text} />
-                <Text style={[styles.socialBtnText, { color: colors.text }]}>Đăng ký với Apple</Text>
               </TouchableOpacity>
             </View>
           </View>

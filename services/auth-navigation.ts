@@ -30,7 +30,7 @@ interface GuardState {
 
 const AUTH_ENTRY_SCREENS = new Set(['welcome', 'login', 'register']);
 const RECOVERY_SCREENS = new Set(['callback', 'reset-password']);
-const PUBLIC_ROOT_ROUTES = new Set(['', 'index', 'privacy', '+not-found']);
+const PUBLIC_ROOT_ROUTES = new Set(['', 'index', 'privacy', 'terms', '+not-found']);
 
 export function getPostAuthDestination(
   profile: Pick<Profile, 'onboarding_completed'>,

@@ -46,6 +46,7 @@ interface AuthState {
 }
 
 let authSubscription: { unsubscribe: () => void } | null = null;
+let initializationPromise: Promise<void> | null = null;
 
 const loadAuthenticatedProfile = createProfileLoader({
   queryProfile: async (userId) => {
@@ -91,76 +92,90 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isRecoverySession: false,
 
   initialize: async () => {
-    set({
-      isLoading: true,
-      initializationError: null,
-    });
+    if (initializationPromise) {
+      return initializationPromise;
+    }
 
-    authSubscription?.unsubscribe();
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT' || !session) {
-        set({
-          session: null,
-          user: null,
-          profile: null,
-          profileStatus: 'idle',
-          profileError: null,
-          isRecoverySession: false,
-        });
-        return;
-      }
-
-      const currentUserId = get().user?.id;
+    const run = (async () => {
       set({
-        session,
-        user: session.user,
-        isRecoverySession: event === 'PASSWORD_RECOVERY'
-          ? true
-          : get().isRecoverySession,
+        isLoading: true,
+        initializationError: null,
       });
 
-      const shouldRefreshProfile = (
-        event === 'SIGNED_IN'
-        || event === 'PASSWORD_RECOVERY'
-        || event === 'USER_UPDATED'
-      ) && (
-        currentUserId !== session.user.id
-        || get().profileStatus === 'idle'
-      ) && !get().isAuthTransitioning;
-
-      if (shouldRefreshProfile) {
-        void get().fetchProfile(session.user.id);
-      }
-    });
-    authSubscription = listener.subscription;
-
-    try {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error) {
-        throw error;
-      }
-
-      set({
-        session,
-        user: session?.user ?? null,
-        profile: session ? get().profile : null,
-        profileStatus: session ? 'loading' : 'idle',
-      });
-
-      if (session?.user) {
-        const profile = await get().fetchProfile(session.user.id);
-        if (!profile) {
-          throw new Error(
-            get().profileError
-              ?? 'Không thể tải hồ sơ người dùng. Vui lòng thử lại.',
-          );
+      authSubscription?.unsubscribe();
+      const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_OUT' || !session) {
+          set({
+            session: null,
+            user: null,
+            profile: null,
+            profileStatus: 'idle',
+            profileError: null,
+            isRecoverySession: false,
+          });
+          return;
         }
+
+        const currentUserId = get().user?.id;
+        set({
+          session,
+          user: session.user,
+          isRecoverySession: event === 'PASSWORD_RECOVERY'
+            ? true
+            : get().isRecoverySession,
+        });
+
+        const shouldRefreshProfile = (
+          event === 'SIGNED_IN'
+          || event === 'PASSWORD_RECOVERY'
+          || event === 'USER_UPDATED'
+        ) && (
+          currentUserId !== session.user.id
+          || get().profileStatus === 'idle'
+        ) && !get().isAuthTransitioning;
+
+        if (shouldRefreshProfile) {
+          void get().fetchProfile(session.user.id);
+        }
+      });
+      authSubscription = listener.subscription;
+
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          throw error;
+        }
+
+        set({
+          session,
+          user: session?.user ?? null,
+          profile: session ? get().profile : null,
+          profileStatus: session ? 'loading' : 'idle',
+        });
+
+        if (session?.user) {
+          const profile = await get().fetchProfile(session.user.id);
+          if (!profile) {
+            throw new Error(
+              get().profileError
+                ?? 'Không thể tải hồ sơ người dùng. Vui lòng thử lại.',
+            );
+          }
+        }
+      } catch (error) {
+        set({ initializationError: getErrorMessage(error) });
+      } finally {
+        set({ isLoading: false, isInitialized: true });
       }
-    } catch (error) {
-      console.error('Auth initialization error:', error);
-      set({ initializationError: getErrorMessage(error) });
+    })();
+
+    initializationPromise = run;
+    try {
+      await run;
     } finally {
-      set({ isLoading: false, isInitialized: true });
+      if (initializationPromise === run) {
+        initializationPromise = null;
+      }
     }
   },
 
@@ -202,7 +217,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
       return profile;
     } catch (error) {
-      console.error('Error fetching profile:', error);
       set({
         profile: null,
         profileStatus: 'error',
@@ -254,7 +268,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       .single();
 
     if (error) {
-      console.error('Error updating profile:', error);
       throw error;
     }
 

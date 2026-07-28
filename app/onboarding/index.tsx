@@ -33,6 +33,7 @@ export default function OnboardingScreen() {
   const [duration, setDuration] = useState(15);
   const [level, setLevel] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const config = STEP_CONFIG[step];
   const progress = ((config.index + 1) / 3) * 100;
@@ -48,7 +49,9 @@ export default function OnboardingScreen() {
   };
 
   const handleComplete = async () => {
+    if (isLoading) return;
     setIsLoading(true);
+    setError('');
     try {
       const goalXp = STUDY_GOALS.find(g => g.minutes === duration)?.xpTarget ?? 20;
       await updateProfile({
@@ -59,8 +62,12 @@ export default function OnboardingScreen() {
         onboarding_completed: true,
       });
       router.replace('/(tabs)/learn');
-    } catch (error) {
-      console.error('Onboarding error:', error);
+    } catch (reason: unknown) {
+      setError(
+        reason instanceof Error && reason.message
+          ? reason.message
+          : 'Không thể lưu thiết lập học tập. Vui lòng thử lại.',
+      );
     } finally {
       setIsLoading(false);
     }
@@ -99,6 +106,9 @@ export default function OnboardingScreen() {
 
       {/* Footer */}
       <View style={[styles.footer, { paddingBottom: insets.bottom + Spacing.md }]}>
+        {error ? (
+          <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
+        ) : null}
         {step === 'level' ? (
           <Button title="Bắt đầu học" variant="gradient" size="xl" fullWidth rounded loading={isLoading} disabled={!canProceed} onPress={handleComplete} />
         ) : (
@@ -197,4 +207,5 @@ const styles = StyleSheet.create({
   listLabel: { fontSize: FontSize.lg, fontWeight: FontWeight.medium },
   listSub: { fontSize: FontSize.sm, marginTop: 2 },
   footer: { paddingHorizontal: Spacing.xl, paddingTop: Spacing.md },
+  error: { fontSize: FontSize.sm, textAlign: 'center', marginBottom: Spacing.sm },
 });

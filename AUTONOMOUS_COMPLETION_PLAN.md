@@ -177,16 +177,47 @@ Stitch migration remains the visual source of truth.
   - Supabase CLI emitted the same non-fatal pg-delta temporary certificate cache
     warning after migration apply; matching migration history and a fresh remote
     schema dump independently confirmed the hosted schema
-- Commit: pending
+- Commit: `6a89ba6` (`fix: persist SRS review state`)
 
 ### Phase 4 — Auth and OAuth finishing
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: Apple configuration and legal content to be verified
+- Status: COMPLETE
+- Files:
+  - `app/(auth)/login.tsx`
+  - `app/(auth)/register.tsx`
+  - `app/onboarding/index.tsx`
+  - `app/terms.tsx`
+  - `app/_layout.tsx`
+  - `services/auth-navigation.ts`
+  - `stores/auth-store.ts`
+  - `__tests__/auth-finishing.test.ts`
+- Migrations: none
+- Deployments: none
+- Validation:
+  - Focused auth/OAuth/recovery: 4 suites / 57 tests passed
+  - TypeScript: 0 errors
+  - Jest: 22 suites / 269 tests passed
+  - Expo Web: 49 routes exported, including public `/terms`
+- Result:
+  - Existing email/password, recovery, Google PKCE, first-time onboarding,
+    returning-user routing, logout, and protected-route behavior remain intact
+  - Auth initialization is single-flight and replaces the prior subscription
+    before registering another listener
+  - Session persistence remains always enabled with localStorage on Web and
+    SecureStore on native; the non-functional Remember Me checkbox was removed
+  - Unconfigured Apple buttons were hidden rather than presenting a dead action
+  - Terms and Privacy are independent public links and no longer toggle consent
+  - Added a real Terms route and retryable onboarding persistence error state
+- Blockers:
+  - P1 external configuration: Apple Sign-In requires an Apple Developer
+    account, Sign in with Apple capability/Services ID, key/team identifiers,
+    Supabase Apple provider secret, Expo dependency/configuration, and real EAS
+    submission values; the current `eas.json` values are placeholders
+  - P1 manual QA: Google provider collision and full browser redirect/relogin
+    require interactive owner-controlled provider accounts; automated PKCE,
+    replay, routing, recovery, and logout regressions pass
+  - P2 legal: the in-app Terms content should receive owner/legal review before
+    public release
 - Commit: pending
 
 ### Phase 5 — Profile, levels, achievements, account, and privacy

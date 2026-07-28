@@ -117,6 +117,7 @@ export default function RootLayout() {
         <Stack.Screen name="gamification" options={{ headerShown: false }} />
         <Stack.Screen name="admin" options={{ headerShown: false }} />
         <Stack.Screen name="privacy" />
+        <Stack.Screen name="terms" />
         <Stack.Screen name="delete-account" />
       </Stack>
     </QueryClientProvider>

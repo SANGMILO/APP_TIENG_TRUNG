@@ -213,13 +213,10 @@ export default function LoginScreen() {
 
             {/* Options row */}
             <View style={styles.optionsRow}>
-              <View style={styles.rememberRow}>
-                <View style={[styles.checkbox, { borderColor: colors.border }]} />
-                <Text style={[styles.rememberText, { color: colors.textTertiary }]}>
-                  Ghi nhớ đăng nhập
-                </Text>
-              </View>
-              <TouchableOpacity onPress={() => router.push('/(auth)/forgot-password')}>
+              <TouchableOpacity
+                style={styles.forgotLink}
+                onPress={() => router.push('/(auth)/forgot-password')}
+              >
                 <Text style={[styles.forgotText, { color: colors.primary }]}>
                   Quên mật khẩu?
                 </Text>
@@ -271,14 +268,6 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.socialButton, { backgroundColor: colors.card, borderColor: colors.border }]}
-              disabled={isLoading || isGoogleLoading}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="logo-apple" size={20} color={colors.text} />
-              <Text style={[styles.socialText, { color: colors.text }]}>Tiếp tục với Apple</Text>
-            </TouchableOpacity>
           </View>
 
           {/* Footer */}
@@ -446,23 +435,7 @@ const styles = StyleSheet.create({
     marginTop: 4, // Stitch mt-sm (small extra)
     marginBottom: 32, // Stitch mb-xl
   },
-  rememberRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 4,
-    borderWidth: 1.5,
-  },
-  rememberText: {
-    fontSize: 12, // Stitch label-sm
-    fontFamily: FontFamily.semibold,
-    fontWeight: FontWeight.semibold,
-    lineHeight: 16,
-  },
+  forgotLink: { marginLeft: 'auto' },
   forgotText: {
     fontSize: 12,
     fontFamily: FontFamily.semibold,
