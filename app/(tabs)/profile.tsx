@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { FadeInView, AnimatedPressable, Avatar, ProgressBar } from '@/components/ui';
+import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
 import { FontSize, Spacing, BorderRadius, Shadow, FontWeight, FontFamily } from '@/constants/theme';
 
 // ─── Types ──────────────────────────────────────────────────────────────────────
@@ -66,7 +67,13 @@ export default function ProfileScreen() {
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView
-        contentContainerStyle={[styles.content, { paddingTop: insets.top + Spacing.lg, paddingBottom: 100 }]}
+        contentContainerStyle={[
+          styles.content,
+          {
+            paddingTop: insets.top + Spacing.lg,
+            paddingBottom: getPremiumTabContentInset(insets.bottom),
+          },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {/* ─── 1. User Profile Card ─────────────────────────────────────── */}
@@ -103,7 +110,7 @@ export default function ProfileScreen() {
               {/* Subtitle: Premium + member since */}
               <View style={styles.subtitleRow}>
                 <Text style={[styles.premiumLabel, { color: colors.secondary }]}>
-                  Hanzi Premium
+                  Mandarin Master
                 </Text>
                 {memberSinceDate ? (
                   <>

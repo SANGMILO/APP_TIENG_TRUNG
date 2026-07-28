@@ -1,10 +1,21 @@
-import { hasPermission, canAccessAdmin, validateVocabImport, VocabImportRow } from '../services/admin-service';
+import {
+  hasPermission,
+  canAccessAdmin,
+  updateUserRole,
+  validateVocabImport,
+  VocabImportRow,
+} from '../services/admin-service';
+import { supabase } from '../lib/supabase';
 
 jest.mock('../lib/supabase', () => ({
   supabase: { from: jest.fn(), rpc: jest.fn(), auth: { getUser: jest.fn() } },
 }));
 
 describe('Admin Service', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('RBAC - hasPermission', () => {
     it('student has no admin permissions', () => {
       expect(hasPermission('student', 'view_admin')).toBe(false);
@@ -60,6 +71,20 @@ describe('Admin Service', () => {
 
     it('admin can access admin', () => {
       expect(canAccessAdmin('admin')).toBe(true);
+    });
+  });
+
+  describe('role updates', () => {
+    it('uses the database-authorized role RPC instead of a direct profile update', async () => {
+      const updated = { id: 'user-1', role: 'editor' };
+      (supabase.rpc as jest.Mock).mockResolvedValue({ data: updated, error: null });
+
+      await expect(updateUserRole('user-1', 'editor')).resolves.toEqual(updated);
+      expect(supabase.rpc).toHaveBeenCalledWith('admin_update_user_role', {
+        p_user_id: 'user-1',
+        p_new_role: 'editor',
+      });
+      expect(supabase.from).not.toHaveBeenCalled();
     });
   });
 

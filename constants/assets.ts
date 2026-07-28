@@ -83,7 +83,7 @@ export interface ScenarioAsset {
 export type ScenarioKey = 'restaurant' | 'travel' | 'general' | 'work' | 'hsk' | 'grammar';
 
 export const scenarioAssets: Record<ScenarioKey, ScenarioAsset> = {
-  restaurant: { fallbackGradient: ['#D72638', '#EF4444'] },
+  restaurant: { fallbackGradient: ['#AC001E', '#D90429'] },
   travel: { fallbackGradient: ['#2563EB', '#3B82F6'] },
   general: { fallbackGradient: ['#059669', '#2D8B6F'] },
   work: { fallbackGradient: ['#D4A017', '#F5D042'] },
@@ -123,7 +123,7 @@ export interface OnboardingSlideAsset {
 }
 
 export const onboardingAssets: OnboardingSlideAsset[] = [
-  { fallbackGradient: ['#D72638', '#EF4444'] }, // Purpose
+  { fallbackGradient: ['#AC001E', '#D90429'] }, // Purpose
   { fallbackGradient: ['#059669', '#2D8B6F'] }, // Duration
   { fallbackGradient: ['#D4A017', '#F5D042'] }, // Level
 ];

@@ -6,6 +6,7 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
+import { authorizeAiConversation } from '../_shared/ai-conversation-authorization.ts';
 
 const AI_PROVIDER = Deno.env.get('AI_PROVIDER') || 'openai';
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
@@ -54,6 +55,29 @@ serve(async (req) => {
       return corsResponse({ error: 'Message too long' }, 400);
     }
 
+    // The service-role client bypasses RLS, so ownership must be established
+    // before any conversation messages or metadata are read or written.
+    const { data: conversation, error: conversationError } = await supabase
+      .from('ai_conversations')
+      .select('id, user_id, mode, status')
+      .eq('id', body.conversationId)
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    const authorization = authorizeAiConversation(user.id, body.mode, conversation);
+    if (conversationError) {
+      return corsResponse({
+        error: 'Conversation unavailable',
+        errorCode: 'CONVERSATION_FORBIDDEN',
+      }, 403);
+    }
+    if (!authorization.authorized) {
+      return corsResponse({
+        error: authorization.error,
+        errorCode: authorization.errorCode,
+      }, authorization.status);
+    }
+
     // Check daily limit
     const limitOk = await checkDailyLimit(supabase, user.id);
     if (!limitOk) {
@@ -65,6 +89,7 @@ serve(async (req) => {
       .from('ai_messages')
       .select('id')
       .eq('conversation_id', body.conversationId)
+      .eq('user_id', user.id)
       .eq('client_message_id', body.clientMessageId)
       .eq('role', 'user')
       .single();
@@ -75,6 +100,7 @@ serve(async (req) => {
         .from('ai_messages')
         .select('*')
         .eq('conversation_id', body.conversationId)
+        .eq('user_id', user.id)
         .eq('role', 'assistant')
         .order('created_at', { ascending: false })
         .limit(1)
@@ -93,7 +119,12 @@ serve(async (req) => {
     });
 
     // Build context
-    const context = await buildContext(supabase, user.id, body.conversationId, body.mode);
+    const context = await buildContext(
+      supabase,
+      user.id,
+      body.conversationId,
+      authorization.mode,
+    );
 
     // Call AI provider
     const startTime = Date.now();
@@ -136,7 +167,8 @@ serve(async (req) => {
         last_message_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
-      .eq('id', body.conversationId);
+      .eq('id', body.conversationId)
+      .eq('user_id', user.id);
 
     // Track usage
     await supabase.from('ai_usage').insert({
@@ -193,6 +225,7 @@ async function buildContext(supabase: any, userId: string, conversationId: strin
     .from('ai_messages')
     .select('role, content', { count: 'exact' })
     .eq('conversation_id', conversationId)
+    .eq('user_id', userId)
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
     .limit(MAX_CONTEXT_MESSAGES);

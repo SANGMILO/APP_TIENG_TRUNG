@@ -2,7 +2,7 @@
 
 > Generated: 2026-07-27
 > Source: `stitch-reference/manifest.json` (Project ID: 6506278782152367391)
-> Total screens exported: 11 (8 OK + 3 failed with shader-only fallbacks)
+> Total references available: 20 (11 original exports, 3 auth references, 6 Lesson references)
 
 ---
 
@@ -185,6 +185,41 @@
 | **Reference Folder** | `stitch-reference/review/` |
 | **Represents** | Supplementary review screen reference (possibly earlier iteration) |
 | **Notes** | Has encoding issues similar to Screen 09. Use Screen 11 as the definitive Review reference. |
+
+---
+
+## Screens 15-20 - Lesson Experience
+
+All six references map to the same reusable immersive Lesson route. They are state
+references, not separate application routes.
+
+| # | Reference Folder | Represents | Existing Route / Source |
+|---|------------------|------------|-------------------------|
+| 15 | `stitch-reference/15_Lesson_MultipleChoice/` | Default and selected multiple-choice state | `/lesson/[id]` - `app/lesson/[id].tsx` |
+| 16 | `stitch-reference/16_Lesson_Correct/` | Correct-answer reveal and feedback panel | `/lesson/[id]` - `app/lesson/[id].tsx` |
+| 17 | `stitch-reference/17_Lesson_Listening/` | Listening player and listening answer options | `/lesson/[id]` - `app/lesson/[id].tsx` |
+| 18 | `stitch-reference/18_Lesson_Incorrect/` | Incorrect selection, correct reveal and explanation | `/lesson/[id]` - `app/lesson/[id].tsx` |
+| 19 | `stitch-reference/19_Lesson_Speaking/` | Speaking recorder, microphone state and pronunciation scores | `/lesson/[id]` - `components/exercise/SpeakingExercise.tsx` |
+| 20 | `stitch-reference/20_Lesson_Complete/` | Completion entrance, XP, accuracy, correct count, time and streak | `/lesson/[id]` - `app/lesson/[id].tsx` |
+
+### Existing Lesson Functionality
+
+- Supabase exercise loading and ordering through `services/lesson-engine.ts`
+- Dynamic lesson ID routing
+- Vocabulary, multiple-choice, listening, translation, sentence-builder and speaking exercises
+- Chinese, pinyin and Vietnamese content from exercise data
+- Audio playback, recording, pronunciation assessment and saved attempts
+- Answer validation, per-exercise timing and progress tracking
+- Lesson result calculation, perfect bonus, `complete_lesson` RPC and profile refresh
+- Loading, empty, error, feedback and completion states
+
+### Visual Implementation Notes
+
+- Use the jade progress treatment and immersive Lesson header across all exercise types.
+- Reuse the Screen 15 option-card language for exercise types without a dedicated reference.
+- Use Screen 16 and Screen 18 as the canonical correct/incorrect feedback states.
+- Keep the bottom tab bar hidden while the Lesson route is active.
+- Bind every label, score, answer, XP amount and elapsed time to real runtime data.
 
 ---
 

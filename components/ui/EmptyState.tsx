@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeStore } from '@/stores/theme-store';
 import { Button } from './Button';
-import { FontSize, Spacing, FontWeight } from '@/constants/theme';
+import { FontFamily, FontSize, Spacing, FontWeight } from '@/constants/theme';
 
 interface EmptyStateProps {
   iconName: string;
@@ -33,6 +33,17 @@ export function EmptyState({ iconName, title, description, actionLabel, onAction
 const styles = StyleSheet.create({
   container: { alignItems: 'center', paddingVertical: Spacing['4xl'], paddingHorizontal: Spacing.xl },
   iconWrap: { width: 64, height: 64, borderRadius: 32, justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.lg },
-  title: { fontSize: FontSize.lg, fontWeight: FontWeight.semibold, marginBottom: Spacing.xs, textAlign: 'center' },
-  description: { fontSize: FontSize.md, textAlign: 'center', lineHeight: 20 },
+  title: {
+    fontSize: FontSize.lg,
+    fontFamily: FontFamily.heading,
+    fontWeight: FontWeight.bold,
+    marginBottom: Spacing.xs,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: FontSize.md,
+    fontFamily: FontFamily.regular,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
 });

@@ -146,11 +146,12 @@ export async function fetchUsers(page = 0, limit = 20, search?: string) {
 }
 
 export async function updateUserRole(userId: string, newRole: string) {
-  const before = await fetchAdminItem('profiles', userId);
-  const { data, error } = await supabase.from('profiles').update({ role: newRole, updated_at: new Date().toISOString() }).eq('id', userId).select().single();
+  const { data, error } = await supabase.rpc('admin_update_user_role', {
+    p_user_id: userId,
+    p_new_role: newRole,
+  });
   if (error) throw error;
-  await logAdminAction('ROLE_CHANGE', 'profiles', userId, before, data);
-  return data;
+  return data as Profile;
 }
 
 // ============================================

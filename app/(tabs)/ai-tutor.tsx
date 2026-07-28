@@ -8,7 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { fetchConversations, checkDailyLimit } from '@/services/ai-tutor-service';
-import { FadeInView, AnimatedPressable } from '@/components/ui';
+import { FadeInView, AnimatedPressable, EmptyState } from '@/components/ui';
+import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
 import { Shadow, FontWeight, FontFamily } from '@/constants/theme';
 import { ConversationMode } from '@/lib/ai';
 
@@ -39,13 +40,21 @@ export default function AiTutorScreen() {
   const insets = useSafeAreaInsets();
 
   // ─── Data queries (preserved) ───
-  const { data: conversations } = useQuery({
+  const {
+    data: conversations,
+    isError: conversationsError,
+    refetch: refetchConversations,
+  } = useQuery({
     queryKey: ['ai-conversations'],
     queryFn: fetchConversations,
     enabled: !!profile,
   });
 
-  const { data: limitInfo } = useQuery({
+  const {
+    data: limitInfo,
+    isError: limitError,
+    refetch: refetchLimit,
+  } = useQuery({
     queryKey: ['ai-daily-limit'],
     queryFn: checkDailyLimit,
     enabled: !!profile,
@@ -72,7 +81,10 @@ export default function AiTutorScreen() {
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: getPremiumTabContentInset(insets.bottom) },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {/* ─── Hero Section ─── */}
@@ -137,6 +149,21 @@ export default function AiTutorScreen() {
                 <View style={[styles.usageBarFill, { backgroundColor: colors.jade, width: `${Math.min(100, (limitUsed / limitTotal) * 100)}%` as any }]} />
               </View>
             </View>
+          </FadeInView>
+        )}
+
+        {(conversationsError || limitError) && (
+          <FadeInView delay={120} animation="slideUp">
+            <EmptyState
+              iconName="cloud-offline-outline"
+              title="Không thể cập nhật hoạt động AI"
+              description="Các tình huống luyện tập vẫn sẵn sàng. Hãy thử tải lại dữ liệu gần đây."
+              actionLabel="Thử lại"
+              onAction={() => {
+                void refetchConversations();
+                void refetchLimit();
+              }}
+            />
           </FadeInView>
         )}
 

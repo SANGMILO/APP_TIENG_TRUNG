@@ -8,7 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
-import { FadeInView, AnimatedPressable } from '@/components/ui';
+import { FadeInView, AnimatedPressable, EmptyState } from '@/components/ui';
+import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
 import { Shadow, FontWeight, FontFamily } from '@/constants/theme';
 
 // ─── Filter tabs — use level-based filtering (preserved from original, matches video-service.ts) ───
@@ -23,7 +24,7 @@ export default function VideosScreen() {
   const [search, setSearch] = useState('');
 
   // ─── Data Queries (preserved — level-based filtering restored) ───
-  const { data: videos, isLoading } = useQuery({
+  const { data: videos, isLoading, isError, refetch } = useQuery({
     queryKey: ['videos', selectedLevel],
     queryFn: async () => {
       let query = supabase.from('videos').select('*').eq('status', 'published').order('created_at', { ascending: false }).limit(30);
@@ -70,7 +71,10 @@ export default function VideosScreen() {
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: getPremiumTabContentInset(insets.bottom) },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {/* ─── Search Bar — Stitch: h-[56px] rounded-xl border shadow-ambient ─── */}
@@ -222,6 +226,14 @@ export default function VideosScreen() {
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Gợi ý cho bạn</Text>
           {isLoading ? (
             <ActivityIndicator size="small" color={colors.primary} style={{ paddingVertical: 24 }} />
+          ) : isError ? (
+            <EmptyState
+              iconName="cloud-offline-outline"
+              title="Không thể tải video"
+              description="Kiểm tra kết nối rồi thử lại."
+              actionLabel="Thử lại"
+              onAction={() => { void refetch(); }}
+            />
           ) : remainingVideos.length === 0 && !featuredVideo ? (
             <View style={styles.emptyState}>
               <Ionicons name="videocam-off-outline" size={40} color={colors.textTertiary} />

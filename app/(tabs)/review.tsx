@@ -15,7 +15,8 @@ import Svg, { Circle } from 'react-native-svg';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
-import { FadeInView, AnimatedPressable } from '@/components/ui';
+import { FadeInView, AnimatedPressable, EmptyState } from '@/components/ui';
+import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
 import { Shadow, FontWeight, FontFamily } from '@/constants/theme';
 
 // SVG donut ring constants (Stitch uses viewBox 0 0 36 36, r=15.9155, circumference≈100)
@@ -28,15 +29,19 @@ export default function ReviewScreen() {
   const insets = useSafeAreaInsets();
 
   // ─── Data Query (preserved exactly) ───
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading, isError, refetch } = useQuery({
     queryKey: ['review-stats'],
     queryFn: async () => {
       if (!profile) return { due: 0, learning: 0, mastered: 0, mistakes: 0 };
       const now = new Date().toISOString();
-      const { count: due } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).lte('next_review_at', now);
-      const { count: learning } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).gt('review_count', 0).lt('memory_strength', 0.8);
-      const { count: mastered } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).gte('memory_strength', 0.8);
-      const { count: mistakes } = await supabase.from('mistakes').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).eq('reviewed', false);
+      const { count: due, error: dueError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).lte('next_review_at', now);
+      if (dueError) throw dueError;
+      const { count: learning, error: learningError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).gt('review_count', 0).lt('memory_strength', 0.8);
+      if (learningError) throw learningError;
+      const { count: mastered, error: masteredError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).gte('memory_strength', 0.8);
+      if (masteredError) throw masteredError;
+      const { count: mistakes, error: mistakesError } = await supabase.from('mistakes').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).eq('reviewed', false);
+      if (mistakesError) throw mistakesError;
       return { due: due ?? 0, learning: learning ?? 0, mastered: mastered ?? 0, mistakes: mistakes ?? 0 };
     },
     enabled: !!profile,
@@ -65,13 +70,24 @@ export default function ReviewScreen() {
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: getPremiumTabContentInset(insets.bottom) },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {isLoading ? (
           <View style={styles.loading}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
+        ) : isError ? (
+          <EmptyState
+            iconName="cloud-offline-outline"
+            title="Không thể tải dữ liệu ôn tập"
+            description="Kiểm tra kết nối rồi thử lại."
+            actionLabel="Thử lại"
+            onAction={() => { void refetch(); }}
+          />
         ) : (
           <>
             {/* ─── Review Summary Card ─── */}
@@ -222,8 +238,7 @@ function ProgressRingCard({ icon, label, value, percent, ringColor, iconColor, c
             stroke={colors.border}
             strokeWidth={3}
             strokeDasharray="100, 100"
-            rotation={-90}
-            origin="18, 18"
+            transform="rotate(-90 18 18)"
           />
           {/* Fill */}
           <Circle
@@ -233,8 +248,7 @@ function ProgressRingCard({ icon, label, value, percent, ringColor, iconColor, c
             strokeWidth={3}
             strokeDasharray={`${strokeDash}, ${RING_CIRCUMFERENCE}`}
             strokeLinecap="round"
-            rotation={-90}
-            origin="18, 18"
+            transform="rotate(-90 18 18)"
           />
         </Svg>
         {/* Center icon */}

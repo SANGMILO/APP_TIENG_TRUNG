@@ -1,16 +1,17 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { Animated, ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeStore } from '@/stores/theme-store';
 import { Button } from '@/components/ui';
 import { ChineseText } from '@/components/chinese';
 import { AudioPlayer } from '@/components/media';
+import { ScoreRing } from '@/components/lesson';
 import { useAudioRecorder } from '@/hooks/useAudioRecorder';
 import { assessPronunciation, savePronunciationAttempt } from '@/services/pronunciation-service';
 import { generateFeedback } from '@/services/pronunciation-feedback';
 import { PronunciationAssessmentResult, getScoreLevel, getScoreLevelLabel, getScoreLevelColor } from '@/lib/speech';
 import { LessonExercise } from '@/services/lesson-engine';
-import { FontSize, Spacing, BorderRadius, Shadow, FontWeight } from '@/constants/theme';
+import { FontFamily, FontSize, Spacing, BorderRadius, Shadow, FontWeight } from '@/constants/theme';
 
 interface SpeakingExerciseProps {
   exercise: LessonExercise;
@@ -37,6 +38,32 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
   const recorder = useAudioRecorder({
     maxDurationMs: referenceText.length > 4 ? 15000 : 8000,
   });
+  const pulse = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (recorder.state !== 'recording') {
+      pulse.stopAnimation();
+      pulse.setValue(0);
+      return;
+    }
+
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, {
+          toValue: 1,
+          duration: 900,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulse, {
+          toValue: 0,
+          duration: 900,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    animation.start();
+    return () => animation.stop();
+  }, [pulse, recorder.state]);
 
   const handleAssess = useCallback(async () => {
     if (!recorder.recordingUri) return;
@@ -109,7 +136,12 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
     const passed = result.overallScore >= passingScore;
 
     return (
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
+        <View style={[styles.typePill, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }]}>
+          <Ionicons name="mic" size={18} color={colors.primary} />
+          <Text style={[styles.typeLabel, { color: colors.textSecondary }]}>Kết quả phát âm</Text>
+        </View>
         {/* Score */}
         <View style={styles.scoreSection}>
           <Text style={[styles.scoreNumber, { color: getScoreLevelColor(level, colors) }]}>
@@ -120,6 +152,11 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
         <Text style={[styles.scoreLabel, { color: getScoreLevelColor(level, colors) }]}>
           {getScoreLevelLabel(level)}
         </Text>
+        <View style={styles.scoreGrid}>
+          <ScoreRing value={result.accuracyScore} label="Phát âm" color={colors.jade} trackColor={colors.border} />
+          <ScoreRing value={result.completenessScore ?? result.overallScore} label="Hoàn chỉnh" color={colors.primary} trackColor={colors.border} />
+          <ScoreRing value={result.fluencyScore} label="Độ trôi chảy" color={colors.jade} trackColor={colors.border} />
+        </View>
 
         {/* Word-level scores */}
         <View style={styles.wordsRow}>
@@ -148,7 +185,7 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
 
         {/* Actions */}
         <View style={styles.actions}>
-          <AudioPlayer uri={data?.audio_url} label="Nghe mẫu" size="sm" />
+          {data?.audio_url ? <AudioPlayer uri={data.audio_url} label="Nghe mẫu" size="sm" /> : null}
           <TouchableOpacity onPress={recorder.playRecording} style={styles.actionBtn}>
             <Ionicons name="play-circle-outline" size={18} color={colors.primary} />
             <Text style={[styles.actionText, { color: colors.primary }]}>Giọng của tôi</Text>
@@ -168,41 +205,63 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
           />
         </View>
       </View>
+      </ScrollView>
     );
   }
 
   // Recording interface
   return (
+    <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
     <View style={styles.container}>
-      <ChineseText characters={referenceText} pinyin={pinyin} translation={meaning} fontSize={40} />
-
-      {data?.audio_url && (
-        <View style={styles.listenSection}>
-          <AudioPlayer uri={data.audio_url} label="Nghe mẫu" size="md" showSpeed />
-        </View>
-      )}
+      <View style={[styles.typePill, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }]}>
+        <Ionicons name="people" size={18} color={colors.primary} />
+        <Text style={[styles.typeLabel, { color: colors.textSecondary }]}>Luyện phát âm</Text>
+      </View>
+      <View style={[styles.targetCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <View style={[styles.targetAccent, { backgroundColor: colors.primary }]} />
+        <ChineseText characters={referenceText} pinyin={pinyin} translation={meaning} fontSize={56} />
+        {data?.audio_url && (
+          <View style={styles.listenSection}>
+            <AudioPlayer uri={data.audio_url} label="Nghe mẫu" size="md" showSpeed />
+          </View>
+        )}
+      </View>
 
       {/* Recording area */}
       <View style={styles.recordArea}>
+        <View style={[styles.recordRing, { borderColor: recorder.state === 'recording' ? colors.primaryLight : `${colors.primary}33` }]}>
+        {recorder.state === 'recording' ? (
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.pulseHalo,
+              {
+                borderColor: colors.primary,
+                opacity: pulse.interpolate({ inputRange: [0, 1], outputRange: [0.5, 0] }),
+                transform: [
+                  {
+                    scale: pulse.interpolate({ inputRange: [0, 1], outputRange: [0.78, 1.2] }),
+                  },
+                ],
+              },
+            ]}
+          />
+        ) : null}
         {recorder.state === 'idle' || recorder.state === 'ready' ? (
           <TouchableOpacity
             style={[styles.recordBtn, { backgroundColor: colors.primary }]}
             onPress={recorder.startRecording}
             activeOpacity={0.7}
           >
-            <Ionicons name="mic" size={28} color="#fff" />
-            <Text style={styles.recordLabel}>Nhấn để đọc</Text>
+            <Ionicons name="mic" size={44} color="#fff" />
           </TouchableOpacity>
         ) : recorder.state === 'recording' ? (
           <TouchableOpacity
-            style={[styles.recordBtn, styles.recordingActive, { backgroundColor: colors.error }]}
+            style={[styles.recordBtn, styles.recordingActive, { backgroundColor: colors.primary }]}
             onPress={recorder.stopRecording}
             activeOpacity={0.7}
           >
-            <Ionicons name="stop" size={28} color="#fff" />
-            <Text style={styles.recordLabel}>
-              Đang nghe... {Math.floor(recorder.durationMs / 1000)}s
-            </Text>
+            <Ionicons name="stop" size={42} color="#fff" />
           </TouchableOpacity>
         ) : recorder.state === 'recorded' ? (
           <View style={styles.recordedActions}>
@@ -222,10 +281,18 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
             </TouchableOpacity>
           </View>
         ) : null}
+        </View>
 
         {recorder.state === 'requesting_permission' && (
           <Text style={[styles.stateText, { color: colors.textSecondary }]}>Đang yêu cầu quyền micro...</Text>
         )}
+        <Text style={[styles.recordState, { color: colors.primary }]}>
+          {recorder.state === 'recording'
+            ? `Đang nghe... ${Math.floor(recorder.durationMs / 1000)}s`
+            : recorder.state === 'recorded'
+              ? 'Bản thu đã sẵn sàng'
+              : 'Nhấn để đọc'}
+        </Text>
       </View>
 
       {/* Assess button */}
@@ -254,18 +321,25 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
         </Text>
       )}
     </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.xl },
+  scrollContent: { flexGrow: 1, paddingHorizontal: Spacing.xl, paddingVertical: Spacing.xl },
+  container: { width: '100%', maxWidth: 680, alignSelf: 'center', alignItems: 'center', gap: Spacing.xl },
+  typePill: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, paddingHorizontal: Spacing.lg, paddingVertical: Spacing.sm, borderRadius: BorderRadius.full, borderWidth: 1, ...Shadow.sm },
+  typeLabel: { fontFamily: FontFamily.semibold, fontSize: FontSize.sm },
+  targetCard: { width: '100%', borderWidth: 1, borderRadius: BorderRadius.xl, padding: Spacing.xl, alignItems: 'center', overflow: 'hidden', ...Shadow.md },
+  targetAccent: { position: 'absolute', top: 0, left: 0, right: 0, height: 4 },
   listenSection: { marginTop: Spacing.lg },
   recordArea: { alignItems: 'center', gap: Spacing.md },
-  recordBtn: { width: 88, height: 88, borderRadius: 44, justifyContent: 'center', alignItems: 'center', gap: Spacing.xs, ...Shadow.md },
-  recordingActive: { transform: [{ scale: 1.05 }] },
-  recordIcon: { fontSize: 28 },
-  recordLabel: { color: '#fff', fontSize: FontSize.xs, fontWeight: FontWeight.semibold },
-  recordedActions: { flexDirection: 'row', gap: Spacing.md },
+  recordRing: { width: 176, height: 176, borderRadius: 88, borderWidth: 4, alignItems: 'center', justifyContent: 'center' },
+  pulseHalo: { position: 'absolute', width: 176, height: 176, borderRadius: 88, borderWidth: 4 },
+  recordBtn: { width: 112, height: 112, borderRadius: 56, justifyContent: 'center', alignItems: 'center', ...Shadow.lg },
+  recordingActive: { transform: [{ scale: 1.06 }] },
+  recordState: { fontFamily: FontFamily.semibold, fontSize: FontSize.sm, textTransform: 'uppercase', letterSpacing: 0.8 },
+  recordedActions: { flexDirection: 'column', gap: Spacing.sm },
   smallBtn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.xs, paddingHorizontal: Spacing.lg, paddingVertical: Spacing.sm + 2, borderRadius: BorderRadius.lg, borderWidth: 1.5 },
   smallBtnText: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
   stateText: { fontSize: FontSize.md },
@@ -275,6 +349,7 @@ const styles = StyleSheet.create({
   scoreNumber: { fontSize: 56, fontWeight: 'bold' },
   scoreMax: { fontSize: FontSize.xl },
   scoreLabel: { fontSize: FontSize.lg, fontWeight: '600' },
+  scoreGrid: { width: '100%', flexDirection: 'row', gap: Spacing.md },
   wordsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.lg, justifyContent: 'center' },
   wordScore: { alignItems: 'center', gap: 2 },
   wordChar: { fontSize: FontSize['2xl'], fontWeight: '600' },

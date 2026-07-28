@@ -23,6 +23,21 @@ export async function fetchLessonExercises(lessonId: string): Promise<LessonExer
 }
 
 /**
+ * Fetch the configured XP reward for a lesson.
+ * The route keeps a conservative fallback if this metadata cannot be loaded.
+ */
+export async function fetchLessonXpReward(lessonId: string): Promise<number> {
+  const { data, error } = await supabase
+    .from('lessons')
+    .select('xp_reward')
+    .eq('id', lessonId)
+    .single();
+
+  if (error) throw error;
+  return typeof data?.xp_reward === 'number' ? data.xp_reward : 15;
+}
+
+/**
  * Validate an answer for an exercise
  * Returns whether the answer is correct
  */

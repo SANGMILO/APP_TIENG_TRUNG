@@ -16,7 +16,8 @@ import Svg, { Circle } from 'react-native-svg';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
-import { FadeInView, AnimatedPressable, PulsingDot } from '@/components/ui';
+import { FadeInView, AnimatedPressable, PulsingDot, EmptyState } from '@/components/ui';
+import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
 import { Shadow, FontWeight, FontFamily } from '@/constants/theme';
 import { Lesson } from '@/types';
 
@@ -26,21 +27,25 @@ export default function LearnScreen() {
   const insets = useSafeAreaInsets();
 
   // ─── Data Queries (preserved exactly) ───
-  const { data: courseData, isLoading } = useQuery({
+  const { data: courseData, isLoading, isError, refetch } = useQuery({
     queryKey: ['learning-path'],
     queryFn: async () => {
-      const { data: courses } = await supabase
+      const { data: courses, error: coursesError } = await supabase
         .from('courses').select('id, title, level').eq('status', 'published').order('order_index').limit(1);
+      if (coursesError) throw coursesError;
       if (!courses?.length) return { course: null, lessons: [] as Lesson[] };
       const course = courses[0];
-      const { data: units } = await supabase
+      const { data: units, error: unitsError } = await supabase
         .from('units').select('id').eq('course_id', course.id).eq('status', 'published').order('order_index').limit(1);
+      if (unitsError) throw unitsError;
       if (!units?.length) return { course, lessons: [] as Lesson[] };
-      const { data: chapters } = await supabase
+      const { data: chapters, error: chaptersError } = await supabase
         .from('chapters').select('id').eq('unit_id', units[0].id).eq('status', 'published').order('order_index').limit(1);
+      if (chaptersError) throw chaptersError;
       if (!chapters?.length) return { course, lessons: [] as Lesson[] };
-      const { data: lessonData } = await supabase
+      const { data: lessonData, error: lessonsError } = await supabase
         .from('lessons').select('*').eq('chapter_id', chapters[0].id).eq('status', 'published').order('order_index');
+      if (lessonsError) throw lessonsError;
       return { course, lessons: (lessonData ?? []) as Lesson[] };
     },
   });
@@ -123,7 +128,10 @@ export default function LearnScreen() {
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: getPremiumTabContentInset(insets.bottom) },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {/* ─── Greeting ─── */}
@@ -283,6 +291,14 @@ export default function LearnScreen() {
           <View style={styles.loading}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
+        ) : isError ? (
+          <EmptyState
+            iconName="cloud-offline-outline"
+            title="Không thể tải hành trình học"
+            description="Kiểm tra kết nối rồi thử lại."
+            actionLabel="Thử lại"
+            onAction={() => { void refetch(); }}
+          />
         ) : !lessons?.length ? (
           <FadeInView delay={500} animation="slideUp">
             <View style={[styles.emptyCard, { backgroundColor: colors.card, borderColor: colors.border }]}>

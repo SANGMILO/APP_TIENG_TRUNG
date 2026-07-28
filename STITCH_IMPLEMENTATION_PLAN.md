@@ -170,6 +170,49 @@ pinyin-md: Inter 18px/24px medium, tracking 0.05em
 
 ---
 
+### Phase 6: Lesson Experience (HIGH RISK)
+
+**Screens**: 15-20 (one reusable Lesson system)
+**Risk Level**: High
+**Reason**: Lesson is the primary transactional learning flow. Its UI coordinates
+multiple exercise types, answer validation, timing, pronunciation services and
+atomic completion.
+
+**State References**:
+- Screen 15: default/selected multiple choice
+- Screen 16: correct feedback
+- Screen 17: listening
+- Screen 18: incorrect feedback
+- Screen 19: speaking/pronunciation
+- Screen 20: completion/result
+
+**Changes**:
+- Introduce a consistent immersive Lesson header with jade progress
+- Create reusable option-card and answer-feedback presentation
+- Apply the same visual system to vocabulary, translation and sentence-builder
+- Redesign listening around the existing audio player behavior
+- Restyle speaking recording, assessment and score presentation
+- Build a responsive completion bento using real XP, accuracy, count, time and streak data
+- Add focused selection, feedback, microphone and completion motion
+
+**Preserves**:
+- Dynamic `/lesson/[id]` routing and back behavior
+- `fetchLessonExercises`, exercise ordering and all Supabase contracts
+- All six existing exercise types and their interaction models
+- `validateAnswer`, timing and result accumulation
+- Audio playback, recording, pronunciation assessment and saved attempts
+- `calculateLessonResult`, perfect bonus and `complete_lesson`
+- Profile refresh after completion
+- Loading, empty and error states
+
+**Risk Mitigation**:
+- Keep `services/lesson-engine.ts` unchanged unless a functional defect requires it
+- Treat screens 15-20 as states of one renderer rather than separate routes
+- Keep long content scrollable and bottom actions reachable on short screens
+- Validate every exercise type before shipping
+
+---
+
 ## Cross-Cutting Concerns
 
 ### Shared Components to Build First
@@ -244,4 +287,5 @@ Before marking a screen migration complete:
 | 3 | Video | 1-2 days | Phase 0 |
 | 4 | AI Tutor | 2-3 days | Phase 0 |
 | 5 | Home/Learn | 2-3 days | Phase 0 |
+| 6 | Lesson states 15-20 | 2-3 days | Phase 0 + Learn navigation |
 | — | **Total** | **8-13 days** | — |

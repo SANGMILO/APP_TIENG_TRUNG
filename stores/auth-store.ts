@@ -3,6 +3,20 @@ import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { Profile } from '@/types';
 
+export type EditableProfileUpdate = Partial<Pick<
+  Profile,
+  | 'username'
+  | 'display_name'
+  | 'avatar_url'
+  | 'native_language'
+  | 'timezone'
+  | 'chinese_level'
+  | 'daily_goal_minutes'
+  | 'daily_goal_xp'
+  | 'learning_purpose'
+  | 'onboarding_completed'
+>>;
+
 interface AuthState {
   session: Session | null;
   user: User | null;
@@ -16,7 +30,7 @@ interface AuthState {
   setProfile: (profile: Profile | null) => void;
   fetchProfile: () => Promise<void>;
   signOut: () => Promise<void>;
-  updateProfile: (updates: Partial<Profile>) => Promise<void>;
+  updateProfile: (updates: EditableProfileUpdate) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -89,7 +103,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     const { data, error } = await supabase
       .from('profiles')
-      .update({ ...updates, updated_at: new Date().toISOString() })
+      .update(updates)
       .eq('id', user.id)
       .select()
       .single();

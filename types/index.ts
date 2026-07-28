@@ -29,6 +29,7 @@ export interface Profile {
   avatar_url: string | null;
   role: UserRole;
   native_language: string;
+  timezone: string;
   chinese_level: string;
   daily_goal_minutes: number;
   daily_goal_xp: number;
