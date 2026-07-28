@@ -1,0 +1,594 @@
+{
+  "schemaVersion": 1,
+  "batchKey": "batch-10-work",
+  "version": 1,
+  "migrationName": "20260729190000_content_batch_10_work",
+  "description": "Chinese for Work and Business core curriculum; review-stage pending qualified linguistic approval.",
+  "courses": [
+    {
+      "slug": "chinese-for-work-business",
+      "title": "Chinese for Work and Business",
+      "titleZh": "商务汉语",
+      "descriptionVi": "Giao tiếp công sở, họp, thương lượng và tuyển dụng.",
+      "level": "intermediate",
+      "orderIndex": 14,
+      "status": "review",
+      "estimatedMinutes": 78,
+      "objectives": [
+        "Trao đổi công việc rõ ràng",
+        "Tham gia họp và thương lượng",
+        "Dùng văn phong nghề nghiệp phù hợp"
+      ],
+      "units": [
+        {
+          "slug": "work-nen-tang",
+          "title": "Nền tảng",
+          "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+          "orderIndex": 1,
+          "status": "review",
+          "objectives": [
+            "Trao đổi công việc rõ ràng",
+            "Tham gia họp và thương lượng"
+          ],
+          "chapters": [
+            {
+              "slug": "work-nen-tang-chapter",
+              "title": "Khái niệm cốt lõi",
+              "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Trao đổi công việc rõ ràng",
+                "Tham gia họp và thương lượng"
+              ],
+              "lessons": [
+                {
+                  "slug": "email",
+                  "title": "确认邮件 — Email công việc",
+                  "descriptionVi": "Xác nhận và phản hồi nhiệm vụ.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Viết phản hồi ngắn, rõ"
+                  ],
+                  "culturalNote": "是否 phù hợp email; hội thoại thường dùng …吗 hoặc 是不是.",
+                  "reviewVocabularyKeys": [],
+                  "reviewGrammarKeys": [],
+                  "vocabulary": [
+                    {
+                      "key": "work:附件",
+                      "chinese": "附件",
+                      "pinyin": "fùjiàn",
+                      "meaningVi": "tệp đính kèm",
+                      "meaningEn": "attachment",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "email",
+                      "status": "review",
+                      "exampleSentence": "报价单请见邮件附件。",
+                      "examplePinyin": "Bàojiàdān qǐng jiàn yóujiàn fùjiàn.",
+                      "exampleMeaningVi": "Xin xem báo giá trong tệp đính kèm email."
+                    },
+                    {
+                      "key": "work:确认",
+                      "chinese": "确认",
+                      "pinyin": "quèrèn",
+                      "meaningVi": "xác nhận",
+                      "meaningEn": "confirm",
+                      "partOfSpeech": "động từ",
+                      "level": "intermediate",
+                      "category": "email",
+                      "status": "review",
+                      "exampleSentence": "请确认会议时间是否合适。",
+                      "examplePinyin": "Qǐng quèrèn huìyì shíjiān shìfǒu héshì.",
+                      "exampleMeaningVi": "Xin xác nhận thời gian họp có phù hợp không."
+                    },
+                    {
+                      "key": "work:回复",
+                      "chinese": "回复",
+                      "pinyin": "huífù",
+                      "meaningVi": "phản hồi",
+                      "meaningEn": "reply",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "intermediate",
+                      "category": "email",
+                      "status": "review",
+                      "exampleSentence": "我会在今天下班前回复。",
+                      "examplePinyin": "Wǒ huì zài jīntiān xiàbān qián huífù.",
+                      "exampleMeaningVi": "Tôi sẽ phản hồi trước khi tan làm hôm nay."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "work:email",
+                      "title": "Hỏi xác nhận với 是否",
+                      "pattern": "động từ + 是否 + tính từ/động từ",
+                      "explanationVi": "是否 là dạng văn viết, trang trọng hơn “是不是”.",
+                      "exampleChinese": "请确认附件是否完整。",
+                      "examplePinyin": "Qǐng quèrèn fùjiàn shìfǒu wánzhěng.",
+                      "exampleMeaningVi": "Xin xác nhận tệp đính kèm có đầy đủ không.",
+                      "level": "intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "work:附件",
+                    "distractorKeys": [
+                      "work:确认",
+                      "work:回复"
+                    ],
+                    "sentenceTokens": [
+                      "请",
+                      "确认",
+                      "附件",
+                      "是否",
+                      "完整",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "请确认附件是否完整。",
+                    "translationPromptVi": "Xin xác nhận tệp đính kèm có đầy đủ không.",
+                    "translationAnswerZh": "请确认附件是否完整。",
+                    "grammarQuestion": "Câu email nào yêu cầu xác nhận?",
+                    "grammarOptions": [
+                      "请确认附件是否完整。",
+                      "。完整是否附件确认请",
+                      "确认附件是否完整。请"
+                    ],
+                    "grammarCorrect": "请确认附件是否完整。",
+                    "grammarExplanationVi": "是否 là dạng văn viết, trang trọng hơn “是不是”.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "work:email",
+                    "speakingTextZh": "请确认附件是否完整。",
+                    "speakingPinyin": "Qǐng quèrèn fùjiàn shìfǒu wánzhěng."
+                  }
+                },
+                {
+                  "slug": "hop",
+                  "title": "汇报进度 — Cuộc họp",
+                  "descriptionVi": "Báo cáo tiến độ và nêu vấn đề.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Cập nhật dự án trong cuộc họp"
+                  ],
+                  "culturalNote": "一下 làm giọng điệu bớt cứng nhưng vẫn chuyên nghiệp.",
+                  "reviewVocabularyKeys": [
+                    "work:附件",
+                    "work:确认",
+                    "work:回复"
+                  ],
+                  "reviewGrammarKeys": [
+                    "work:email"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "work:进度",
+                      "chinese": "进度",
+                      "pinyin": "jìndù",
+                      "meaningVi": "tiến độ",
+                      "meaningEn": "progress",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "hop",
+                      "status": "review",
+                      "exampleSentence": "项目进度符合原来的计划。",
+                      "examplePinyin": "Xiàngmù jìndù fúhé yuánlái de jìhuà.",
+                      "exampleMeaningVi": "Tiến độ dự án phù hợp kế hoạch ban đầu."
+                    },
+                    {
+                      "key": "work:汇报",
+                      "chinese": "汇报",
+                      "pinyin": "huìbào",
+                      "meaningVi": "báo cáo",
+                      "meaningEn": "report",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "intermediate",
+                      "category": "hop",
+                      "status": "review",
+                      "exampleSentence": "我先汇报本周的工作。",
+                      "examplePinyin": "Wǒ xiān huìbào běn zhōu de gōngzuò.",
+                      "exampleMeaningVi": "Tôi báo cáo công việc tuần này trước."
+                    },
+                    {
+                      "key": "work:议程",
+                      "chinese": "议程",
+                      "pinyin": "yìchéng",
+                      "meaningVi": "chương trình nghị sự",
+                      "meaningEn": "agenda",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "hop",
+                      "status": "review",
+                      "exampleSentence": "今天的议程有三个部分。",
+                      "examplePinyin": "Jīntiān de yìchéng yǒu sān ge bùfen.",
+                      "exampleMeaningVi": "Chương trình hôm nay có ba phần."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "work:hop",
+                      "title": "Mở đầu báo cáo với 先",
+                      "pattern": "我先 + động từ + nội dung",
+                      "explanationVi": "先 giúp báo hiệu bước đầu trong trình tự cuộc họp.",
+                      "exampleChinese": "我先汇报一下项目进度。",
+                      "examplePinyin": "Wǒ xiān huìbào yíxià xiàngmù jìndù.",
+                      "exampleMeaningVi": "Tôi xin báo cáo sơ qua tiến độ dự án trước.",
+                      "level": "intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "work:进度",
+                    "distractorKeys": [
+                      "work:汇报",
+                      "work:议程"
+                    ],
+                    "sentenceTokens": [
+                      "我",
+                      "先",
+                      "汇报",
+                      "一下",
+                      "项目",
+                      "进度",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "我先汇报一下项目进度。",
+                    "translationPromptVi": "Tôi xin báo cáo sơ qua tiến độ dự án trước.",
+                    "translationAnswerZh": "我先汇报一下项目进度。",
+                    "grammarQuestion": "Câu nào mở đầu báo cáo tự nhiên?",
+                    "grammarOptions": [
+                      "我先汇报一下项目进度。",
+                      "。进度项目一下汇报先我",
+                      "先汇报一下项目进度。我"
+                    ],
+                    "grammarCorrect": "我先汇报一下项目进度。",
+                    "grammarExplanationVi": "先 giúp báo hiệu bước đầu trong trình tự cuộc họp.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "work:hop",
+                    "speakingTextZh": "我先汇报一下项目进度。",
+                    "speakingPinyin": "Wǒ xiān huìbào yíxià xiàngmù jìndù."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "work-van-dung",
+          "title": "Vận dụng",
+          "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+          "orderIndex": 2,
+          "status": "review",
+          "objectives": [
+            "Tham gia họp và thương lượng",
+            "Dùng văn phong nghề nghiệp phù hợp"
+          ],
+          "chapters": [
+            {
+              "slug": "work-van-dung-chapter",
+              "title": "Ngữ cảnh thực tế",
+              "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Tham gia họp và thương lượng",
+                "Dùng văn phong nghề nghiệp phù hợp"
+              ],
+              "lessons": [
+                {
+                  "slug": "thuong-luong",
+                  "title": "达成协议 — Thương lượng",
+                  "descriptionVi": "Nêu điều kiện và tìm phương án chung.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Thương lượng điều khoản cơ bản"
+                  ],
+                  "culturalNote": "Dùng 可以 thay cho 会 khi nói khả năng thương lượng.",
+                  "reviewVocabularyKeys": [
+                    "work:进度",
+                    "work:汇报",
+                    "work:议程"
+                  ],
+                  "reviewGrammarKeys": [
+                    "work:hop"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "work:报价",
+                      "chinese": "报价",
+                      "pinyin": "bàojià",
+                      "meaningVi": "báo giá",
+                      "meaningEn": "quote; quotation",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "intermediate",
+                      "category": "thuong-luong",
+                      "status": "review",
+                      "exampleSentence": "这个报价包括运输费用。",
+                      "examplePinyin": "Zhège bàojià bāokuò yùnshū fèiyòng.",
+                      "exampleMeaningVi": "Báo giá này bao gồm phí vận chuyển."
+                    },
+                    {
+                      "key": "work:让步",
+                      "chinese": "让步",
+                      "pinyin": "ràngbù",
+                      "meaningVi": "nhượng bộ",
+                      "meaningEn": "make a concession",
+                      "partOfSpeech": "động từ",
+                      "level": "intermediate",
+                      "category": "thuong-luong",
+                      "status": "review",
+                      "exampleSentence": "双方都需要作出适当让步。",
+                      "examplePinyin": "Shuāngfāng dōu xūyào zuòchū shìdàng ràngbù.",
+                      "exampleMeaningVi": "Hai bên đều cần có nhượng bộ phù hợp."
+                    },
+                    {
+                      "key": "work:协议",
+                      "chinese": "协议",
+                      "pinyin": "xiéyì",
+                      "meaningVi": "thỏa thuận",
+                      "meaningEn": "agreement",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "thuong-luong",
+                      "status": "review",
+                      "exampleSentence": "双方终于达成了协议。",
+                      "examplePinyin": "Shuāngfāng zhōngyú dáchéng le xiéyì.",
+                      "exampleMeaningVi": "Hai bên cuối cùng đã đạt được thỏa thuận."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "work:thuong-luong",
+                      "title": "Điều kiện thương lượng",
+                      "pattern": "如果 A，我们可以 B",
+                      "explanationVi": "如果 nêu điều kiện; vế sau đưa ra phương án tương ứng.",
+                      "exampleChinese": "如果增加数量，我们可以调整报价。",
+                      "examplePinyin": "Rúguǒ zēngjiā shùliàng, wǒmen kěyǐ tiáozhěng bàojià.",
+                      "exampleMeaningVi": "Nếu tăng số lượng, chúng tôi có thể điều chỉnh báo giá.",
+                      "level": "intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "work:报价",
+                    "distractorKeys": [
+                      "work:让步",
+                      "work:协议"
+                    ],
+                    "sentenceTokens": [
+                      "如果",
+                      "增加",
+                      "数量",
+                      "，",
+                      "我们",
+                      "可以",
+                      "调整",
+                      "报价",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "如果增加数量，我们可以调整报价。",
+                    "translationPromptVi": "Nếu tăng số lượng, chúng tôi có thể điều chỉnh báo giá.",
+                    "translationAnswerZh": "如果增加数量，我们可以调整报价。",
+                    "grammarQuestion": "Câu nào đưa ra điều kiện thương lượng?",
+                    "grammarOptions": [
+                      "如果增加数量，我们可以调整报价。",
+                      "。报价调整可以我们，数量增加如果",
+                      "增加数量，我们可以调整报价。如果"
+                    ],
+                    "grammarCorrect": "如果增加数量，我们可以调整报价。",
+                    "grammarExplanationVi": "如果 nêu điều kiện; vế sau đưa ra phương án tương ứng.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "work:thuong-luong",
+                    "speakingTextZh": "如果增加数量，我们可以调整报价。",
+                    "speakingPinyin": "Rúguǒ zēngjiā shùliàng, wǒmen kěyǐ tiáozhěng bàojià."
+                  }
+                },
+                {
+                  "slug": "phong-van",
+                  "title": "应聘职位 — Phỏng vấn",
+                  "descriptionVi": "Trình bày kinh nghiệm và năng lực.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Tự giới thiệu trong phỏng vấn"
+                  ],
+                  "culturalNote": "曾经 thường đi với 过 hoặc bối cảnh quá khứ rõ.",
+                  "reviewVocabularyKeys": [
+                    "work:报价",
+                    "work:让步",
+                    "work:协议"
+                  ],
+                  "reviewGrammarKeys": [
+                    "work:thuong-luong"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "work:应聘",
+                      "chinese": "应聘",
+                      "pinyin": "yìngpìn",
+                      "meaningVi": "ứng tuyển",
+                      "meaningEn": "apply for a job",
+                      "partOfSpeech": "động từ",
+                      "level": "intermediate",
+                      "category": "phong-van",
+                      "status": "review",
+                      "exampleSentence": "我来应聘市场经理这个职位。",
+                      "examplePinyin": "Wǒ lái yìngpìn shìchǎng jīnglǐ zhège zhíwèi.",
+                      "exampleMeaningVi": "Tôi đến ứng tuyển vị trí giám đốc tiếp thị."
+                    },
+                    {
+                      "key": "work:经验",
+                      "chinese": "经验",
+                      "pinyin": "jīngyàn",
+                      "meaningVi": "kinh nghiệm",
+                      "meaningEn": "experience",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "phong-van",
+                      "status": "review",
+                      "exampleSentence": "我有三年项目管理经验。",
+                      "examplePinyin": "Wǒ yǒu sān nián xiàngmù guǎnlǐ jīngyàn.",
+                      "exampleMeaningVi": "Tôi có ba năm kinh nghiệm quản lý dự án."
+                    },
+                    {
+                      "key": "work:负责",
+                      "chinese": "负责",
+                      "pinyin": "fùzé",
+                      "meaningVi": "phụ trách",
+                      "meaningEn": "be responsible for",
+                      "partOfSpeech": "động từ",
+                      "level": "intermediate",
+                      "category": "phong-van",
+                      "status": "review",
+                      "exampleSentence": "我曾经负责海外客户服务。",
+                      "examplePinyin": "Wǒ céngjīng fùzé hǎiwài kèhù fúwù.",
+                      "exampleMeaningVi": "Tôi từng phụ trách dịch vụ khách hàng nước ngoài."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "work:phong-van",
+                      "title": "Kinh nghiệm với 曾经",
+                      "pattern": "chủ ngữ + 曾经 + động từ",
+                      "explanationVi": "曾经 nêu trải nghiệm quá khứ có liên quan đến hiện tại.",
+                      "exampleChinese": "我曾经负责一个国际项目。",
+                      "examplePinyin": "Wǒ céngjīng fùzé yí ge guójì xiàngmù.",
+                      "exampleMeaningVi": "Tôi từng phụ trách một dự án quốc tế.",
+                      "level": "intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "work:应聘",
+                    "distractorKeys": [
+                      "work:经验",
+                      "work:负责"
+                    ],
+                    "sentenceTokens": [
+                      "我",
+                      "曾经",
+                      "负责",
+                      "一个",
+                      "国际",
+                      "项目",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "我曾经负责一个国际项目。",
+                    "translationPromptVi": "Tôi từng phụ trách một dự án quốc tế.",
+                    "translationAnswerZh": "我曾经负责一个国际项目。",
+                    "grammarQuestion": "Câu nào trình bày kinh nghiệm làm việc?",
+                    "grammarOptions": [
+                      "我曾经负责一个国际项目。",
+                      "。项目国际一个负责曾经我",
+                      "曾经负责一个国际项目。我"
+                    ],
+                    "grammarCorrect": "我曾经负责一个国际项目。",
+                    "grammarExplanationVi": "曾经 nêu trải nghiệm quá khứ có liên quan đến hiện tại.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "work:phong-van",
+                    "speakingTextZh": "我曾经负责一个国际项目。",
+                    "speakingPinyin": "Wǒ céngjīng fùzé yí ge guójì xiàngmù."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "work-on-tap",
+          "title": "Ôn tập",
+          "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+          "orderIndex": 3,
+          "status": "review",
+          "objectives": [
+            "Ôn từ vựng",
+            "Ôn mẫu câu"
+          ],
+          "chapters": [
+            {
+              "slug": "work-on-tap-chapter",
+              "title": "Củng cố lộ trình",
+              "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Ôn từ vựng",
+                "Ôn mẫu câu"
+              ],
+              "lessons": [
+                {
+                  "slug": "work-review",
+                  "title": "Ôn tập Chinese for Work and Business",
+                  "descriptionVi": "Củng cố từ vựng, mẫu câu và khả năng diễn đạt của toàn khóa.",
+                  "orderIndex": 1,
+                  "xpReward": 30,
+                  "status": "review",
+                  "lessonType": "review",
+                  "estimatedMinutes": 18,
+                  "objectives": [
+                    "Vận dụng lại từ vựng trọng tâm",
+                    "Tự kiểm tra mẫu câu đã học"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "work:应聘",
+                    "work:经验",
+                    "work:负责"
+                  ],
+                  "reviewGrammarKeys": [
+                    "work:phong-van"
+                  ],
+                  "vocabulary": [],
+                  "grammar": [],
+                  "practice": {
+                    "targetKey": "work:应聘",
+                    "distractorKeys": [
+                      "work:经验",
+                      "work:负责"
+                    ],
+                    "sentenceTokens": [
+                      "我",
+                      "曾经",
+                      "负责",
+                      "一个",
+                      "国际",
+                      "项目",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "我曾经负责一个国际项目。",
+                    "translationPromptVi": "Tôi từng phụ trách một dự án quốc tế.",
+                    "translationAnswerZh": "我曾经负责一个国际项目。",
+                    "grammarQuestion": "Câu nào trình bày kinh nghiệm làm việc?",
+                    "grammarOptions": [
+                      "我曾经负责一个国际项目。",
+                      "。项目国际一个负责曾经我",
+                      "曾经负责一个国际项目。我"
+                    ],
+                    "grammarCorrect": "我曾经负责一个国际项目。",
+                    "grammarExplanationVi": "曾经 nêu trải nghiệm quá khứ có liên quan đến hiện tại.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "work:phong-van",
+                    "speakingTextZh": "我曾经负责一个国际项目。",
+                    "speakingPinyin": "Wǒ céngjīng fùzé yí ge guójì xiàngmù."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
