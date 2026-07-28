@@ -38,23 +38,37 @@ export default function LearnScreen() {
       if (!courses?.length) return { course: null, lessons: [] as Lesson[] };
       const course = courses[0];
       const { data: units, error: unitsError } = await supabase
-        .from('units').select('id').eq('course_id', course.id).eq('status', 'published').order('order_index').limit(1);
+        .from('units').select('id, order_index').eq('course_id', course.id).eq('status', 'published').order('order_index');
       if (unitsError) throw unitsError;
       if (!units?.length) return { course, lessons: [] as Lesson[] };
       const { data: chapters, error: chaptersError } = await supabase
-        .from('chapters').select('id').eq('unit_id', units[0].id).eq('status', 'published').order('order_index').limit(1);
+        .from('chapters').select('id, unit_id, order_index').in('unit_id', units.map((unit) => unit.id)).eq('status', 'published');
       if (chaptersError) throw chaptersError;
       if (!chapters?.length) return { course, lessons: [] as Lesson[] };
       const { data: lessonData, error: lessonsError } = await supabase
-        .from('lessons').select('*').eq('chapter_id', chapters[0].id).eq('status', 'published').order('order_index');
+        .from('lessons').select('*').in('chapter_id', chapters.map((chapter) => chapter.id)).eq('status', 'published');
       if (lessonsError) throw lessonsError;
-      return { course, lessons: (lessonData ?? []) as Lesson[] };
+      const unitOrder = new Map(units.map((unit) => [unit.id, unit.order_index]));
+      const chapterOrder = new Map(
+        chapters.map((chapter) => [
+          chapter.id,
+          [unitOrder.get(chapter.unit_id) ?? 0, chapter.order_index] as const,
+        ]),
+      );
+      const orderedLessons = [...(lessonData ?? [])].sort((left, right) => {
+        const leftOrder = chapterOrder.get(left.chapter_id) ?? [0, 0];
+        const rightOrder = chapterOrder.get(right.chapter_id) ?? [0, 0];
+        return leftOrder[0] - rightOrder[0]
+          || leftOrder[1] - rightOrder[1]
+          || left.order_index - right.order_index;
+      });
+      return { course, lessons: orderedLessons as Lesson[] };
     },
     enabled: !!profile,
   });
 
   const lessons = courseData?.lessons;
-  const courseLevel = courseData?.course?.level ?? 'HSK 1'; // Fallback if no course data
+  const courseLevel = courseData?.course?.level ?? 'starter';
   const courseTitle = courseData?.course?.title ?? 'Hành trình học';
 
   const {
