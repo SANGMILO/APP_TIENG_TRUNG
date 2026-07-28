@@ -19,13 +19,39 @@ export interface GamificationSummary {
   todayXp: number;
   streak: number;
   longestStreak: number;
+  streakFreezeAvailable: boolean;
   boostActive: boolean;
 }
 
 export async function getGamificationSummary(): Promise<GamificationSummary> {
   const { data, error } = await supabase.rpc('get_gamification_summary');
   if (error) throw error;
-  return data as GamificationSummary;
+  if (
+    !data
+    || !Number.isFinite(Number(data.level))
+    || !Number.isFinite(Number(data.totalXp))
+    || !Number.isFinite(Number(data.coins))
+    || !Number.isFinite(Number(data.dailyGoalXp))
+    || !Number.isFinite(Number(data.todayXp))
+    || !Number.isFinite(Number(data.streak))
+    || !Number.isFinite(Number(data.longestStreak))
+    || typeof data.streakFreezeAvailable !== 'boolean'
+    || typeof data.boostActive !== 'boolean'
+  ) {
+    throw new Error('Invalid gamification summary');
+  }
+  return {
+    level: Math.max(1, Math.round(Number(data.level))),
+    totalXp: Math.max(0, Math.round(Number(data.totalXp))),
+    coins: Math.max(0, Math.round(Number(data.coins))),
+    hearts: Math.max(0, Math.round(Number(data.hearts) || 0)),
+    dailyGoalXp: Math.max(0, Math.round(Number(data.dailyGoalXp))),
+    todayXp: Math.max(0, Math.round(Number(data.todayXp))),
+    streak: Math.max(0, Math.round(Number(data.streak))),
+    longestStreak: Math.max(0, Math.round(Number(data.longestStreak))),
+    streakFreezeAvailable: data.streakFreezeAvailable,
+    boostActive: data.boostActive,
+  };
 }
 
 // ============================================
@@ -46,33 +72,20 @@ export interface DailyQuestItem {
 }
 
 export async function fetchDailyQuests(): Promise<DailyQuestItem[]> {
-  const user = (await supabase.auth.getUser()).data.user;
-  if (!user) return [];
-
-  const today = new Date().toISOString().split('T')[0];
-
-  const { data, error } = await supabase
-    .from('user_daily_quests')
-    .select(`
-      id, quest_id, progress, completed, assigned_date,
-      daily_quests:quest_id (title, description, quest_type, requirement_value, xp_reward, coin_reward)
-    `)
-    .eq('user_id', user.id)
-    .eq('assigned_date', today);
-
+  const { data, error } = await supabase.rpc('get_daily_quests');
   if (error) throw error;
-
-  return (data ?? []).map((item: any) => ({
+  if (!Array.isArray(data)) throw new Error('Invalid daily quest response');
+  return data.map((item: any) => ({
     id: item.id,
     quest_id: item.quest_id,
-    title: item.daily_quests?.title || '',
-    description: item.daily_quests?.description || '',
-    quest_type: item.daily_quests?.quest_type || '',
-    requirement_value: item.daily_quests?.requirement_value || 0,
-    progress: item.progress,
-    completed: item.completed,
-    xp_reward: item.daily_quests?.xp_reward || 0,
-    coin_reward: item.daily_quests?.coin_reward || 0,
+    title: item.title || '',
+    description: item.description || '',
+    quest_type: item.quest_type || '',
+    requirement_value: Math.max(0, Number(item.requirement_value) || 0),
+    progress: Math.max(0, Number(item.progress) || 0),
+    completed: item.completed === true,
+    xp_reward: Math.max(0, Number(item.xp_reward) || 0),
+    coin_reward: Math.max(0, Number(item.coin_reward) || 0),
   }));
 }
 
@@ -224,24 +237,16 @@ export interface LeaderboardEntry {
 }
 
 export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
-  const thisWeekStart = getWeekStart();
-
-  const { data, error } = await supabase
-    .from('leaderboards')
-    .select('user_id, xp_earned, rank, league, profiles:user_id (display_name, avatar_url)')
-    .eq('week_start', thisWeekStart)
-    .order('xp_earned', { ascending: false })
-    .limit(30);
-
+  const { data, error } = await supabase.rpc('get_weekly_leaderboard');
   if (error) throw error;
-
-  return (data ?? []).map((item: any, i: number) => ({
+  if (!Array.isArray(data)) throw new Error('Invalid leaderboard response');
+  return data.map((item: any, i: number) => ({
     user_id: item.user_id,
-    display_name: item.profiles?.display_name,
-    avatar_url: item.profiles?.avatar_url,
-    xp_earned: item.xp_earned,
-    rank: item.rank || i + 1,
-    league: item.league,
+    display_name: typeof item.display_name === 'string' ? item.display_name : null,
+    avatar_url: typeof item.avatar_url === 'string' ? item.avatar_url : null,
+    xp_earned: Math.max(0, Number(item.xp_earned) || 0),
+    rank: Math.max(1, Number(item.rank) || i + 1),
+    league: typeof item.league === 'string' ? item.league : 'jade',
   }));
 }
 
@@ -265,17 +270,21 @@ export async function fetchShopItems(): Promise<ShopItem[]> {
   return (data ?? []) as ShopItem[];
 }
 
-export async function purchaseItem(itemId: string): Promise<{ success: boolean; error?: string }> {
-  const idempotencyKey = `${(await supabase.auth.getUser()).data.user?.id}:shop:${itemId}:${Date.now()}`;
-
+export async function purchaseItem(
+  itemId: string,
+  idempotencyKey: string,
+): Promise<{ success: boolean; alreadyProcessed?: boolean; error?: string }> {
   const { data, error } = await supabase.rpc('purchase_shop_item', {
     p_item_id: itemId,
     p_idempotency_key: idempotencyKey,
   });
 
-  if (error) return { success: false, error: error.message };
+  if (error) throw error;
   if (!data?.success) return { success: false, error: data?.error || 'Purchase failed' };
-  return { success: true };
+  return {
+    success: true,
+    alreadyProcessed: data.already_processed === true,
+  };
 }
 
 // ============================================
@@ -304,16 +313,4 @@ export async function fetchInventory(): Promise<InventoryItem[]> {
     quantity: item.quantity,
     item_type: item.shop_items?.item_type || '',
   }));
-}
-
-// ============================================
-// HELPERS
-// ============================================
-
-function getWeekStart(): string {
-  const now = new Date();
-  const day = now.getDay(); // 0=Sun
-  const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Monday
-  const monday = new Date(now.setDate(diff));
-  return monday.toISOString().split('T')[0];
 }

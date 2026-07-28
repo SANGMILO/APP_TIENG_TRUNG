@@ -89,18 +89,31 @@ ON CONFLICT (id) DO NOTHING;
 -- No seed needed for exercise_options
 
 -- Achievements (config)
-INSERT INTO achievements (id, key, title, description, icon, category, requirement_type, requirement_value, xp_reward, coin_reward) VALUES
-  ('a0000000-0000-0000-0000-000000000001', 'first_lesson', 'Bài học đầu tiên', 'Hoàn thành bài học đầu tiên', '🎓', 'lesson', 'lessons_completed', 1, 10, 5),
-  ('a0000000-0000-0000-0000-000000000002', 'xp_100', '100 XP', 'Đạt 100 điểm kinh nghiệm', '⚡', 'xp', 'total_xp', 100, 20, 10),
-  ('a0000000-0000-0000-0000-000000000003', 'xp_1000', '1000 XP', 'Đạt 1000 điểm kinh nghiệm', '🌟', 'xp', 'total_xp', 1000, 50, 25),
-  ('a0000000-0000-0000-0000-000000000004', 'streak_7', '7 ngày liên tục', 'Học 7 ngày không nghỉ', '🔥', 'streak', 'streak_days', 7, 30, 15),
-  ('a0000000-0000-0000-0000-000000000005', 'streak_30', '30 ngày liên tục', 'Học 30 ngày không nghỉ', '💪', 'streak', 'streak_days', 30, 100, 50),
-  ('a0000000-0000-0000-0000-000000000006', 'words_100', '100 từ vựng', 'Học được 100 từ', '📚', 'vocabulary', 'words_learned', 100, 40, 20),
-  ('a0000000-0000-0000-0000-000000000007', 'words_500', '500 từ vựng', 'Học được 500 từ', '🏆', 'vocabulary', 'words_learned', 500, 100, 50),
-  ('a0000000-0000-0000-0000-000000000008', 'perfect_lesson', 'Hoàn hảo', 'Hoàn thành 1 bài không sai', '💯', 'lesson', 'perfect_lessons', 1, 15, 10),
-  ('a0000000-0000-0000-0000-000000000009', 'pronunciation_master', 'Phát âm chuẩn', 'Đạt 95+ điểm phát âm', '🎤', 'speaking', 'pronunciation_score', 95, 30, 15),
-  ('a0000000-0000-0000-0000-000000000010', 'listening_master', 'Thính giác tốt', 'Trả lời đúng 50 bài nghe', '👂', 'listening', 'listening_correct', 50, 30, 15)
-ON CONFLICT (id) DO NOTHING;
+INSERT INTO achievements (
+  id,
+  key,
+  title,
+  description,
+  icon,
+  category,
+  requirement_type,
+  requirement_value,
+  xp_reward,
+  coin_reward,
+  is_hidden
+) VALUES
+  ('a0000000-0000-0000-0000-000000000001', 'first_lesson', 'Bài học đầu tiên', 'Hoàn thành bài học đầu tiên', '🎓', 'lesson', 'lessons_completed', 1, 10, 5, TRUE),
+  ('a0000000-0000-0000-0000-000000000002', 'xp_100', '100 XP', 'Đạt 100 điểm kinh nghiệm', '⚡', 'xp', 'total_xp', 100, 20, 10, FALSE),
+  ('a0000000-0000-0000-0000-000000000003', 'xp_1000', '1000 XP', 'Đạt 1000 điểm kinh nghiệm', '🌟', 'xp', 'total_xp', 1000, 50, 25, FALSE),
+  ('a0000000-0000-0000-0000-000000000004', 'streak_7', '7 ngày liên tục', 'Học 7 ngày không nghỉ', '🔥', 'streak', 'streak_days', 7, 30, 15, FALSE),
+  ('a0000000-0000-0000-0000-000000000005', 'streak_30', '30 ngày liên tục', 'Học 30 ngày không nghỉ', '💪', 'streak', 'streak_days', 30, 100, 50, FALSE),
+  ('a0000000-0000-0000-0000-000000000006', 'words_100', '100 từ vựng', 'Học được 100 từ', '📚', 'vocabulary', 'words_learned', 100, 40, 20, TRUE),
+  ('a0000000-0000-0000-0000-000000000007', 'words_500', '500 từ vựng', 'Học được 500 từ', '🏆', 'vocabulary', 'words_learned', 500, 100, 50, TRUE),
+  ('a0000000-0000-0000-0000-000000000008', 'perfect_lesson', 'Hoàn hảo', 'Hoàn thành 1 bài không sai', '💯', 'lesson', 'perfect_lessons', 1, 15, 10, TRUE),
+  ('a0000000-0000-0000-0000-000000000009', 'pronunciation_master', 'Phát âm chuẩn', 'Đạt 95+ điểm phát âm', '🎤', 'speaking', 'pronunciation_score', 95, 30, 15, TRUE),
+  ('a0000000-0000-0000-0000-000000000010', 'listening_master', 'Thính giác tốt', 'Trả lời đúng 50 bài nghe', '👂', 'listening', 'listening_correct', 50, 30, 15, TRUE)
+ON CONFLICT (id) DO UPDATE
+SET is_hidden = EXCLUDED.is_hidden;
 
 -- Daily quests (config)
 INSERT INTO daily_quests (id, title, description, quest_type, requirement_value, xp_reward, coin_reward) VALUES

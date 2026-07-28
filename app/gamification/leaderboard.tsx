@@ -15,7 +15,7 @@ export default function LeaderboardScreen() {
   const { profile } = useAuthStore();
   const insets = useSafeAreaInsets();
 
-  const { data: entries, isLoading } = useQuery({
+  const { data: entries, isLoading, isError, refetch } = useQuery({
     queryKey: ['leaderboard'],
     queryFn: fetchLeaderboard,
   });
@@ -43,6 +43,14 @@ export default function LeaderboardScreen() {
 
       {isLoading ? (
         <View style={styles.center}><ActivityIndicator size="large" color={colors.primary} /></View>
+      ) : isError ? (
+        <EmptyState
+          iconName="cloud-offline-outline"
+          title="Không thể tải bảng xếp hạng"
+          description="Kiểm tra kết nối rồi thử lại."
+          actionLabel="Thử lại"
+          onAction={() => { void refetch(); }}
+        />
       ) : (
         <FlatList
           data={entries}

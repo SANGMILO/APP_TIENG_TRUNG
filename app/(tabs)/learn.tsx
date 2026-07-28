@@ -100,30 +100,24 @@ export default function LearnScreen() {
       {/* ─── TopAppBar ─── */}
       <View style={[styles.topBar, { paddingTop: insets.top + 12 }]}>
         {/* Streak */}
-        <TouchableOpacity style={styles.topBarPill} activeOpacity={0.7}>
+        <View style={styles.topBarPill}>
           <Ionicons name="flame" size={20} color={colors.primary} />
           <Text style={[styles.topBarPillText, { color: colors.text }]}>
             {profile?.current_streak ?? 0}
           </Text>
-        </TouchableOpacity>
+        </View>
 
         {/* Brand */}
         <Text style={[styles.topBarBrand, { color: colors.primary }]}>Học Tiếng Trung</Text>
 
-        {/* XP + Hearts */}
+        {/* XP */}
         <View style={styles.topBarRight}>
-          <TouchableOpacity style={styles.topBarPill} activeOpacity={0.7}>
+          <View style={styles.topBarPill}>
             <Ionicons name="diamond-outline" size={16} color={colors.textSecondary} />
             <Text style={[styles.topBarPillText, { color: colors.text }]}>
               {profile?.total_xp ?? 0}
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.topBarPill} activeOpacity={0.7}>
-            <Ionicons name="heart" size={16} color={colors.primary} />
-            <Text style={[styles.topBarPillText, { color: colors.text }]}>
-              {profile?.hearts ?? 5}
-            </Text>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
 

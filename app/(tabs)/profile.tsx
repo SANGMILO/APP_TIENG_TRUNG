@@ -116,9 +116,6 @@ export default function ProfileScreen() {
     ? new Date(profile.created_at).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })
     : '';
 
-  // Hearts display: show "∞" for unlimited (premium), otherwise the number
-  const heartsDisplay = (profile?.hearts ?? 5) >= 99 ? '∞' : (profile?.hearts ?? 5);
-
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView
@@ -192,7 +189,7 @@ export default function ProfileScreen() {
           </View>
         </FadeInView>
 
-        {/* ─── 2. Stats Grid (2x2) ─────────────────────────────────────── */}
+        {/* ─── 2. Real gamification stats ──────────────────────────────── */}
         <FadeInView delay={150} animation="slideUp">
           <View style={styles.statsGrid}>
             <StatCard
@@ -209,14 +206,6 @@ export default function ProfileScreen() {
               label="Tổng XP"
               iconColor={colors.secondary}
               iconBgColor={colors.secondary + '12'}
-              colors={colors}
-            />
-            <StatCard
-              icon="heart"
-              value={heartsDisplay}
-              label="Mạng"
-              iconColor={colors.primary}
-              iconBgColor={colors.primary + '12'}
               colors={colors}
             />
             <StatCard

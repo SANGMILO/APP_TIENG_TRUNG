@@ -377,16 +377,62 @@ Stitch migration remains the visual source of truth.
 - Blockers:
   - Interactive authenticated Azure assessment requires microphone permission
     and a real user session; no hosted production user was created for QA
-- Commit: pending
+- Commit: `9ed610a` (`fix: persist pronunciation practice scores`)
 
 ### Phase 8 — Gamification population
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: product-rule gaps to be documented where applicable
+- Status: COMPLETE
+- Files:
+  - `app/(tabs)/learn.tsx`
+  - `app/(tabs)/profile.tsx`
+  - `app/gamification/leaderboard.tsx`
+  - `app/gamification/shop.tsx`
+  - `services/gamification-service.ts`
+  - `supabase/seed/001_course_data.sql`
+  - `__tests__/gamification.test.ts`
+  - `supabase/tests/authoritative_gamification.test.sql`
+- Migrations:
+  - `20260729060000_authoritative_gamification.sql`
+  - `20260729070000_gamification_existing_data_backfill.sql`
+- Deployments:
+  - Both migrations applied to the linked Supabase project
+  - Remote schema independently dumped and verified after the primary migration;
+    temporary dumps removed
+- Validation:
+  - Local database recreated from all migrations successfully
+  - pgTAP: 8 files / 203 assertions passed
+  - Focused gamification Jest: 1 suite / 12 tests passed
+  - TypeScript: 0 errors
+  - Jest: 26 suites / 280 tests passed
+  - Expo Web: 51 routes exported
+  - Hosted migration list: local and remote matched through `20260729070000`
+- Result:
+  - Lesson, review, pronunciation, video, voice, XP, and streak evidence now
+    feeds one idempotent server-owned event pipeline
+  - Daily quests use the user timezone and only defined authoritative event types
+  - Achievements are evaluated from persisted learning evidence and rewarded once
+  - Existing earned achievements and current-week XP are backfilled from ledgers
+  - Weekly leaderboard totals/ranks are server-derived and other users are
+    anonymized by the read RPC
+  - Direct client writes to achievements, quests, leaderboard totals, inventory,
+    raw events, streak activity, and speaking rewards are revoked
+  - Streak Freeze is the only visible shop item and now has atomic purchase,
+    stable retry idempotency, and real one-gap consumption
+  - Unsupported hearts, XP boosts, legacy quests/achievements, and AI-session
+    achievement claims are hidden rather than simulated
+  - Failed gamification processing is retained for retry without blocking the
+    authoritative learning transaction
+- Blockers:
+  - P1 product rules: hearts have no defined loss/recovery lifecycle, so heart
+    counters are hidden
+  - P1 product rules: XP boost consumption/multipliers and league
+    promotion/demotion are undefined, so boost products and league claims remain
+    inactive
+  - P1 product rules: weekly quests and AI-session completion have no
+    authoritative completion semantics and remain unexposed
+  - Supabase CLI emitted the known non-fatal pg-delta certificate cache warning;
+    matching migration history and a fresh remote schema dump independently
+    confirmed the hosted schema
 - Commit: pending
 
 ### Phase 9 — Dead interactions, route reachability, and analytics

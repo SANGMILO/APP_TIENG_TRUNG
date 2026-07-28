@@ -1,188 +1,228 @@
+declare const require: (moduleName: string) => any;
+declare const __dirname: string;
+
+import { supabase } from '../lib/supabase';
+import {
+  fetchDailyQuests,
+  fetchLeaderboard,
+  getGamificationSummary,
+  purchaseItem,
+} from '../services/gamification-service';
+
+const fs = require('fs');
+const path = require('path');
+
 jest.mock('../lib/supabase', () => ({
-  supabase: { from: jest.fn(), rpc: jest.fn(), auth: { getUser: jest.fn() } },
+  supabase: {
+    from: jest.fn(),
+    rpc: jest.fn(),
+    auth: { getUser: jest.fn() },
+  },
 }));
 
-describe('Gamification System', () => {
-  describe('XP Idempotency Rules', () => {
-    it('lesson completion XP uses lesson_id + date as key', () => {
-      const userId = 'user-1';
-      const lessonId = 'lesson-1';
-      const date = '2024-06-01';
-      const key = `${userId}:lesson_complete:${lessonId}:${date}`;
-      expect(key).toBe('user-1:lesson_complete:lesson-1:2024-06-01');
+const migration = fs.readFileSync(
+  path.join(
+    __dirname,
+    '..',
+    'supabase',
+    'migrations',
+    '20260729060000_authoritative_gamification.sql',
+  ),
+  'utf8',
+);
+const backfillMigration = fs.readFileSync(
+  path.join(
+    __dirname,
+    '..',
+    'supabase',
+    'migrations',
+    '20260729070000_gamification_existing_data_backfill.sql',
+  ),
+  'utf8',
+);
+
+describe('authoritative gamification service', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('loads and normalizes the server-owned summary', async () => {
+    (supabase.rpc as jest.Mock).mockResolvedValue({
+      data: {
+        level: 2,
+        totalXp: 115,
+        coins: 24,
+        hearts: 5,
+        dailyGoalXp: 30,
+        todayXp: 17,
+        streak: 4,
+        longestStreak: 8,
+        streakFreezeAvailable: true,
+        boostActive: false,
+      },
+      error: null,
     });
 
-    it('same lesson same day = same key', () => {
-      const key1 = 'user-1:lesson_complete:lesson-1:2024-06-01';
-      const key2 = 'user-1:lesson_complete:lesson-1:2024-06-01';
-      expect(key1).toBe(key2);
+    await expect(getGamificationSummary()).resolves.toEqual({
+      level: 2,
+      totalXp: 115,
+      coins: 24,
+      hearts: 5,
+      dailyGoalXp: 30,
+      todayXp: 17,
+      streak: 4,
+      longestStreak: 8,
+      streakFreezeAvailable: true,
+      boostActive: false,
+    });
+    expect(supabase.rpc).toHaveBeenCalledWith('get_gamification_summary');
+  });
+
+  it('rejects malformed summary data instead of displaying invented values', async () => {
+    (supabase.rpc as jest.Mock).mockResolvedValue({
+      data: { level: 'not-a-level' },
+      error: null,
     });
 
-    it('different day = different key', () => {
-      const key1 = 'user-1:lesson_complete:lesson-1:2024-06-01';
-      const key2 = 'user-1:lesson_complete:lesson-1:2024-06-02';
-      expect(key1).not.toBe(key2);
+    await expect(getGamificationSummary()).rejects.toThrow(
+      'Invalid gamification summary',
+    );
+  });
+
+  it('loads daily quests through the timezone-aware server RPC', async () => {
+    (supabase.rpc as jest.Mock).mockResolvedValue({
+      data: [{
+        id: 'assignment-1',
+        quest_id: 'quest-1',
+        title: 'Ôn 5 từ',
+        description: 'Ôn tập hôm nay',
+        quest_type: 'review_completed',
+        requirement_value: 5,
+        progress: 2,
+        completed: false,
+        xp_reward: 10,
+        coin_reward: 3,
+      }],
+      error: null,
+    });
+
+    await expect(fetchDailyQuests()).resolves.toEqual([{
+      id: 'assignment-1',
+      quest_id: 'quest-1',
+      title: 'Ôn 5 từ',
+      description: 'Ôn tập hôm nay',
+      quest_type: 'review_completed',
+      requirement_value: 5,
+      progress: 2,
+      completed: false,
+      xp_reward: 10,
+      coin_reward: 3,
+    }]);
+    expect(supabase.rpc).toHaveBeenCalledWith('get_daily_quests');
+  });
+
+  it('loads privacy-filtered leaderboard rows from the server', async () => {
+    (supabase.rpc as jest.Mock).mockResolvedValue({
+      data: [{
+        user_id: 'user-2',
+        display_name: 'Người học',
+        avatar_url: null,
+        xp_earned: 48,
+        rank: 1,
+        league: 'jade',
+      }],
+      error: null,
+    });
+
+    await expect(fetchLeaderboard()).resolves.toEqual([{
+      user_id: 'user-2',
+      display_name: 'Người học',
+      avatar_url: null,
+      xp_earned: 48,
+      rank: 1,
+      league: 'jade',
+    }]);
+    expect(supabase.rpc).toHaveBeenCalledWith('get_weekly_leaderboard');
+  });
+
+  it('uses a caller-stable purchase key and exposes confirmed retries', async () => {
+    (supabase.rpc as jest.Mock).mockResolvedValue({
+      data: { success: true, already_processed: true },
+      error: null,
+    });
+
+    await expect(
+      purchaseItem('streak-freeze-id', 'stable-attempt-id'),
+    ).resolves.toEqual({
+      success: true,
+      alreadyProcessed: true,
+    });
+    expect(supabase.rpc).toHaveBeenCalledWith('purchase_shop_item', {
+      p_item_id: 'streak-freeze-id',
+      p_idempotency_key: 'stable-attempt-id',
     });
   });
 
-  describe('Daily Quest Types', () => {
-    const validTypes = ['lessons_completed', 'words_reviewed', 'speaking_exercises', 'daily_xp', 'study_minutes', 'videos_completed'];
-
-    it('supports expected quest types', () => {
-      expect(validTypes.length).toBeGreaterThanOrEqual(5);
+  it('does not convert transport failures into a confirmed purchase result', async () => {
+    (supabase.rpc as jest.Mock).mockResolvedValue({
+      data: null,
+      error: new Error('network unavailable'),
     });
 
-    it('each type is a string', () => {
-      validTypes.forEach(t => expect(typeof t).toBe('string'));
-    });
+    await expect(
+      purchaseItem('streak-freeze-id', 'stable-attempt-id'),
+    ).rejects.toThrow('network unavailable');
+  });
+});
+
+describe('authoritative gamification migration', () => {
+  it('revokes direct client mutation of reward state', () => {
+    expect(migration).toMatch(
+      /REVOKE INSERT, UPDATE, DELETE ON TABLE public\.user_achievements/,
+    );
+    expect(migration).toMatch(
+      /REVOKE INSERT, UPDATE, DELETE ON TABLE public\.leaderboards/,
+    );
+    expect(migration).toMatch(
+      /REVOKE ALL ON FUNCTION public\.record_gamification_event/,
+    );
   });
 
-  describe('Streak Rules', () => {
-    it('same day multiple activities = streak +1 only', () => {
-      const activitiesInDay = 5;
-      const streakIncrement = 1;
-      expect(streakIncrement).toBe(1);
-    });
-
-    it('streak freeze preserves streak for one missed day', () => {
-      const hadFreeze = true;
-      const missedDays = 1;
-      const streakPreserved = hadFreeze && missedDays <= 1;
-      expect(streakPreserved).toBe(true);
-    });
-
-    it('two missed days breaks streak even with freeze', () => {
-      const hadFreeze = true;
-      const missedDays = 2;
-      const streakPreserved = hadFreeze && missedDays <= 1;
-      expect(streakPreserved).toBe(false);
-    });
+  it('derives visible progress from trusted learning evidence', () => {
+    expect(migration).toContain('CREATE TRIGGER on_lesson_gamification_event');
+    expect(migration).toContain('CREATE TRIGGER on_review_gamification_event');
+    expect(migration).toContain('CREATE TRIGGER on_pronunciation_gamification_event');
+    expect(migration).toContain('CREATE TRIGGER on_video_gamification_event');
+    expect(migration).toContain('CREATE TRIGGER on_voice_gamification_event');
   });
 
-  describe('Heart System Rules', () => {
-    const MAX_HEARTS = 5;
-
-    it('incorrect answer costs 1 heart', () => {
-      const hearts = 5;
-      const afterWrong = hearts - 1;
-      expect(afterWrong).toBe(4);
-    });
-
-    it('hearts cannot go below 0', () => {
-      const hearts = 0;
-      const afterWrong = Math.max(0, hearts - 1);
-      expect(afterWrong).toBe(0);
-    });
-
-    it('max hearts is 5', () => {
-      expect(MAX_HEARTS).toBe(5);
-    });
-
-    it('network errors do NOT cost hearts', () => {
-      const isLearningError = false; // network error
-      const shouldDeduct = isLearningError;
-      expect(shouldDeduct).toBe(false);
-    });
+  it('makes event and purchase retries idempotent', () => {
+    expect(migration).toMatch(
+      /ON CONFLICT \(idempotency_key\)[\s\S]*?DO NOTHING/,
+    );
+    expect(migration).toContain('FOR UPDATE');
+    expect(migration).toContain('processing_error = SQLSTATE');
+    expect(migration).toContain('already_processed');
+    expect(migration).toContain('purchase_shop_item');
   });
 
-  describe('Shop Purchase Rules', () => {
-    it('rejects purchase when coins insufficient', () => {
-      const balance = 30;
-      const price = 50;
-      const canPurchase = balance >= price;
-      expect(canPurchase).toBe(false);
-    });
-
-    it('allows purchase when coins sufficient', () => {
-      const balance = 80;
-      const price = 50;
-      const canPurchase = balance >= price;
-      expect(canPurchase).toBe(true);
-    });
-
-    it('deducts exact price from balance', () => {
-      const balance = 100;
-      const price = 50;
-      const afterPurchase = balance - price;
-      expect(afterPurchase).toBe(50);
-    });
-
-    it('duplicate purchase key prevents double buy', () => {
-      const key1 = 'user-1:shop:item-1:1717200000000';
-      const key2 = 'user-1:shop:item-1:1717200000000';
-      expect(key1).toBe(key2); // same key = idempotent
-    });
+  it('uses a validated profile timezone with a safe application fallback', () => {
+    expect(migration).toContain('pg_catalog.pg_timezone_names');
+    expect(migration).toContain("'Asia/Ho_Chi_Minh'");
+    expect(migration).toContain('gamification_local_date');
   });
 
-  describe('League Promotion Rules', () => {
-    const groupSize = 30;
-    const promoteCount = 5;
-    const demoteCount = 5;
-
-    it('top 5 promoted', () => {
-      const rank = 3;
-      const promoted = rank <= promoteCount;
-      expect(promoted).toBe(true);
-    });
-
-    it('bottom 5 demoted', () => {
-      const rank = 28;
-      const demoted = rank > groupSize - demoteCount;
-      expect(demoted).toBe(true);
-    });
-
-    it('middle stays', () => {
-      const rank = 15;
-      const promoted = rank <= promoteCount;
-      const demoted = rank > groupSize - demoteCount;
-      expect(promoted).toBe(false);
-      expect(demoted).toBe(false);
-    });
-
-    it('lowest league cannot demote', () => {
-      const league = 'jade'; // rank 1 = lowest
-      const canDemote = league !== 'jade';
-      expect(canDemote).toBe(false);
-    });
-
-    it('highest league cannot promote', () => {
-      const league = 'dragon'; // rank 5 = highest
-      const canPromote = league !== 'dragon';
-      expect(canPromote).toBe(false);
-    });
+  it('hides configurations without authoritative product rules', () => {
+    expect(migration).toContain("WHERE item_type <> 'streak_freeze'");
+    expect(migration).toContain("'first_lesson'");
+    expect(migration).toContain("'pronunciation_master'");
+    expect(migration).toContain("requirement_type = 'ai_sessions'");
   });
 
-  describe('XP Boost Rules', () => {
-    it('boost applies to lesson XP', () => {
-      const baseXp = 10;
-      const multiplier = 2;
-      const boostedXp = baseXp * multiplier;
-      expect(boostedXp).toBe(20);
-    });
-
-    it('boost does NOT apply to achievement rewards', () => {
-      const achievementXp = 30;
-      const eligible = false; // achievements excluded
-      const finalXp = eligible ? achievementXp * 2 : achievementXp;
-      expect(finalXp).toBe(30);
-    });
-
-    it('expired boost does not apply', () => {
-      const boostExpiresAt = new Date('2024-06-01T10:00:00Z');
-      const now = new Date('2024-06-01T11:00:00Z');
-      const isActive = now < boostExpiresAt;
-      expect(isActive).toBe(false);
-    });
-  });
-
-  describe('Timezone handling', () => {
-    it('daily quest date uses user timezone', () => {
-      // 23:30 UTC = 06:30+7 next day
-      const utcTime = new Date('2024-06-01T23:30:00Z');
-      const vnOffset = 7; // hours
-      const vnDate = new Date(utcTime.getTime() + vnOffset * 3600 * 1000);
-      const vnDay = vnDate.toISOString().split('T')[0];
-      expect(vnDay).toBe('2024-06-02'); // next day in VN
-    });
+  it('rebuilds existing visible state only from authoritative ledgers', () => {
+    expect(backfillMigration).toContain('evaluate_user_achievements');
+    expect(backfillMigration).toContain('FROM public.xp_transactions');
+    expect(backfillMigration).toContain('ON CONFLICT (user_id, week_start)');
+    expect(backfillMigration).not.toContain('INSERT INTO public.xp_transactions');
   });
 });
