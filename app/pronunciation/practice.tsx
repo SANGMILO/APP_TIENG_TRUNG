@@ -7,10 +7,7 @@ import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
 import { Button, ProgressBar } from '@/components/ui';
-import { ChineseText } from '@/components/chinese';
-import { AudioPlayer } from '@/components/media';
 import { SpeakingExercise } from '@/components/exercise';
-import { LessonExercise } from '@/services/lesson-engine';
 import { FontSize, Spacing } from '@/constants/theme';
 import { Vocabulary } from '@/types';
 
@@ -19,10 +16,15 @@ export default function PronunciationPracticeScreen() {
   const { profile } = useAuthStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completed, setCompleted] = useState(false);
-  const [scores, setScores] = useState<number[]>([]);
+  const [scoresByWord, setScoresByWord] = useState<Record<string, number>>({});
 
   // Fetch vocabulary to practice pronunciation
-  const { data: vocab, isLoading } = useQuery({
+  const {
+    data: vocab,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ['pronunciation-practice-words'],
     queryFn: async () => {
       if (!profile) return [];
@@ -32,10 +34,38 @@ export default function PronunciationPracticeScreen() {
         .from('vocabulary')
         .select('*')
         .eq('status', 'published')
-        .limit(5);
+        .limit(50);
 
       if (error) throw error;
-      return (data ?? []) as Vocabulary[];
+      const words = (data ?? []) as Vocabulary[];
+      if (!words.length) return [];
+
+      const { data: attempts, error: attemptsError } = await supabase
+        .from('pronunciation_attempts')
+        .select('vocabulary_id, overall_score, created_at')
+        .eq('user_id', profile.id)
+        .in('vocabulary_id', words.map(word => word.id))
+        .order('created_at', { ascending: false });
+      if (attemptsError) throw attemptsError;
+
+      const latestScore = new Map<string, number>();
+      for (const attempt of attempts ?? []) {
+        if (
+          typeof attempt.vocabulary_id === 'string'
+          && !latestScore.has(attempt.vocabulary_id)
+          && Number.isFinite(Number(attempt.overall_score))
+        ) {
+          latestScore.set(attempt.vocabulary_id, Number(attempt.overall_score));
+        }
+      }
+
+      return [...words]
+        .sort((a, b) => {
+          const scoreA = latestScore.get(a.id) ?? -1;
+          const scoreB = latestScore.get(b.id) ?? -1;
+          return scoreA - scoreB;
+        })
+        .slice(0, 5);
     },
     enabled: !!profile,
   });
@@ -45,6 +75,20 @@ export default function PronunciationPracticeScreen() {
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.center}>
           <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (isError) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.center}>
+          <Ionicons name="cloud-offline-outline" size={32} color={colors.textTertiary} />
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+            Không thể tải danh sách luyện phát âm.
+          </Text>
+          <Button title="Thử lại" variant="primary" size="lg" onPress={() => void refetch()} />
         </View>
       </SafeAreaView>
     );
@@ -62,6 +106,7 @@ export default function PronunciationPracticeScreen() {
   }
 
   if (completed) {
+    const scores = Object.values(scoresByWord);
     const avgScore = scores.length > 0 ? Math.round(scores.reduce((s, v) => s + v, 0) / scores.length) : 0;
     const ratingText = avgScore >= 95 ? 'Tuyệt vời! Phát âm rất tự nhiên.' : avgScore >= 85 ? 'Rất tốt! Chỉ cần chỉnh nhẹ một chút.' : avgScore >= 70 ? 'Khá ổn! Hãy nghe mẫu và thử lại.' : 'Đừng lo, mình luyện lại từng âm nhé.';
     return (
@@ -73,7 +118,7 @@ export default function PronunciationPracticeScreen() {
           <Text style={[styles.resultTitle, { color: colors.text }]}>Phiên luyện hoàn thành</Text>
           <Text style={[styles.resultScore, { color: colors.primary }]}>{avgScore}/100</Text>
           <Text style={[styles.resultRating, { color: colors.textSecondary }]}>{ratingText}</Text>
-          <Text style={[styles.resultCount, { color: colors.textTertiary }]}>{vocab.length} từ đã luyện</Text>
+          <Text style={[styles.resultCount, { color: colors.textTertiary }]}>{scores.length} từ đã luyện</Text>
           <Button title="Hoàn thành" variant="primary" size="lg" fullWidth rounded onPress={() => router.back()} style={{ marginTop: Spacing.xl }} />
         </View>
       </SafeAreaView>
@@ -83,26 +128,13 @@ export default function PronunciationPracticeScreen() {
   const word = vocab[currentIndex];
   const progress = ((currentIndex + 1) / vocab.length) * 100;
 
-  // Create a fake exercise object for the SpeakingExercise component
-  const fakeExercise: LessonExercise = {
-    id: `practice_${word.id}`,
-    lesson_id: '',
-    exercise_type: 'speaking',
-    order_index: currentIndex,
-    question: `Phát âm: ${word.chinese}`,
-    correct_answer: word.chinese,
-    question_audio_url: word.audio_url,
-    explanation: null,
-    hint: null,
-    points: 1,
-    data: {
+  const practiceTarget = {
       text: word.chinese,
       pinyin: word.pinyin,
       meaning: word.meaning_vi,
-      audio_url: word.audio_url,
-      passing_score: 60,
-    },
-    created_at: '',
+      audioUrl: word.audio_url,
+      passingScore: 60,
+      vocabularyId: word.id,
   };
 
   return (
@@ -119,11 +151,16 @@ export default function PronunciationPracticeScreen() {
 
       <View style={styles.exerciseArea}>
         <SpeakingExercise
-          exercise={fakeExercise}
+          key={word.id}
+          practiceTarget={practiceTarget}
           colors={colors}
-          onAnswer={(answer, isCorrect) => {
-            // Could capture score here
+          onAssessmentComplete={(result) => {
+            setScoresByWord(previous => ({
+              ...previous,
+              [word.id]: result.overallScore,
+            }));
           }}
+          onAnswer={() => {}}
           onNext={() => {
             if (currentIndex < vocab.length - 1) {
               setCurrentIndex(prev => prev + 1);

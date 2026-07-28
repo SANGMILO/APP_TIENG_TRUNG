@@ -15,6 +15,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
 
 const MAX_AUDIO_SIZE = 5 * 1024 * 1024; // 5MB
 const DAILY_LIMIT = 20;
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 interface RequestBody {
   audio: string;           // base64 encoded audio
@@ -80,6 +81,29 @@ serve(async (req) => {
 
     if (!body.audio || !body.referenceText || !body.clientAttemptId) {
       return jsonResponse({ error: 'Missing required fields' }, 400);
+    }
+    if (
+      body.clientAttemptId.length > 200
+      || !validOptionalUuid(body.exerciseId)
+      || !validOptionalUuid(body.lessonId)
+      || !validOptionalUuid(body.vocabularyId)
+    ) {
+      return jsonResponse({ error: 'Invalid assessment identifiers', errorCode: 'INVALID_REFERENCE' }, 400);
+    }
+
+    // A network retry must return the already persisted provider result before
+    // consuming quota or invoking Azure a second time.
+    const existingAttempt = await findExistingAttempt(supabase, user.id, body.clientAttemptId);
+    if (existingAttempt) {
+      return jsonResponse({ result: attemptToResult(existingAttempt) });
+    }
+
+    const reference = await validateAssessmentReference(supabase, body);
+    if (!reference) {
+      return jsonResponse({
+        error: 'Pronunciation target is no longer available.',
+        errorCode: 'INVALID_REFERENCE',
+      }, 400);
     }
 
     // Check audio size
@@ -175,7 +199,7 @@ serve(async (req) => {
     const { data: attemptData, error: attemptError } = await supabase.from('pronunciation_attempts').insert({
       user_id: user.id,
       reference_text: body.referenceText,
-      pinyin: body.pinyin ?? null,
+      pinyin: body.pinyin?.trim() || null,
       recognized_text: result.recognizedText,
       locale: body.locale || 'zh-CN',
       overall_score: result.overallScore,
@@ -184,14 +208,20 @@ serve(async (req) => {
       completeness_score: result.completenessScore,
       provider: result.provider,
       duration_ms: result.durationMs,
-      exercise_id: body.exerciseId || null,
-      lesson_id: body.lessonId || null,
-      vocabulary_id: body.vocabularyId || null,
+      exercise_id: reference.exerciseId,
+      lesson_id: reference.lessonId,
+      vocabulary_id: reference.vocabularyId,
       client_attempt_id: body.clientAttemptId,
       feedback: { words: result.words },
     }).select('id').single();
 
     if (attemptError) {
+      if (attemptError.code === '23505') {
+        const concurrentAttempt = await findExistingAttempt(supabase, user.id, body.clientAttemptId);
+        if (concurrentAttempt) {
+          return jsonResponse({ result: attemptToResult(concurrentAttempt) });
+        }
+      }
       console.error({
         stage: 'saving_attempt_failed',
         code: attemptError.code,
@@ -368,6 +398,110 @@ function mapErrorType(azureType?: string): string {
     case 'Insertion': return 'Insertion';
     default: return 'Unknown';
   }
+}
+
+function validOptionalUuid(value?: string): boolean {
+  return value === undefined || value === null || (typeof value === 'string' && UUID_PATTERN.test(value));
+}
+
+async function validateAssessmentReference(
+  supabase: any,
+  body: RequestBody,
+): Promise<{ exerciseId: string | null; lessonId: string | null; vocabularyId: string | null } | null> {
+  if (body.exerciseId && body.vocabularyId) return null;
+  if (body.lessonId && !body.exerciseId) return null;
+
+  if (body.exerciseId) {
+    const { data: exercise, error: exerciseError } = await supabase
+      .from('exercises')
+      .select('id, lesson_id, correct_answer, data')
+      .eq('id', body.exerciseId)
+      .maybeSingle();
+    if (exerciseError || !exercise) return null;
+    if (body.lessonId && body.lessonId !== exercise.lesson_id) return null;
+
+    const { data: lesson, error: lessonError } = await supabase
+      .from('lessons')
+      .select('id, status')
+      .eq('id', exercise.lesson_id)
+      .eq('status', 'published')
+      .maybeSingle();
+    if (lessonError || !lesson) return null;
+
+    const expectedText = typeof exercise.data?.text === 'string'
+      ? exercise.data.text
+      : exercise.correct_answer;
+    if (normalizeReference(expectedText) !== normalizeReference(body.referenceText)) return null;
+
+    return {
+      exerciseId: exercise.id,
+      lessonId: exercise.lesson_id,
+      vocabularyId: null,
+    };
+  }
+
+  if (body.vocabularyId) {
+    const { data: vocabulary, error: vocabularyError } = await supabase
+      .from('vocabulary')
+      .select('id, chinese')
+      .eq('id', body.vocabularyId)
+      .eq('status', 'published')
+      .maybeSingle();
+    if (
+      vocabularyError
+      || !vocabulary
+      || normalizeReference(vocabulary.chinese) !== normalizeReference(body.referenceText)
+    ) {
+      return null;
+    }
+    return { exerciseId: null, lessonId: null, vocabularyId: vocabulary.id };
+  }
+
+  return null;
+}
+
+async function findExistingAttempt(supabase: any, userId: string, clientAttemptId: string) {
+  const { data, error } = await supabase
+    .from('pronunciation_attempts')
+    .select(`
+      overall_score,
+      accuracy_score,
+      fluency_score,
+      completeness_score,
+      recognized_text,
+      reference_text,
+      provider,
+      duration_ms,
+      feedback,
+      created_at
+    `)
+    .eq('user_id', userId)
+    .eq('client_attempt_id', clientAttemptId)
+    .maybeSingle();
+  return error ? null : data;
+}
+
+function attemptToResult(attempt: any) {
+  return {
+    overallScore: Number(attempt.overall_score),
+    accuracyScore: Number(attempt.accuracy_score),
+    fluencyScore: Number(attempt.fluency_score),
+    completenessScore: attempt.completeness_score === null
+      ? null
+      : Number(attempt.completeness_score),
+    recognizedText: attempt.recognized_text || '',
+    expectedText: attempt.reference_text,
+    words: Array.isArray(attempt.feedback?.words) ? attempt.feedback.words : [],
+    provider: attempt.provider || 'azure',
+    durationMs: Number(attempt.duration_ms) || 0,
+    assessedAt: attempt.created_at,
+  };
+}
+
+function normalizeReference(value: unknown): string {
+  return typeof value === 'string'
+    ? value.trim().normalize('NFKC').replace(/\s+/g, '')
+    : '';
 }
 
 async function checkDailyLimit(supabase: any, userId: string, limit: number): Promise<boolean> {

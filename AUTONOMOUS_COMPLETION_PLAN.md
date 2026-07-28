@@ -339,16 +339,44 @@ Stitch migration remains the visual source of truth.
   - Supabase CLI emitted the same non-fatal pg-delta temporary certificate cache
     warning after migration apply; matching migration history and a fresh remote
     schema dump independently confirmed the hosted schema
-- Commit: pending
+- Commit: `c0d2758` (`fix: make AI tutor retries authoritative`)
 
 ### Phase 7 — Pronunciation quick practice
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: pending audit
+- Status: COMPLETE
+- Files:
+  - `app/pronunciation/practice.tsx`
+  - `components/exercise/SpeakingExercise.tsx`
+  - `lib/speech/types.ts`
+  - `services/pronunciation-service.ts`
+  - `supabase/functions/pronunciation-assess/index.ts`
+  - `__tests__/pronunciation-quick-practice.test.ts`
+- Migrations: none
+- Deployments:
+  - `pronunciation-assess` deployed as active version 12 with JWT verification
+- Validation:
+  - Focused pronunciation: 3 suites / 22 tests passed
+  - TypeScript: 0 errors
+  - Jest: 26 suites / 293 tests passed
+  - Expo Web: 51 routes exported
+  - Hosted unauthenticated smoke correctly returned HTTP 401
+- Result:
+  - Removed the fake lesson-exercise adapter and all non-UUID/empty foreign keys
+  - Quick practice now sends only its real published vocabulary ID while lesson
+    speaking continues to send its real exercise and lesson IDs
+  - Published reference text and parent relationships are revalidated server-side
+    before an assessment can be linked
+  - The persisted provider score is propagated through the component callback
+    into the real per-word score collection and completion average
+  - Each word remounts cleanly, so a previous result cannot leak into the next
+  - Network/persistence retries retain the same client attempt ID; the Edge
+    Function returns an existing saved result before quota/provider work and
+    handles concurrent unique-insert races
+  - Malformed scores are rejected client-side and persistence errors remain
+    visible/retryable instead of showing success
+- Blockers:
+  - Interactive authenticated Azure assessment requires microphone permission
+    and a real user session; no hosted production user was created for QA
 - Commit: pending
 
 ### Phase 8 — Gamification population

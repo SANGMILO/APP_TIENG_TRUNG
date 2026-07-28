@@ -15,7 +15,40 @@ export interface AssessmentRequestResult {
   success: boolean;
   result?: PronunciationAssessmentResult;
   error?: string;
-  errorCode?: 'NOT_CONFIGURED' | 'RATE_LIMITED' | 'AUDIO_TOO_LARGE' | 'NETWORK_ERROR' | 'SPEECH_NOT_DETECTED' | 'SERVER_ERROR';
+  errorCode?:
+    | 'NOT_CONFIGURED'
+    | 'RATE_LIMITED'
+    | 'AUDIO_TOO_LARGE'
+    | 'UNSUPPORTED_AUDIO_FORMAT'
+    | 'SPEECH_NOT_DETECTED'
+    | 'SPEECH_NOISE_ONLY'
+    | 'AZURE_NO_MATCH'
+    | 'INVALID_REFERENCE'
+    | 'PERSIST_FAILED'
+    | 'NETWORK_ERROR'
+    | 'SERVER_ERROR';
+}
+
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+export function buildAssessmentFunctionBody(
+  input: PronunciationAssessmentInput,
+  base64Audio: string,
+): Record<string, unknown> {
+  const exerciseId = validUuid(input.exerciseId);
+  const lessonId = validUuid(input.lessonId);
+  const vocabularyId = validUuid(input.vocabularyId);
+
+  return {
+    audio: base64Audio,
+    referenceText: input.referenceText,
+    pinyin: typeof input.pinyin === 'string' ? input.pinyin : '',
+    locale: input.locale || 'zh-CN',
+    clientAttemptId: input.clientAttemptId,
+    ...(exerciseId ? { exerciseId } : {}),
+    ...(lessonId ? { lessonId } : {}),
+    ...(vocabularyId ? { vocabularyId } : {}),
+  };
 }
 
 /**
@@ -77,53 +110,50 @@ export async function assessPronunciation(
 
     // Call Supabase Edge Function
     const { data, error } = await supabase.functions.invoke('pronunciation-assess', {
-      body: {
-        audio: base64Audio,
-        referenceText: input.referenceText,
-        locale: input.locale || 'zh-CN',
-        exerciseId: input.exerciseId,
-        lessonId: input.lessonId,
-        vocabularyId: input.vocabularyId,
-        clientAttemptId: input.clientAttemptId,
-      },
+      body: buildAssessmentFunctionBody(input, base64Audio),
     });
 
     if (error) {
-      // Parse edge function errors
-      if (error.message?.includes('rate limit') || error.message?.includes('429')) {
+      const details = await readFunctionError(error);
+      if (details.errorCode === 'RATE_LIMITED' || details.status === 429) {
         return { success: false, error: 'Bạn đã đạt giới hạn luyện phát âm hôm nay. Thử lại sau.', errorCode: 'RATE_LIMITED' };
       }
-      if (error.message?.includes('not configured') || error.message?.includes('503')) {
+      if (details.errorCode === 'NOT_CONFIGURED' || details.status === 503) {
         return { success: false, error: 'Dịch vụ phát âm chưa được cấu hình.', errorCode: 'NOT_CONFIGURED' };
+      }
+      if (details.errorCode === 'PERSIST_FAILED') {
+        return { success: false, error: 'Kết quả chưa được lưu. Vui lòng thử lại.', errorCode: 'PERSIST_FAILED' };
+      }
+      if (details.errorCode === 'INVALID_REFERENCE') {
+        return { success: false, error: 'Nội dung luyện phát âm không còn khả dụng.', errorCode: 'INVALID_REFERENCE' };
       }
       return { success: false, error: 'Lỗi kết nối. Vui lòng thử lại.', errorCode: 'NETWORK_ERROR' };
     }
 
     if (!data?.result) {
-      if (data?.errorCode === 'SPEECH_NOT_DETECTED') {
-        return { success: false, error: 'Chưa nghe rõ giọng nói. Hãy thử nói gần micro hơn.', errorCode: 'SPEECH_NOT_DETECTED' };
+      const errorCode = typeof data?.errorCode === 'string' ? data.errorCode : 'SERVER_ERROR';
+      if (errorCode === 'SPEECH_NOT_DETECTED') {
+        return { success: false, error: data?.error || 'Chưa nghe rõ giọng nói. Hãy thử nói gần micro hơn.', errorCode };
+      }
+      if (errorCode === 'SPEECH_NOISE_ONLY' || errorCode === 'AZURE_NO_MATCH') {
+        return {
+          success: false,
+          error: data?.error || 'Chưa nhận dạng được câu nói. Hãy thử lại ở nơi yên tĩnh.',
+          errorCode,
+        };
       }
       return { success: false, error: 'Không nhận được kết quả. Vui lòng thử lại.', errorCode: 'SERVER_ERROR' };
     }
 
-    return { success: true, result: data.result as PronunciationAssessmentResult };
-  } catch (err: any) {
-    console.error('Pronunciation assessment error:', err);
+    const result = normalizeAssessmentResult(data.result);
+    if (!result) {
+      return { success: false, error: 'Kết quả chấm phát âm không hợp lệ.', errorCode: 'SERVER_ERROR' };
+    }
+
+    return { success: true, result };
+  } catch {
     return { success: false, error: 'Lỗi kết nối. Vui lòng kiểm tra mạng và thử lại.', errorCode: 'NETWORK_ERROR' };
   }
-}
-
-/**
- * savePronunciationAttempt is now handled server-side by the
- * pronunciation-assess Edge Function. Client no longer persists scores.
- * This function is kept as a no-op for backward compatibility.
- */
-export async function savePronunciationAttempt(
-  _result: PronunciationAssessmentResult,
-  _input: PronunciationAssessmentInput
-): Promise<void> {
-  // Server-side persistence: Edge Function saves after assessment.
-  // Client does NOT write scores directly.
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
@@ -133,4 +163,72 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
     binary += String.fromCharCode(bytes[i]);
   }
   return btoa(binary);
+}
+
+function validUuid(value: unknown): string | null {
+  return typeof value === 'string' && UUID_PATTERN.test(value) ? value : null;
+}
+
+function normalizeAssessmentResult(value: any): PronunciationAssessmentResult | null {
+  const scores = [
+    Number(value?.overallScore),
+    Number(value?.accuracyScore),
+    Number(value?.fluencyScore),
+  ];
+  const completeness = value?.completenessScore === null
+    ? null
+    : Number(value?.completenessScore);
+  if (
+    scores.some(score => !Number.isFinite(score) || score < 0 || score > 100)
+    || (completeness !== null && (!Number.isFinite(completeness) || completeness < 0 || completeness > 100))
+    || typeof value?.recognizedText !== 'string'
+    || typeof value?.expectedText !== 'string'
+    || !['azure', 'google', 'openai'].includes(value?.provider)
+  ) {
+    return null;
+  }
+
+  const words = Array.isArray(value.words)
+    ? value.words
+        .filter((word: any) => (
+          typeof word?.word === 'string'
+          && Number.isFinite(Number(word?.accuracyScore))
+          && Number(word.accuracyScore) >= 0
+          && Number(word.accuracyScore) <= 100
+        ))
+        .map((word: any) => ({
+          word: word.word,
+          accuracyScore: Number(word.accuracyScore),
+          errorType: ['None', 'Mispronunciation', 'Omission', 'Insertion', 'Unknown'].includes(word.errorType)
+            ? word.errorType
+            : 'Unknown',
+        }))
+    : [];
+
+  return {
+    overallScore: scores[0],
+    accuracyScore: scores[1],
+    fluencyScore: scores[2],
+    completenessScore: completeness,
+    recognizedText: value.recognizedText,
+    expectedText: value.expectedText,
+    words,
+    provider: value.provider,
+    durationMs: Number.isFinite(Number(value.durationMs)) ? Math.max(0, Number(value.durationMs)) : 0,
+    assessedAt: typeof value.assessedAt === 'string' ? value.assessedAt : new Date().toISOString(),
+  };
+}
+
+async function readFunctionError(error: any): Promise<{ status?: number; errorCode?: string }> {
+  const response = error?.context;
+  if (!response || typeof response.clone !== 'function') return {};
+  try {
+    const payload = await response.clone().json();
+    return {
+      status: response.status,
+      errorCode: typeof payload?.errorCode === 'string' ? payload.errorCode : undefined,
+    };
+  } catch {
+    return { status: response.status };
+  }
 }

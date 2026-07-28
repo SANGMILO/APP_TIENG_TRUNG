@@ -7,27 +7,54 @@ import { ChineseText } from '@/components/chinese';
 import { AudioPlayer } from '@/components/media';
 import { ScoreRing } from '@/components/lesson';
 import { useAudioRecorder } from '@/hooks/useAudioRecorder';
-import { assessPronunciation, savePronunciationAttempt } from '@/services/pronunciation-service';
+import { assessPronunciation } from '@/services/pronunciation-service';
 import { generateFeedback } from '@/services/pronunciation-feedback';
 import { PronunciationAssessmentResult, getScoreLevel, getScoreLevelLabel, getScoreLevelColor } from '@/lib/speech';
 import { LessonExercise } from '@/services/lesson-engine';
 import { FontFamily, FontSize, Spacing, BorderRadius, Shadow, FontWeight } from '@/constants/theme';
+import * as Crypto from 'expo-crypto';
+
+export interface SpeakingPracticeTarget {
+  text: string;
+  pinyin?: string;
+  meaning?: string;
+  audioUrl?: string | null;
+  passingScore?: number;
+  vocabularyId: string;
+}
 
 interface SpeakingExerciseProps {
-  exercise: LessonExercise;
+  exercise?: LessonExercise;
+  practiceTarget?: SpeakingPracticeTarget;
   colors: any;
   onAnswer: (answer: string, isCorrect: boolean) => void;
+  onAssessmentComplete?: (result: PronunciationAssessmentResult) => void;
   onNext: () => void;
 }
 
 const MAX_RETRIES = 3;
 
-export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: SpeakingExerciseProps) {
-  const data = exercise.data as any;
-  const referenceText = data?.text || exercise.correct_answer;
-  const pinyin = data?.pinyin || '';
-  const meaning = data?.meaning || '';
-  const passingScore = data?.passing_score || 60;
+export function SpeakingExercise({
+  exercise,
+  practiceTarget,
+  colors,
+  onAnswer,
+  onAssessmentComplete,
+  onNext,
+}: SpeakingExerciseProps) {
+  if (!exercise && !practiceTarget) {
+    throw new Error('SpeakingExercise requires an exercise or practice target.');
+  }
+
+  const data = exercise?.data as any;
+  const referenceText = practiceTarget?.text || data?.text || exercise?.correct_answer || '';
+  const pinyin = practiceTarget?.pinyin || data?.pinyin || '';
+  const meaning = practiceTarget?.meaning || data?.meaning || '';
+  const audioUrl = practiceTarget?.audioUrl ?? data?.audio_url ?? exercise?.question_audio_url ?? null;
+  const passingScore = practiceTarget?.passingScore || data?.passing_score || 60;
+  const assessmentIds = practiceTarget
+    ? { vocabularyId: practiceTarget.vocabularyId }
+    : { exerciseId: exercise?.id, lessonId: exercise?.lesson_id };
 
   const [result, setResult] = useState<PronunciationAssessmentResult | null>(null);
   const [isAssessing, setIsAssessing] = useState(false);
@@ -38,6 +65,7 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
   const recorder = useAudioRecorder({
     maxDurationMs: referenceText.length > 4 ? 15000 : 8000,
   });
+  const clientAttemptIdRef = useRef(Crypto.randomUUID());
   const pulse = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -76,31 +104,20 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
       const response = await fetch(recorder.recordingUri);
       const audioBlob = await response.blob();
 
-      const clientAttemptId = `${exercise.id}_${Date.now()}_${attempts}`;
-
       const assessResult = await assessPronunciation({
         audio: audioBlob,
         audioUri: recorder.recordingUri,
         referenceText,
+        pinyin,
         locale: 'zh-CN',
-        exerciseId: exercise.id,
-        lessonId: exercise.lesson_id,
-        clientAttemptId,
+        ...assessmentIds,
+        clientAttemptId: clientAttemptIdRef.current,
       });
 
       if (assessResult.success && assessResult.result) {
         setResult(assessResult.result);
         setAttempts(prev => prev + 1);
-
-        // Save to database
-        await savePronunciationAttempt(assessResult.result, {
-          audio: audioBlob,
-          referenceText,
-          locale: 'zh-CN',
-          exerciseId: exercise.id,
-          lessonId: exercise.lesson_id,
-          clientAttemptId,
-        });
+        onAssessmentComplete?.(assessResult.result);
       } else {
         setAssessError(assessResult.error || 'Không thể chấm phát âm.');
       }
@@ -109,7 +126,15 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
     } finally {
       setIsAssessing(false);
     }
-  }, [recorder.recordingUri, exercise, referenceText, attempts]);
+  }, [
+    recorder.recordingUri,
+    referenceText,
+    pinyin,
+    assessmentIds.exerciseId,
+    assessmentIds.lessonId,
+    assessmentIds.vocabularyId,
+    onAssessmentComplete,
+  ]);
 
   const handleContinue = () => {
     const passed = result ? result.overallScore >= passingScore : false;
@@ -126,6 +151,7 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
   const handleRetry = () => {
     setResult(null);
     setAssessError(null);
+    clientAttemptIdRef.current = Crypto.randomUUID();
     recorder.reset();
   };
 
@@ -185,7 +211,7 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
 
         {/* Actions */}
         <View style={styles.actions}>
-          {data?.audio_url ? <AudioPlayer uri={data.audio_url} label="Nghe mẫu" size="sm" /> : null}
+          {audioUrl ? <AudioPlayer uri={audioUrl} label="Nghe mẫu" size="sm" /> : null}
           <TouchableOpacity onPress={recorder.playRecording} style={styles.actionBtn}>
             <Ionicons name="play-circle-outline" size={18} color={colors.primary} />
             <Text style={[styles.actionText, { color: colors.primary }]}>Giọng của tôi</Text>
@@ -220,9 +246,9 @@ export function SpeakingExercise({ exercise, colors, onAnswer, onNext }: Speakin
       <View style={[styles.targetCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <View style={[styles.targetAccent, { backgroundColor: colors.primary }]} />
         <ChineseText characters={referenceText} pinyin={pinyin} translation={meaning} fontSize={56} />
-        {data?.audio_url && (
+        {audioUrl && (
           <View style={styles.listenSection}>
-            <AudioPlayer uri={data.audio_url} label="Nghe mẫu" size="md" showSpeed />
+            <AudioPlayer uri={audioUrl} label="Nghe mẫu" size="md" showSpeed />
           </View>
         )}
       </View>

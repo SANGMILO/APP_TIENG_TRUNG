@@ -27,6 +27,7 @@ export interface PronunciationAssessmentInput {
   audio: ArrayBuffer | Blob;
   audioUri?: string;          // Preferred: raw recording URI for normalization
   referenceText: string;
+  pinyin?: string;
   locale: string;             // e.g. 'zh-CN'
   exerciseId?: string;
   lessonId?: string;
