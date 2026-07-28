@@ -399,6 +399,18 @@ export default function RegisterScreen() {
                   {isGoogleLoading ? 'Đang kết nối...' : 'Đăng ký với Google'}
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.socialBtn, { borderColor: colors.border + '50', opacity: 0.55 }]}
+                disabled
+                accessibilityState={{ disabled: true }}
+                accessibilityLabel="Đăng ký với Apple, sắp có"
+              >
+                <Ionicons name="logo-apple" size={20} color={colors.text} />
+                <Text style={[styles.socialBtnText, { color: colors.text }]}>Đăng ký với Apple</Text>
+                <View style={[styles.soonBadge, { backgroundColor: colors.surfaceElevated }]}>
+                  <Text style={[styles.soonText, { color: colors.textSecondary }]}>Sắp có</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -690,6 +702,17 @@ const styles = StyleSheet.create({
   },
   socialBtnText: {
     fontSize: 14,
+    fontFamily: FontFamily.semibold,
+    fontWeight: FontWeight.semibold,
+  },
+  soonBadge: {
+    marginLeft: 'auto',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 999,
+  },
+  soonText: {
+    fontSize: 10,
     fontFamily: FontFamily.semibold,
     fontWeight: FontWeight.semibold,
   },

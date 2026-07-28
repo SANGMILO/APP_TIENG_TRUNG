@@ -213,6 +213,14 @@ export default function LoginScreen() {
 
             {/* Options row */}
             <View style={styles.optionsRow}>
+              <View style={styles.rememberRow}>
+                <View style={[styles.checkbox, { borderColor: colors.primary, backgroundColor: colors.primary }]}>
+                  <Ionicons name="checkmark" size={14} color="#FFFFFF" />
+                </View>
+                <Text style={[styles.rememberText, { color: colors.textTertiary }]}>
+                  Ghi nhớ đăng nhập
+                </Text>
+              </View>
               <TouchableOpacity
                 style={styles.forgotLink}
                 onPress={() => router.push('/(auth)/forgot-password')}
@@ -268,6 +276,21 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
 
+            <TouchableOpacity
+              style={[
+                styles.socialButton,
+                { backgroundColor: colors.card, borderColor: colors.border, opacity: 0.55 },
+              ]}
+              disabled
+              accessibilityState={{ disabled: true }}
+              accessibilityLabel="Tiếp tục với Apple, sắp có"
+            >
+              <Ionicons name="logo-apple" size={20} color={colors.text} />
+              <Text style={[styles.socialText, { color: colors.text }]}>Tiếp tục với Apple</Text>
+              <View style={[styles.soonBadge, { backgroundColor: colors.surfaceElevated }]}>
+                <Text style={[styles.soonText, { color: colors.textSecondary }]}>Sắp có</Text>
+              </View>
+            </TouchableOpacity>
           </View>
 
           {/* Footer */}
@@ -435,6 +458,25 @@ const styles = StyleSheet.create({
     marginTop: 4, // Stitch mt-sm (small extra)
     marginBottom: 32, // Stitch mb-xl
   },
+  rememberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  rememberText: {
+    fontSize: 12,
+    fontFamily: FontFamily.semibold,
+    fontWeight: FontWeight.semibold,
+    lineHeight: 16,
+  },
   forgotLink: { marginLeft: 'auto' },
   forgotText: {
     fontSize: 12,
@@ -508,6 +550,17 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.semibold,
     fontWeight: FontWeight.semibold,
     lineHeight: 16,
+  },
+  soonBadge: {
+    marginLeft: 'auto',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 999,
+  },
+  soonText: {
+    fontSize: 10,
+    fontFamily: FontFamily.semibold,
+    fontWeight: FontWeight.semibold,
   },
 
   // Footer
