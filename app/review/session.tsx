@@ -1,120 +1,112 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
+import * as Crypto from 'expo-crypto';
 import { router } from 'expo-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
-import { supabase } from '@/lib/supabase';
 import { Button, Card, ProgressBar } from '@/components/ui';
 import { ChineseText } from '@/components/chinese';
 import { AudioPlayer } from '@/components/media';
-import { calculateNextReview, SRSRating, SRSCard } from '@/services/srs-engine';
+import type { SRSRating } from '@/services/srs-engine';
+import {
+  fetchDueReviewWords,
+  ReviewWord,
+  submitVocabularyReview,
+} from '@/services/review-service';
 import { FontSize, Spacing, BorderRadius } from '@/constants/theme';
-
-interface ReviewWord {
-  id: string;
-  vocabulary_id: string;
-  chinese: string;
-  pinyin: string;
-  meaning_vi: string;
-  audio_url: string | null;
-  example_sentence: string | null;
-  example_pinyin: string | null;
-  example_meaning: string | null;
-  difficulty: number;
-  review_count: number;
-  memory_strength: number;
-}
 
 export default function ReviewSessionScreen() {
   const { colors } = useThemeStore();
   const { profile } = useAuthStore();
+  const queryClient = useQueryClient();
   const [words, setWords] = useState<ReviewWord[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [ratingError, setRatingError] = useState('');
   const [completed, setCompleted] = useState(false);
   const [results, setResults] = useState<{ correct: number; total: number }>({ correct: 0, total: 0 });
+  const pendingSubmissionRef = useRef<{
+    wordId: string;
+    rating: SRSRating;
+    submissionId: string;
+  } | null>(null);
 
   useEffect(() => {
-    loadDueWords();
-  }, []);
+    void loadDueWords();
+  }, [profile?.id]);
 
   const loadDueWords = async () => {
-    if (!profile) return;
+    if (!profile) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setLoadError('');
     try {
-      const now = new Date().toISOString();
-      const { data, error } = await supabase
-        .from('user_vocabulary_progress')
-        .select(`
-          id, vocabulary_id, difficulty, review_count, memory_strength,
-          vocabulary:vocabulary_id (chinese, pinyin, meaning_vi, audio_url, example_sentence, example_pinyin, example_meaning)
-        `)
-        .eq('user_id', profile.id)
-        .lte('next_review_at', now)
-        .order('next_review_at')
-        .limit(20);
-
-      if (error) throw error;
-
-      const mapped = (data ?? []).map((item: any) => ({
-        id: item.id,
-        vocabulary_id: item.vocabulary_id,
-        chinese: item.vocabulary.chinese,
-        pinyin: item.vocabulary.pinyin,
-        meaning_vi: item.vocabulary.meaning_vi,
-        audio_url: item.vocabulary.audio_url,
-        example_sentence: item.vocabulary.example_sentence,
-        example_pinyin: item.vocabulary.example_pinyin,
-        example_meaning: item.vocabulary.example_meaning,
-        difficulty: item.difficulty,
-        review_count: item.review_count,
-        memory_strength: item.memory_strength,
-      }));
-
-      setWords(mapped);
-    } catch (err) {
-      console.error('Failed to load review words:', err);
+      setWords(await fetchDueReviewWords(profile.id));
+      setCurrentIndex(0);
+      setCompleted(false);
+      setResults({ correct: 0, total: 0 });
+    } catch (reason: unknown) {
+      setLoadError(getErrorMessage(
+        reason,
+        'Không thể tải các từ đến hạn. Vui lòng thử lại.',
+      ));
     } finally {
       setLoading(false);
     }
   };
 
   const handleRating = async (rating: SRSRating) => {
+    if (saving) return;
     const word = words[currentIndex];
-    const card: SRSCard = {
-      difficulty: word.difficulty,
-      interval_days: 0,
-      review_count: word.review_count,
-      memory_strength: word.memory_strength,
-      state: 'review',
-    };
+    if (!word) return;
 
-    const result = calculateNextReview(card, rating);
+    const pending = pendingSubmissionRef.current;
+    const submission = pending
+      && pending.wordId === word.id
+      && pending.rating === rating
+      ? pending
+      : {
+          wordId: word.id,
+          rating,
+          submissionId: Crypto.randomUUID(),
+        };
+    pendingSubmissionRef.current = submission;
     const isCorrect = rating === 'good' || rating === 'easy';
 
-    // Update SRS in database
-    await supabase
-      .from('user_vocabulary_progress')
-      .update({
-        difficulty: result.difficulty,
-        review_count: result.review_count,
-        memory_strength: result.memory_strength,
-        next_review_at: result.next_review_at.toISOString(),
-        last_reviewed_at: new Date().toISOString(),
-      })
-      .eq('id', word.id);
+    setSaving(true);
+    setRatingError('');
+    try {
+      await submitVocabularyReview(
+        submission.submissionId,
+        word.id,
+        rating,
+      );
+      pendingSubmissionRef.current = null;
+      setResults(prev => ({
+        correct: prev.correct + (isCorrect ? 1 : 0),
+        total: prev.total + 1,
+      }));
+      await queryClient.invalidateQueries({ queryKey: ['review-stats'] });
 
-    setResults(prev => ({
-      correct: prev.correct + (isCorrect ? 1 : 0),
-      total: prev.total + 1,
-    }));
-
-    // Move to next
-    if (currentIndex < words.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-      setRevealed(false);
-    } else {
-      setCompleted(true);
+      if (currentIndex < words.length - 1) {
+        setCurrentIndex(prev => prev + 1);
+        setRevealed(false);
+      } else {
+        setCompleted(true);
+      }
+    } catch (reason: unknown) {
+      setRatingError(getErrorMessage(
+        reason,
+        'Không thể lưu kết quả ôn tập. Vui lòng thử lại.',
+      ));
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -123,6 +115,29 @@ export default function ReviewSessionScreen() {
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.center}>
           <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.center}>
+          <Text style={styles.emptyEmoji}>⚠️</Text>
+          <Text style={[styles.emptyTitle, { color: colors.text }]}>
+            Không thể tải phiên ôn tập
+          </Text>
+          <Text style={[styles.resultText, { color: colors.error }]}>
+            {loadError}
+          </Text>
+          <Button
+            title="Thử lại"
+            variant="primary"
+            size="lg"
+            onPress={() => { void loadDueWords(); }}
+          />
+          <Button title="Quay lại" variant="outline" onPress={() => router.back()} />
         </View>
       </SafeAreaView>
     );
@@ -197,12 +212,29 @@ export default function ReviewSessionScreen() {
 
         {!revealed ? (
           <Button title="Hiện đáp án" variant="outline" size="lg" fullWidth onPress={() => setRevealed(true)} style={{ marginTop: Spacing.xl }} />
+        ) : ratingError && pendingSubmissionRef.current ? (
+          <View style={styles.ratingError}>
+            <Text style={[styles.ratingErrorText, { color: colors.error }]}>
+              {ratingError}
+            </Text>
+            <Button
+              title="Thử lưu lại"
+              variant="primary"
+              size="lg"
+              fullWidth
+              loading={saving}
+              onPress={() => {
+                const pending = pendingSubmissionRef.current;
+                if (pending) void handleRating(pending.rating);
+              }}
+            />
+          </View>
         ) : (
           <View style={styles.ratingRow}>
-            <RatingButton label="Quên" emoji="😰" color={colors.error} onPress={() => handleRating('again')} />
-            <RatingButton label="Khó" emoji="😐" color={colors.warning} onPress={() => handleRating('hard')} />
-            <RatingButton label="Nhớ" emoji="😊" color={colors.success} onPress={() => handleRating('good')} />
-            <RatingButton label="Dễ" emoji="😎" color={colors.info} onPress={() => handleRating('easy')} />
+            <RatingButton label="Quên" emoji="😰" color={colors.error} disabled={saving} onPress={() => { void handleRating('again'); }} />
+            <RatingButton label="Khó" emoji="😐" color={colors.warning} disabled={saving} onPress={() => { void handleRating('hard'); }} />
+            <RatingButton label="Nhớ" emoji="😊" color={colors.success} disabled={saving} onPress={() => { void handleRating('good'); }} />
+            <RatingButton label="Dễ" emoji="😎" color={colors.info} disabled={saving} onPress={() => { void handleRating('easy'); }} />
           </View>
         )}
       </View>
@@ -210,13 +242,31 @@ export default function ReviewSessionScreen() {
   );
 }
 
-function RatingButton({ label, emoji, color, onPress }: { label: string; emoji: string; color: string; onPress: () => void }) {
+function RatingButton({ label, emoji, color, disabled, onPress }: { label: string; emoji: string; color: string; disabled: boolean; onPress: () => void }) {
   return (
-    <TouchableOpacity style={[styles.ratingBtn, { borderColor: color }]} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={[styles.ratingBtn, { borderColor: color, opacity: disabled ? 0.5 : 1 }]}
+      onPress={onPress}
+      disabled={disabled}
+      activeOpacity={0.7}
+    >
       <Text style={styles.ratingEmoji}>{emoji}</Text>
       <Text style={[styles.ratingLabel, { color }]}>{label}</Text>
     </TouchableOpacity>
   );
+}
+
+function getErrorMessage(reason: unknown, fallback: string) {
+  if (
+    typeof reason === 'object'
+    && reason !== null
+    && 'message' in reason
+    && typeof reason.message === 'string'
+    && reason.message.trim()
+  ) {
+    return reason.message;
+  }
+  return fallback;
 }
 
 const styles = StyleSheet.create({
@@ -240,4 +290,6 @@ const styles = StyleSheet.create({
   ratingBtn: { flex: 1, alignItems: 'center', paddingVertical: Spacing.md, borderRadius: BorderRadius.lg, borderWidth: 1.5, gap: 2 },
   ratingEmoji: { fontSize: 20 },
   ratingLabel: { fontSize: FontSize.xs, fontWeight: '600' },
+  ratingError: { marginTop: Spacing.xl, gap: Spacing.md },
+  ratingErrorText: { fontSize: FontSize.sm, textAlign: 'center' },
 });

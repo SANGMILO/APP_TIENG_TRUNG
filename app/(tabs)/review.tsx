@@ -30,25 +30,27 @@ export default function ReviewScreen() {
 
   // ─── Data Query (preserved exactly) ───
   const { data: stats, isLoading, isError, refetch } = useQuery({
-    queryKey: ['review-stats'],
+    queryKey: ['review-stats', profile?.id],
     queryFn: async () => {
-      if (!profile) return { due: 0, learning: 0, mastered: 0, mistakes: 0 };
+      if (!profile) return { due: 0, learning: 0, mastered: 0, mistakes: 0, total: 0 };
       const now = new Date().toISOString();
       const { count: due, error: dueError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).lte('next_review_at', now);
       if (dueError) throw dueError;
-      const { count: learning, error: learningError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).gt('review_count', 0).lt('memory_strength', 0.8);
+      const { count: learning, error: learningError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).in('state', ['new', 'learning', 'review']);
       if (learningError) throw learningError;
-      const { count: mastered, error: masteredError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).gte('memory_strength', 0.8);
+      const { count: mastered, error: masteredError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).eq('state', 'mastered');
       if (masteredError) throw masteredError;
+      const { count: total, error: totalError } = await supabase.from('user_vocabulary_progress').select('*', { count: 'exact', head: true }).eq('user_id', profile.id);
+      if (totalError) throw totalError;
       const { count: mistakes, error: mistakesError } = await supabase.from('mistakes').select('*', { count: 'exact', head: true }).eq('user_id', profile.id).eq('reviewed', false);
       if (mistakesError) throw mistakesError;
-      return { due: due ?? 0, learning: learning ?? 0, mastered: mastered ?? 0, mistakes: mistakes ?? 0 };
+      return { due: due ?? 0, learning: learning ?? 0, mastered: mastered ?? 0, mistakes: mistakes ?? 0, total: total ?? 0 };
     },
     enabled: !!profile,
   });
 
   // ─── Derived state ───
-  const total = (stats?.due ?? 0) + (stats?.learning ?? 0) + (stats?.mastered ?? 0);
+  const total = stats?.total ?? 0;
   const duePercent = total > 0 ? Math.round(((stats?.due ?? 0) / total) * 100) : 0;
   const learningPercent = total > 0 ? Math.round(((stats?.learning ?? 0) / total) * 100) : 0;
   const masteredPercent = total > 0 ? Math.round(((stats?.mastered ?? 0) / total) * 100) : 0;

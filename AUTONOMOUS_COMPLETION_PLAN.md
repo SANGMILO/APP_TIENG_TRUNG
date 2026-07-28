@@ -136,16 +136,47 @@ Stitch migration remains the visual source of truth.
   - Supabase CLI emitted a non-fatal pg-delta temporary certificate cache warning
     after migration apply; migration history and a fresh remote schema dump
     independently confirmed the hosted schema
-- Commit: pending
+- Commit: `c4d3c56` (`fix: make video learning authoritative`)
 
 ### Phase 3 — Review SRS and mistake practice
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: pending audit
+- Status: COMPLETE
+- Files:
+  - `app/(tabs)/review.tsx`
+  - `app/review/session.tsx`
+  - `app/review/mistakes.tsx`
+  - `services/review-service.ts`
+  - `services/srs-engine.ts`
+  - `__tests__/authoritative-review-srs.test.ts`
+  - `__tests__/review-service.test.ts`
+  - `__tests__/srs-engine.test.ts`
+  - `supabase/tests/authoritative_review_srs.test.sql`
+- Migrations:
+  - `20260729030000_authoritative_review_srs.sql`
+- Deployments:
+  - Migration `20260729030000` applied to the linked Supabase project
+  - Remote schema independently dumped and verified; temporary dump removed
+- Validation:
+  - Local database recreated from all migrations successfully
+  - pgTAP: 5 files / 118 assertions passed
+  - TypeScript: 0 errors
+  - Jest: 21 suites / 264 tests passed
+  - Expo Web: 48 routes exported
+  - Hosted migration list: local and remote matched through `20260729030000`
+- Result:
+  - Existing SRS rules now persist bounded interval and explicit card state
+  - Existing reviewed cards are backfilled from their real persisted due dates
+  - Ratings are caller-owned, due-validated, atomic, and idempotent on retry
+  - Direct client mutation of vocabulary progress is revoked
+  - Review load/update failures are visible and retryable
+  - Review statistics use persisted state rather than inferred memory thresholds
+  - Mistakes now provide real typed-answer practice with server-side checking
+  - Incorrect practice remains unresolved; a correct answer marks the mistake
+    reviewed, and every practice submission is auditable/idempotent
+- Blockers:
+  - Supabase CLI emitted the same non-fatal pg-delta temporary certificate cache
+    warning after migration apply; matching migration history and a fresh remote
+    schema dump independently confirmed the hosted schema
 - Commit: pending
 
 ### Phase 4 — Auth and OAuth finishing

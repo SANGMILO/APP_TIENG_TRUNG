@@ -129,6 +129,19 @@ describe('SRS Engine', () => {
       }
       expect(card.difficulty).toBeLessThanOrEqual(3.0);
     });
+
+    it('keeps very mature review intervals within the persisted bound', () => {
+      const result = calculateNextReview({
+        difficulty: 3,
+        interval_days: 30000,
+        review_count: 100,
+        memory_strength: 1,
+        state: 'mastered',
+      }, 'easy', now);
+
+      expect(result.interval_days).toBe(36500);
+      expect(result.state).toBe('mastered');
+    });
   });
 
   describe('isDue', () => {

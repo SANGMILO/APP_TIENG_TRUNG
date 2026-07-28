@@ -29,6 +29,7 @@ const MAX_EASE = 3.0;
 const GRADUATING_INTERVAL = 1;   // 1 day
 const EASY_INTERVAL = 4;          // 4 days
 const MASTERED_THRESHOLD = 21;    // 21 days = mastered
+const MAX_INTERVAL_DAYS = 36500;  // Keep persisted dates/integers bounded
 
 /**
  * Calculate next review based on rating
@@ -59,7 +60,7 @@ export function calculateNextReview(card: SRSCard, rating: SRSRating, now: Date 
       if (interval_days === 0) {
         interval_days = GRADUATING_INTERVAL;
       } else {
-        interval_days = Math.ceil(interval_days * 1.2);
+        interval_days = Math.min(MAX_INTERVAL_DAYS, Math.ceil(interval_days * 1.2));
       }
       memory_strength = Math.min(1, memory_strength + 0.1);
       break;
@@ -69,7 +70,7 @@ export function calculateNextReview(card: SRSCard, rating: SRSRating, now: Date 
       if (interval_days === 0) {
         interval_days = GRADUATING_INTERVAL;
       } else {
-        interval_days = Math.ceil(interval_days * difficulty);
+        interval_days = Math.min(MAX_INTERVAL_DAYS, Math.ceil(interval_days * difficulty));
       }
       memory_strength = Math.min(1, memory_strength + 0.2);
       break;
@@ -80,7 +81,10 @@ export function calculateNextReview(card: SRSCard, rating: SRSRating, now: Date 
       if (interval_days === 0) {
         interval_days = EASY_INTERVAL;
       } else {
-        interval_days = Math.ceil(interval_days * difficulty * 1.3);
+        interval_days = Math.min(
+          MAX_INTERVAL_DAYS,
+          Math.ceil(interval_days * difficulty * 1.3),
+        );
       }
       memory_strength = Math.min(1, memory_strength + 0.3);
       break;
