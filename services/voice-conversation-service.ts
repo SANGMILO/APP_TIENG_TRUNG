@@ -17,7 +17,8 @@ export async function createVoiceSession(config: VoiceSessionConfig): Promise<st
   if (!user) throw new Error('Not authenticated');
 
   // Check daily limit
-  const { data: limitOk } = await supabase.rpc('check_voice_daily_limit', { p_user_id: user.id });
+  const { data: limitOk, error: limitError } = await supabase.rpc('check_voice_daily_limit', { p_user_id: user.id });
+  if (limitError) throw limitError;
   if (!limitOk) throw new Error('Daily voice limit reached');
 
   const { data, error } = await supabase
@@ -37,30 +38,22 @@ export async function createVoiceSession(config: VoiceSessionConfig): Promise<st
   return data.id;
 }
 
-export async function endVoiceSession(
-  sessionId: string,
-  totalDurationMs: number,
-  userSpeechMs: number,
-  aiSpeechMs: number,
-  turnCount: number
-): Promise<VoiceSessionSummary> {
-  const { data, error } = await supabase.rpc('complete_voice_session', {
+export async function endVoiceSession(sessionId: string): Promise<VoiceSessionSummary> {
+  const { data, error } = await supabase.rpc('complete_voice_session_authoritative', {
     p_session_id: sessionId,
-    p_total_duration_ms: totalDurationMs,
-    p_user_speech_ms: userSpeechMs,
-    p_ai_speech_ms: aiSpeechMs,
-    p_turn_count: turnCount,
   });
+  if (error) throw error;
+  if (!data || data.sessionId !== sessionId) throw new Error('Invalid voice summary');
 
   return {
     sessionId,
-    totalDurationMs,
-    userSpeechMs,
-    aiSpeechMs,
-    turnCount,
-    newWordsCount: 0, // Could be calculated from conversation
-    correctionsCount: 0,
-    xpEarned: userSpeechMs >= 30000 && turnCount >= 3 ? 10 : 0,
+    totalDurationMs: safeCount(data.totalDurationMs),
+    userSpeechMs: safeCount(data.userSpeechMs),
+    aiSpeechMs: safeCount(data.aiSpeechMs),
+    turnCount: safeCount(data.turnCount),
+    newWordsCount: safeCount(data.newWordsCount),
+    correctionsCount: safeCount(data.correctionsCount),
+    xpEarned: safeCount(data.xpEarned),
   };
 }
 
@@ -74,6 +67,9 @@ export interface VoiceTurnResult {
   aiResponse?: TutorResponse;
   aiText?: string;
   ttsAudioUri?: string;
+  turnId?: string;
+  userAudioDurationMs?: number;
+  assistantAudioDurationMs?: number;
   error?: string;
   errorCode?: string;
   latency: {
@@ -99,7 +95,7 @@ export async function executeVoiceTurn(
 
   // Step 1: STT (Speech-to-Text)
   const sttStart = Date.now();
-  const sttResult = await transcribeAudio(audioUri);
+  const sttResult = await transcribeAudio(audioUri, sessionId, clientTurnId);
   const sttLatency = Date.now() - sttStart;
 
   if (!sttResult.success) {
@@ -111,11 +107,13 @@ export async function executeVoiceTurn(
     };
   }
 
-  if (!sttResult.text?.trim()) {
+  if (!sttResult.text?.trim() || !sttResult.turnId) {
     return {
       success: false,
-      error: 'Mình chưa nghe rõ. Hãy thử nói lại nhé.',
-      errorCode: 'NO_SPEECH',
+      error: sttResult.text?.trim()
+        ? 'Không thể lưu lượt nói. Hãy thử lại nhé.'
+        : 'Mình chưa nghe rõ. Hãy thử nói lại nhé.',
+      errorCode: sttResult.text?.trim() ? 'TURN_SAVE_FAILED' : 'NO_SPEECH',
       latency: { sttMs: sttLatency, aiMs: 0, ttsMs: 0, totalMs: Date.now() - turnStart },
     };
   }
@@ -125,7 +123,7 @@ export async function executeVoiceTurn(
   const aiResult = await sendToAITutor(sttResult.text, conversationId, mode, clientTurnId);
   const aiLatency = Date.now() - aiStart;
 
-  if (!aiResult.success) {
+  if (!aiResult.success || !aiResult.assistantMessageId) {
     return {
       success: false,
       transcript: sttResult.text,
@@ -138,18 +136,34 @@ export async function executeVoiceTurn(
   // Step 3: TTS for AI response
   const ttsStart = Date.now();
   const chineseText = aiResult.structured?.reply?.chinese || aiResult.text || '';
-  const ttsResult = await synthesizeSpeech(chineseText);
+  const ttsResult = await synthesizeSpeech(
+    sessionId,
+    sttResult.turnId,
+    aiResult.assistantMessageId,
+  );
   const ttsLatency = Date.now() - ttsStart;
 
-  // Save voice turn
-  await saveVoiceTurn(sessionId, sttResult.text, chineseText, sttLatency, aiLatency, ttsLatency, sttResult.durationMs);
+  if (!ttsResult.success) {
+    return {
+      success: false,
+      transcript: sttResult.text,
+      aiResponse: aiResult.structured,
+      aiText: chineseText,
+      error: ttsResult.error,
+      errorCode: ttsResult.errorCode,
+      latency: { sttMs: sttLatency, aiMs: aiLatency, ttsMs: ttsLatency, totalMs: Date.now() - turnStart },
+    };
+  }
 
   return {
     success: true,
     transcript: sttResult.text,
     aiResponse: aiResult.structured,
     aiText: chineseText,
-    ttsAudioUri: ttsResult?.audioUri,
+    ttsAudioUri: ttsResult.audioUri,
+    turnId: sttResult.turnId,
+    userAudioDurationMs: sttResult.durationMs,
+    assistantAudioDurationMs: ttsResult.durationMs,
     latency: {
       sttMs: sttLatency,
       aiMs: aiLatency,
@@ -166,12 +180,17 @@ export async function executeVoiceTurn(
 interface STTFunctionResult {
   success: boolean;
   text?: string;
+  turnId?: string;
   durationMs: number;
   error?: string;
   errorCode?: string;
 }
 
-async function transcribeAudio(audioUri: string): Promise<STTFunctionResult> {
+async function transcribeAudio(
+  audioUri: string,
+  sessionId: string,
+  clientTurnId: string,
+): Promise<STTFunctionResult> {
   try {
     const response = await fetch(audioUri);
     const blob = await response.blob();
@@ -179,7 +198,7 @@ async function transcribeAudio(audioUri: string): Promise<STTFunctionResult> {
     const base64 = arrayBufferToBase64(buffer);
 
     const { data, error } = await supabase.functions.invoke('voice-transcribe', {
-      body: { audio: base64, language: 'zh' },
+      body: { audio: base64, language: 'zh', sessionId, clientTurnId },
     });
 
     if (error) {
@@ -192,7 +211,8 @@ async function transcribeAudio(audioUri: string): Promise<STTFunctionResult> {
     return {
       success: true,
       text: data?.text || '',
-      durationMs: data?.durationMs || 0,
+      turnId: typeof data?.turnId === 'string' ? data.turnId : undefined,
+      durationMs: safeCount(data?.durationMs),
     };
   } catch (err) {
     return { success: false, durationMs: 0, error: 'Lỗi kết nối.', errorCode: 'NETWORK_ERROR' };
@@ -207,6 +227,7 @@ interface AIFunctionResult {
   success: boolean;
   text?: string;
   structured?: TutorResponse;
+  assistantMessageId?: string;
   error?: string;
 }
 
@@ -225,10 +246,14 @@ async function sendToAITutor(transcript: string, conversationId: string, mode: s
     if (!data?.assistantMessage) return { success: false, error: 'Không có phản hồi.' };
 
     const msg = data.assistantMessage;
+    if (typeof msg.id !== 'string' || !msg.structured_data?.reply?.chinese) {
+      return { success: false, error: 'Phản hồi AI không hợp lệ.' };
+    }
     return {
       success: true,
       text: msg.content,
       structured: msg.structured_data,
+      assistantMessageId: msg.id,
     };
   } catch {
     return { success: false, error: 'Lỗi kết nối AI.' };
@@ -240,55 +265,35 @@ async function sendToAITutor(transcript: string, conversationId: string, mode: s
 // ============================================
 
 interface TTSFunctionResult {
+  success: boolean;
   audioUri?: string;
+  durationMs?: number;
+  error?: string;
+  errorCode?: string;
 }
 
-async function synthesizeSpeech(text: string): Promise<TTSFunctionResult | null> {
-  if (!text.trim()) return null;
-
+async function synthesizeSpeech(
+  sessionId: string,
+  turnId: string,
+  assistantMessageId: string,
+): Promise<TTSFunctionResult> {
   try {
     const { data, error } = await supabase.functions.invoke('voice-synthesize', {
-      body: { text, language: 'zh-CN' },
+      body: { sessionId, turnId, assistantMessageId, language: 'zh-CN' },
     });
 
-    if (error || !data?.audio) return null;
+    if (error || !data?.audio) {
+      return { success: false, error: 'Không thể tạo giọng nói AI.', errorCode: 'TTS_ERROR' };
+    }
 
-    // Convert base64 audio to local URI for playback
-    // In production: use blob URL or temp file
-    return { audioUri: `data:audio/mp3;base64,${data.audio}` };
+    return {
+      success: true,
+      audioUri: `data:audio/mp3;base64,${data.audio}`,
+      durationMs: safeCount(data.durationMs),
+    };
   } catch {
-    return null;
+    return { success: false, error: 'Lỗi kết nối giọng nói AI.', errorCode: 'NETWORK_ERROR' };
   }
-}
-
-// ============================================
-// SAVE TURN
-// ============================================
-
-async function saveVoiceTurn(
-  sessionId: string,
-  userTranscript: string,
-  assistantTranscript: string,
-  sttLatencyMs: number,
-  aiLatencyMs: number,
-  ttsLatencyMs: number,
-  userAudioDurationMs: number
-) {
-  const user = (await supabase.auth.getUser()).data.user;
-  if (!user) return;
-
-  await supabase.from('voice_turns').insert({
-    session_id: sessionId,
-    user_id: user.id,
-    user_transcript: userTranscript,
-    assistant_transcript: assistantTranscript,
-    stt_latency_ms: sttLatencyMs,
-    ai_latency_ms: aiLatencyMs,
-    tts_latency_ms: ttsLatencyMs,
-    total_latency_ms: sttLatencyMs + aiLatencyMs + ttsLatencyMs,
-    user_audio_duration_ms: userAudioDurationMs,
-    status: 'completed',
-  });
 }
 
 // ============================================
@@ -302,4 +307,9 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
     binary += String.fromCharCode(bytes[i]);
   }
   return btoa(binary);
+}
+
+function safeCount(value: unknown): number {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(0, Math.round(parsed)) : 0;
 }

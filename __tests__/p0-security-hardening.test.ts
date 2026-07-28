@@ -131,16 +131,22 @@ describe('AI Tutor conversation authorization', () => {
     });
   });
 
-  it('is enforced before idempotency, history, insert, and metadata operations', () => {
+  it('is enforced before reservation, history, and completion operations', () => {
     const authorizationIndex = edgeFunction.indexOf(
       'const authorization = authorizeAiConversation',
     );
+    const protectedOperationMarkers = [
+      "supabase.rpc('begin_ai_tutor_message'",
+      'const context = await buildContext',
+      "'complete_ai_tutor_message'",
+    ];
 
     expect(authorizationIndex).toBeGreaterThan(-1);
-    expect(authorizationIndex).toBeLessThan(edgeFunction.indexOf('// Check idempotency'));
-    expect(authorizationIndex).toBeLessThan(edgeFunction.indexOf('// Save user message'));
-    expect(authorizationIndex).toBeLessThan(edgeFunction.indexOf('// Build context'));
-    expect(authorizationIndex).toBeLessThan(edgeFunction.indexOf('// Update conversation'));
+    protectedOperationMarkers.forEach((marker) => {
+      const operationIndex = edgeFunction.indexOf(marker);
+      expect(operationIndex).toBeGreaterThan(-1);
+      expect(authorizationIndex).toBeLessThan(operationIndex);
+    });
     expect(edgeFunction).toContain(".eq('user_id', user.id)");
   });
 });

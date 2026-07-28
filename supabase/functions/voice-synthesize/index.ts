@@ -35,8 +35,47 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    if (!body.text || body.text.length > MAX_TEXT_LENGTH) {
-      return corsResponse({ error: 'Invalid text' }, 400);
+    if (
+      typeof body.sessionId !== 'string' ||
+      typeof body.turnId !== 'string' ||
+      typeof body.assistantMessageId !== 'string'
+    ) {
+      return corsResponse({ error: 'Missing voice turn fields', errorCode: 'INVALID_REQUEST' }, 400);
+    }
+
+    const { data: session, error: sessionError } = await supabase
+      .from('voice_sessions')
+      .select('id, user_id, conversation_id, status')
+      .eq('id', body.sessionId)
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (sessionError || !session || session.status !== 'active') {
+      return corsResponse({ error: 'Voice session unavailable', errorCode: 'SESSION_FORBIDDEN' }, 403);
+    }
+
+    const { data: turn, error: turnError } = await supabase
+      .from('voice_turns')
+      .select('id')
+      .eq('id', body.turnId)
+      .eq('session_id', body.sessionId)
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (turnError || !turn) {
+      return corsResponse({ error: 'Voice turn unavailable', errorCode: 'TURN_FORBIDDEN' }, 403);
+    }
+
+    const { data: assistantMessage, error: messageError } = await supabase
+      .from('ai_messages')
+      .select('id, conversation_id, structured_data')
+      .eq('id', body.assistantMessageId)
+      .eq('conversation_id', session.conversation_id)
+      .eq('user_id', user.id)
+      .eq('role', 'assistant')
+      .eq('status', 'completed')
+      .maybeSingle();
+    const text = assistantMessage?.structured_data?.reply?.chinese;
+    if (messageError || !assistantMessage || typeof text !== 'string' || !text.trim() || text.length > MAX_TEXT_LENGTH) {
+      return corsResponse({ error: 'Invalid tutor response', errorCode: 'MESSAGE_FORBIDDEN' }, 403);
     }
 
     // Call OpenAI TTS
@@ -51,7 +90,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: OPENAI_TTS_MODEL,
-        input: body.text,
+        input: text,
         voice,
         speed: Math.max(0.5, Math.min(2.0, speed)),
         response_format: 'mp3',
@@ -66,17 +105,39 @@ serve(async (req) => {
     // Get audio as base64
     const audioBuffer = await response.arrayBuffer();
     const base64Audio = uint8ArrayToBase64(new Uint8Array(audioBuffer));
+    const durationMs = Math.max(0, Math.min(60000, Math.round(text.length * 150)));
+
+    const { error: turnSaveError } = await supabase
+      .from('voice_turns')
+      .update({
+        assistant_message_id: assistantMessage.id,
+        assistant_transcript: text,
+        tts_provider: 'openai',
+        tts_model: OPENAI_TTS_MODEL,
+        tts_voice: voice,
+        assistant_audio_duration_ms: durationMs,
+        status: 'completed',
+      })
+      .eq('id', turn.id)
+      .eq('user_id', user.id);
+    if (turnSaveError) {
+      return corsResponse({ error: 'Voice turn could not be saved', errorCode: 'TURN_SAVE_FAILED' }, 500);
+    }
 
     // Track usage
-    await supabase.from('voice_usage').insert({
+    const { error: usageError } = await supabase.from('voice_usage').insert({
       user_id: user.id,
+      session_id: body.sessionId,
       service: 'tts',
       provider: 'openai',
       model: OPENAI_TTS_MODEL,
-      characters_processed: body.text.length,
-      output_duration_ms: Math.round(body.text.length * 150), // rough estimate
+      characters_processed: text.length,
+      output_duration_ms: durationMs,
       status: 'success',
     });
+    if (usageError) {
+      console.error('Voice synthesis usage save failed');
+    }
 
     return corsResponse({
       audio: base64Audio,
@@ -84,9 +145,11 @@ serve(async (req) => {
       provider: 'openai',
       model: OPENAI_TTS_MODEL,
       voice,
+      durationMs,
+      turnId: turn.id,
     });
-  } catch (err: any) {
-    console.error('Voice synthesize error:', err);
+  } catch {
+    console.error('Voice synthesis request failed');
     return corsResponse({ error: 'Server error' }, 500);
   }
 });

@@ -7,6 +7,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
 import { authorizeAiConversation } from '../_shared/ai-conversation-authorization.ts';
+import { normalizeTutorResponse } from '../_shared/tutor-response.ts';
 
 const AI_PROVIDER = Deno.env.get('AI_PROVIDER') || 'openai';
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
@@ -14,16 +15,16 @@ const OPENAI_MODEL = Deno.env.get('OPENAI_MODEL') || 'gpt-4o-mini';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-const DAILY_LIMIT = 20;
 const MAX_CONTEXT_MESSAGES = 10;
 const MAX_MESSAGE_LENGTH = 3000;
 const PROMPT_VERSION = 'tutor_v1';
 
 interface RequestBody {
-  conversationId: string;
-  message: string;
-  mode: string;
-  clientMessageId: string;
+  action?: 'capabilities';
+  conversationId?: string;
+  message?: string;
+  mode?: string;
+  clientMessageId?: string;
 }
 
 serve(async (req) => {
@@ -31,27 +32,41 @@ serve(async (req) => {
     return corsResponse(null, 204);
   }
 
+  let supabase: ReturnType<typeof createClient> | null = null;
+  let userId: string | null = null;
+  let reservedUserMessageId: string | null = null;
+
   try {
     // Auth
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) return corsResponse({ error: 'Unauthorized' }, 401);
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     if (authError || !user) return corsResponse({ error: 'Unauthorized' }, 401);
+    userId = user.id;
 
-    // Check provider configured
+    // Parse request
+    const body = await req.json() as RequestBody;
+    if (body.action === 'capabilities') {
+      return corsResponse({
+        textChatConfigured: Boolean(OPENAI_API_KEY),
+        voiceConfigured: Boolean(OPENAI_API_KEY),
+      });
+    }
+
+    // The capability check above remains available even when no provider key
+    // exists, allowing clients to hide unavailable actions honestly.
     if (!OPENAI_API_KEY) {
       return corsResponse({ error: 'AI Tutor not configured', errorCode: 'NOT_CONFIGURED' }, 503);
     }
 
-    // Parse request
-    const body: RequestBody = await req.json();
     if (!body.conversationId || !body.message || !body.clientMessageId) {
       return corsResponse({ error: 'Missing required fields' }, 400);
     }
-    if (body.message.length > MAX_MESSAGE_LENGTH) {
+    const trimmedMessage = body.message.trim();
+    if (!trimmedMessage || body.message.length > MAX_MESSAGE_LENGTH) {
       return corsResponse({ error: 'Message too long' }, 400);
     }
 
@@ -64,7 +79,7 @@ serve(async (req) => {
       .eq('user_id', user.id)
       .maybeSingle();
 
-    const authorization = authorizeAiConversation(user.id, body.mode, conversation);
+    const authorization = authorizeAiConversation(user.id, body.mode ?? '', conversation);
     if (conversationError) {
       return corsResponse({
         error: 'Conversation unavailable',
@@ -78,45 +93,39 @@ serve(async (req) => {
       }, authorization.status);
     }
 
-    // Check daily limit
-    const limitOk = await checkDailyLimit(supabase, user.id);
-    if (!limitOk) {
-      return corsResponse({ error: 'daily limit reached', errorCode: 'DAILY_LIMIT' }, 429);
-    }
-
-    // Check idempotency
-    const { data: existingMsg } = await supabase
-      .from('ai_messages')
-      .select('id')
-      .eq('conversation_id', body.conversationId)
-      .eq('user_id', user.id)
-      .eq('client_message_id', body.clientMessageId)
-      .eq('role', 'user')
-      .single();
-
-    if (existingMsg) {
-      // Already processed, return existing assistant response
-      const { data: assistantMsg } = await supabase
-        .from('ai_messages')
-        .select('*')
-        .eq('conversation_id', body.conversationId)
-        .eq('user_id', user.id)
-        .eq('role', 'assistant')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-      return corsResponse({ assistantMessage: assistantMsg });
-    }
-
-    // Save user message
-    await supabase.from('ai_messages').insert({
-      conversation_id: body.conversationId,
-      user_id: user.id,
-      role: 'user',
-      content: body.message,
-      client_message_id: body.clientMessageId,
-      status: 'completed',
+    // Atomically reserve this exact client message and its daily quota slot.
+    // Retries reuse the same user message and can only return its linked reply.
+    const { data: reservation, error: reservationError } = await supabase.rpc('begin_ai_tutor_message', {
+      p_user_id: user.id,
+      p_conversation_id: body.conversationId,
+      p_client_message_id: body.clientMessageId,
+      p_content: trimmedMessage,
     });
+    if (reservationError) throw new Error('message_reservation_failed');
+
+    if (reservation?.state === 'completed' && reservation.assistantMessage) {
+      return corsResponse({ assistantMessage: reservation.assistantMessage });
+    }
+    if (reservation?.state === 'daily_limit') {
+      return corsResponse({
+        error: 'daily limit reached',
+        errorCode: 'DAILY_LIMIT',
+        usage: { used: reservation.used, limit: reservation.limit },
+      }, 429);
+    }
+    if (reservation?.state === 'forbidden') {
+      return corsResponse({ error: 'Conversation unavailable', errorCode: 'CONVERSATION_FORBIDDEN' }, 403);
+    }
+    if (reservation?.state === 'idempotency_conflict') {
+      return corsResponse({ error: 'Message retry conflict', errorCode: 'IDEMPOTENCY_CONFLICT' }, 409);
+    }
+    if (reservation?.state === 'in_progress') {
+      return corsResponse({ error: 'Message is still processing', errorCode: 'REQUEST_IN_PROGRESS' }, 409);
+    }
+    if (reservation?.state !== 'process' || !reservation.userMessageId) {
+      return corsResponse({ error: 'Invalid message', errorCode: 'INVALID_REQUEST' }, 400);
+    }
+    reservedUserMessageId = reservation.userMessageId;
 
     // Build context
     const context = await buildContext(
@@ -124,6 +133,7 @@ serve(async (req) => {
       user.id,
       body.conversationId,
       authorization.mode,
+      trimmedMessage,
     );
 
     // Call AI provider
@@ -131,62 +141,74 @@ serve(async (req) => {
     const aiResult = await callOpenAI(context.messages);
     const latencyMs = Date.now() - startTime;
 
-    // Parse structured response
+    // Model output is untrusted. Only the normalized schema may be persisted
+    // or returned to rendering clients.
     let structuredData = null;
     try {
-      const parsed = JSON.parse(extractJson(aiResult.content));
-      if (parsed.reply && parsed.reply.chinese) {
-        structuredData = parsed;
-      }
+      structuredData = normalizeTutorResponse(JSON.parse(extractJson(aiResult.content)));
     } catch {}
+    if (!structuredData) {
+      await supabase.rpc('fail_ai_tutor_message', {
+        p_user_id: user.id,
+        p_user_message_id: reservedUserMessageId,
+      });
+      reservedUserMessageId = null;
+      return corsResponse({
+        error: 'AI response did not match the tutor schema',
+        errorCode: 'MALFORMED_RESPONSE',
+      }, 502);
+    }
 
-    // Save assistant message
-    const { data: assistantMessage, error: saveError } = await supabase
+    const normalizedContent = JSON.stringify(structuredData);
+    const { data: assistantMessage, error: completionError } = await supabase.rpc(
+      'complete_ai_tutor_message',
+      {
+        p_user_id: user.id,
+        p_user_message_id: reservedUserMessageId,
+        p_content: normalizedContent,
+        p_structured_data: structuredData,
+        p_provider: AI_PROVIDER,
+        p_model: OPENAI_MODEL,
+        p_input_tokens: aiResult.inputTokens,
+        p_output_tokens: aiResult.outputTokens,
+        p_latency_ms: latencyMs,
+        p_prompt_version: PROMPT_VERSION,
+      },
+    );
+    if (completionError || !assistantMessage) {
+      throw new Error('message_completion_failed');
+    }
+    reservedUserMessageId = null;
+
+    const { count: usedToday } = await supabase
       .from('ai_messages')
-      .insert({
-        conversation_id: body.conversationId,
-        user_id: user.id,
-        role: 'assistant',
-        content: aiResult.content,
-        structured_data: structuredData,
-        provider: AI_PROVIDER,
-        model: OPENAI_MODEL,
-        input_tokens: aiResult.inputTokens,
-        output_tokens: aiResult.outputTokens,
-        latency_ms: latencyMs,
-        status: 'completed',
-      })
-      .select()
-      .single();
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .eq('role', 'user')
+      .eq('status', 'completed')
+      .gte('created_at', new Date(new Date().setUTCHours(0, 0, 0, 0)).toISOString());
 
-    // Update conversation
-    await supabase
-      .from('ai_conversations')
-      .update({
-        message_count: context.messageCount + 2,
-        last_message_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', body.conversationId)
-      .eq('user_id', user.id);
+    const { data: settings } = await supabase
+      .from('ai_user_settings')
+      .select('daily_message_limit')
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-    // Track usage
-    await supabase.from('ai_usage').insert({
-      user_id: user.id,
-      conversation_id: body.conversationId,
-      provider: AI_PROVIDER,
-      model: OPENAI_MODEL,
-      input_tokens: aiResult.inputTokens,
-      output_tokens: aiResult.outputTokens,
-      total_tokens: aiResult.inputTokens + aiResult.outputTokens,
-      latency_ms: latencyMs,
-      status: 'success',
-      prompt_version: PROMPT_VERSION,
+    return corsResponse({
+      assistantMessage,
+      usage: {
+        used: usedToday ?? 0,
+        limit: settings?.daily_message_limit ?? 20,
+      },
     });
-
-    return corsResponse({ assistantMessage });
   } catch (err: any) {
-    console.error('AI Tutor error:', err);
+    if (supabase && userId && reservedUserMessageId) {
+      await supabase.rpc('fail_ai_tutor_message', {
+        p_user_id: userId,
+        p_user_message_id: reservedUserMessageId,
+      });
+    }
+    console.error('AI Tutor request failed:', err instanceof Error ? err.message : 'unknown_error');
     return corsResponse({ error: 'Internal server error', errorCode: 'SERVER_ERROR' }, 500);
   }
 });
@@ -195,7 +217,13 @@ serve(async (req) => {
 // CONTEXT BUILDING
 // ============================================
 
-async function buildContext(supabase: any, userId: string, conversationId: string, mode: string) {
+async function buildContext(
+  supabase: any,
+  userId: string,
+  conversationId: string,
+  mode: string,
+  currentMessage: string,
+) {
   // Get user profile for level/context
   const { data: profile } = await supabase
     .from('profiles')
@@ -243,6 +271,7 @@ async function buildContext(supabase: any, userId: string, conversationId: strin
   const messages = [
     { role: 'system', content: systemPrompt },
     ...(history || []).reverse().map((m: any) => ({ role: m.role, content: m.content })),
+    { role: 'user', content: currentMessage },
   ];
 
   return { messages, messageCount: count || 0 };
@@ -288,8 +317,7 @@ async function callOpenAI(messages: any[]): Promise<{ content: string; inputToke
   });
 
   if (!response.ok) {
-    const err = await response.text();
-    console.error(`OpenAI error ${response.status}:`, err);
+    console.error(`OpenAI request failed with status ${response.status}`);
     throw new Error(`OpenAI API error: ${response.status}`);
   }
 
@@ -306,18 +334,6 @@ async function callOpenAI(messages: any[]): Promise<{ content: string; inputToke
 // ============================================
 // HELPERS
 // ============================================
-
-async function checkDailyLimit(supabase: any, userId: string): Promise<boolean> {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const { count } = await supabase
-    .from('ai_messages')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId)
-    .eq('role', 'user')
-    .gte('created_at', today.toISOString());
-  return (count ?? 0) < DAILY_LIMIT;
-}
 
 function extractJson(text: string): string {
   const match = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);

@@ -132,5 +132,32 @@ describe('AI Tutor - Context Builder', () => {
       const result = parseStructuredResponse(raw);
       expect(result!.suggestedReplies.length).toBeLessThanOrEqual(3);
     });
+
+    it('sanitizes malformed optional model fields before rendering', () => {
+      const raw = JSON.stringify({
+        reply: { chinese: ' 你好\u0000 ', pinyin: 123, translationVi: null },
+        correction: { original: 'x' },
+        newVocabulary: [
+          { chinese: '好', pinyin: 'hǎo', meaningVi: 'tốt' },
+          { chinese: '<bad>', pinyin: null, meaningVi: {} },
+        ],
+        suggestedReplies: [' 好的 ', { text: 'unsafe' }, '', '再见'],
+        learningTip: { text: 'invalid' },
+        practiceExercise: { type: 'unknown', question: 'x' },
+      });
+
+      const result = parseStructuredResponse(raw);
+      expect(result).not.toBeNull();
+      expect(result!.reply).toEqual({ chinese: '你好', pinyin: '', translationVi: '' });
+      expect(result!.correction).toBeNull();
+      expect(result!.newVocabulary).toEqual([{ chinese: '好', pinyin: 'hǎo', meaningVi: 'tốt' }]);
+      expect(result!.suggestedReplies).toEqual(['好的', '再见']);
+      expect(result!.learningTip).toBeNull();
+      expect(result!.practiceExercise).toBeNull();
+    });
+
+    it('rejects non-string required reply content', () => {
+      expect(parseStructuredResponse('{"reply":{"chinese":{"html":"bad"}}}')).toBeNull();
+    });
   });
 });

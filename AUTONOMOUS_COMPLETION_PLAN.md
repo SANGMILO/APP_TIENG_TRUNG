@@ -273,16 +273,72 @@ Stitch migration remains the visual source of truth.
   - Supabase CLI emitted the same non-fatal pg-delta temporary certificate cache
     warning after migration apply; matching history and a fresh remote schema
     dump independently confirmed the hosted schema
-- Commit: pending
+- Commit: `1e109a9` (`fix: complete profile and account workflows`)
 
 ### Phase 6 — AI Tutor and voice reliability
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: provider configuration to be verified without exposing secrets
+- Status: COMPLETE
+- Files:
+  - `app/(tabs)/ai-tutor.tsx`
+  - `app/ai-chat.tsx`
+  - `app/ai-tutor/voice.tsx`
+  - `services/ai-context-builder.ts`
+  - `services/ai-tutor-service.ts`
+  - `services/voice-conversation-service.ts`
+  - `supabase/functions/_shared/tutor-response.ts`
+  - `supabase/functions/ai-tutor-chat/index.ts`
+  - `supabase/functions/voice-transcribe/index.ts`
+  - `supabase/functions/voice-synthesize/index.ts`
+  - `__tests__/ai-tutor.test.ts`
+  - `__tests__/ai-tutor-service.test.ts`
+  - `__tests__/voice-conversation.test.ts`
+  - `__tests__/p0-security-hardening.test.ts`
+  - `supabase/tests/authoritative_ai_voice.test.sql`
+- Migrations:
+  - `20260729050000_authoritative_ai_voice.sql`
+- Deployments:
+  - Migration `20260729050000` applied to the linked Supabase project
+  - `ai-tutor-chat` deployed as active version 4 with JWT verification
+  - `voice-transcribe` deployed as active version 1 with JWT verification
+  - `voice-synthesize` deployed as active version 1 with JWT verification
+  - Remote schema independently dumped and verified; temporary dump removed
+- Validation:
+  - Local database recreated from all migrations successfully
+  - pgTAP: 7 files / 162 assertions passed
+  - Focused AI/voice Jest: 3 suites / 33 tests passed
+  - TypeScript: 0 errors
+  - Jest: 25 suites / 285 tests passed
+  - Expo Web: 51 routes exported
+  - Hosted migration list: local and remote matched through `20260729050000`
+- Result:
+  - AI messages are transactionally reserved against the database-owned daily
+    setting and retries can return only the assistant linked to that exact input
+  - Failed sends preserve the draft, show per-message failure, and retry with the
+    same stable idempotency key; initialization failures are retryable
+  - Untrusted model JSON is bounded, normalized, and schema-validated on both
+    server and client before reaching render code
+  - AI usage display and enforcement share authoritative database counts/settings
+  - Fictional per-scenario XP promises were removed
+  - Voice turns are persisted by authenticated server functions; direct client
+    writes were revoked, every persistence failure is surfaced, and retries reuse
+    the same server turn and AI message
+  - Voice completion derives duration, turns, vocabulary, corrections, and XP
+    from persisted completed turns and remains idempotent
+  - Provider capability is checked dynamically; unavailable chat/voice actions
+    are disabled instead of creating empty conversations or failing after capture
+- Blockers:
+  - P0 external configuration: the hosted project has no generative AI provider
+    key configured. No secret was invented or copied. The deployed capability
+    endpoint therefore disables AI chat and voice honestly until an owner adds
+    `OPENAI_API_KEY` (and optionally the model variables) in Supabase secrets.
+  - Voice STT/TTS currently use that same provider and cannot be exercised
+    end-to-end without it; the deployed functions safely return not-configured
+    rather than reporting false success
+  - Interactive microphone/provider QA requires a real authenticated session,
+    microphone permission, and the missing provider configuration
+  - Supabase CLI emitted the same non-fatal pg-delta temporary certificate cache
+    warning after migration apply; matching migration history and a fresh remote
+    schema dump independently confirmed the hosted schema
 - Commit: pending
 
 ### Phase 7 — Pronunciation quick practice

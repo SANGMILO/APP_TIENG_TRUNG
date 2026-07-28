@@ -13,6 +13,7 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
 const MAX_AUDIO_SIZE = 25 * 1024 * 1024; // 25MB (Whisper limit)
+const MAX_TURN_DURATION_MS = 60000;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -41,7 +42,46 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    if (!body.audio) return corsResponse({ error: 'Missing audio' }, 400);
+    if (
+      !body.audio ||
+      typeof body.sessionId !== 'string' ||
+      typeof body.clientTurnId !== 'string' ||
+      !body.clientTurnId.trim() ||
+      body.clientTurnId.length > 200
+    ) {
+      return corsResponse({ error: 'Missing voice turn fields', errorCode: 'INVALID_REQUEST' }, 400);
+    }
+
+    const { data: session, error: sessionError } = await supabase
+      .from('voice_sessions')
+      .select('id, user_id, status')
+      .eq('id', body.sessionId)
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (sessionError || !session || session.status !== 'active') {
+      return corsResponse({ error: 'Voice session unavailable', errorCode: 'SESSION_FORBIDDEN' }, 403);
+    }
+
+    const { data: existingTurn, error: existingError } = await supabase
+      .from('voice_turns')
+      .select('id, user_transcript, user_audio_duration_ms')
+      .eq('session_id', body.sessionId)
+      .eq('user_id', user.id)
+      .eq('client_turn_id', body.clientTurnId)
+      .maybeSingle();
+    if (existingError) {
+      return corsResponse({ error: 'Voice turn unavailable', errorCode: 'TURN_READ_FAILED' }, 500);
+    }
+    if (existingTurn?.user_transcript) {
+      return corsResponse({
+        turnId: existingTurn.id,
+        text: existingTurn.user_transcript,
+        language: body.language || 'zh',
+        durationMs: existingTurn.user_audio_duration_ms || 0,
+        provider: 'openai',
+        model: OPENAI_STT_MODEL,
+      });
+    }
 
     // Decode base64 audio
     const audioBytes = base64ToUint8Array(body.audio);
@@ -55,6 +95,7 @@ serve(async (req) => {
     formData.append('file', audioBlob, 'audio.wav');
     formData.append('model', OPENAI_STT_MODEL);
     formData.append('language', body.language || 'zh');
+    formData.append('response_format', 'verbose_json');
     if (body.prompt) formData.append('prompt', body.prompt);
 
     const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
@@ -69,26 +110,64 @@ serve(async (req) => {
     }
 
     const result = await response.json();
+    const transcript = typeof result.text === 'string' ? result.text.trim() : '';
+    const providerDurationMs = Number.isFinite(Number(result.duration))
+      ? Math.round(Number(result.duration) * 1000)
+      : Math.round(audioBytes.length / 32);
+    const durationMs = Math.max(0, Math.min(MAX_TURN_DURATION_MS, providerDurationMs));
+
+    if (!transcript) {
+      return corsResponse({
+        text: '',
+        language: body.language || 'zh',
+        durationMs: 0,
+        provider: 'openai',
+        model: OPENAI_STT_MODEL,
+      });
+    }
+
+    const { data: persistedTurn, error: turnSaveError } = await supabase
+      .from('voice_turns')
+      .upsert({
+        session_id: body.sessionId,
+        user_id: user.id,
+        client_turn_id: body.clientTurnId,
+        user_transcript: transcript,
+        transcription_provider: 'openai',
+        transcription_model: OPENAI_STT_MODEL,
+        user_audio_duration_ms: durationMs,
+        status: 'transcribing',
+      }, { onConflict: 'session_id,client_turn_id' })
+      .select('id')
+      .single();
+    if (turnSaveError || !persistedTurn) {
+      return corsResponse({ error: 'Voice turn could not be saved', errorCode: 'TURN_SAVE_FAILED' }, 500);
+    }
 
     // Track usage
-    await supabase.from('voice_usage').insert({
+    const { error: usageError } = await supabase.from('voice_usage').insert({
       user_id: user.id,
+      session_id: body.sessionId,
       service: 'stt',
       provider: 'openai',
       model: OPENAI_STT_MODEL,
-      input_duration_ms: Math.round(audioBytes.length / 32), // rough estimate
+      input_duration_ms: durationMs,
       status: 'success',
     });
+    if (usageError) {
+      console.error('Voice transcription usage save failed');
+    }
 
     return corsResponse({
-      text: result.text || '',
+      turnId: persistedTurn.id,
+      text: transcript,
       language: body.language || 'zh',
-      durationMs: Math.round(audioBytes.length / 32),
+      durationMs,
       provider: 'openai',
       model: OPENAI_STT_MODEL,
     });
-  } catch (err: any) {
-    console.error('Voice transcribe error:', err);
+  } catch {
+    console.error('Voice transcription request failed');
     return corsResponse({ error: 'Server error' }, 500);
   }
 });

@@ -5,7 +5,8 @@
  */
 
 import { supabase } from '@/lib/supabase';
-import { Conversation, Message, ConversationMode, TutorResponse } from '@/lib/ai';
+import { Conversation, Message, ConversationMode } from '@/lib/ai';
+import { normalizeTutorResponse } from '@/supabase/functions/_shared/tutor-response';
 
 // ============================================
 // CONVERSATION MANAGEMENT
@@ -52,7 +53,7 @@ export async function fetchMessages(conversationId: string, limit = 30, offset =
     .range(offset, offset + limit - 1);
 
   if (error) throw error;
-  return (data ?? []) as Message[];
+  return (data ?? []).map(normalizeStoredMessage);
 }
 
 export async function deleteConversation(conversationId: string): Promise<void> {
@@ -78,8 +79,35 @@ export interface SendMessageParams {
 export interface SendMessageResult {
   success: boolean;
   assistantMessage?: Message;
+  usage?: { used: number; limit: number };
   error?: string;
-  errorCode?: 'NOT_CONFIGURED' | 'RATE_LIMITED' | 'DAILY_LIMIT' | 'MESSAGE_TOO_LONG' | 'NETWORK_ERROR' | 'SERVER_ERROR';
+  errorCode?:
+    | 'NOT_CONFIGURED'
+    | 'RATE_LIMITED'
+    | 'DAILY_LIMIT'
+    | 'MESSAGE_TOO_LONG'
+    | 'MALFORMED_RESPONSE'
+    | 'IDEMPOTENCY_CONFLICT'
+    | 'REQUEST_IN_PROGRESS'
+    | 'NETWORK_ERROR'
+    | 'SERVER_ERROR';
+}
+
+export interface AiCapabilities {
+  textChatConfigured: boolean;
+  voiceConfigured: boolean;
+}
+
+export async function fetchAiCapabilities(): Promise<AiCapabilities> {
+  const { data, error } = await supabase.functions.invoke('ai-tutor-chat', {
+    body: { action: 'capabilities' },
+  });
+  if (error) throw error;
+
+  return {
+    textChatConfigured: data?.textChatConfigured === true,
+    voiceConfigured: data?.voiceConfigured === true,
+  };
 }
 
 export async function sendTutorMessage(params: SendMessageParams): Promise<SendMessageResult> {
@@ -104,13 +132,23 @@ export async function sendTutorMessage(params: SendMessageParams): Promise<SendM
     });
 
     if (error) {
-      if (error.message?.includes('rate limit') || error.message?.includes('429')) {
-        return { success: false, error: 'Bạn đã gửi quá nhanh. Hãy thử lại sau một chút.', errorCode: 'RATE_LIMITED' };
-      }
-      if (error.message?.includes('daily limit')) {
+      const details = await readFunctionError(error);
+      if (details.errorCode === 'DAILY_LIMIT') {
         return { success: false, error: 'Bạn đã hết lượt chat hôm nay. Hãy quay lại ngày mai.', errorCode: 'DAILY_LIMIT' };
       }
-      if (error.message?.includes('not configured') || error.message?.includes('503')) {
+      if (details.errorCode === 'MALFORMED_RESPONSE') {
+        return { success: false, error: 'AI trả về nội dung chưa hợp lệ. Hãy thử lại.', errorCode: 'MALFORMED_RESPONSE' };
+      }
+      if (details.errorCode === 'IDEMPOTENCY_CONFLICT') {
+        return { success: false, error: 'Không thể dùng lại lượt gửi này cho nội dung khác.', errorCode: 'IDEMPOTENCY_CONFLICT' };
+      }
+      if (details.errorCode === 'REQUEST_IN_PROGRESS') {
+        return { success: false, error: 'Tin nhắn vẫn đang được xử lý. Hãy thử lại sau một chút.', errorCode: 'REQUEST_IN_PROGRESS' };
+      }
+      if (details.status === 429 || error.message?.includes('rate limit') || error.message?.includes('429')) {
+        return { success: false, error: 'Bạn đã gửi quá nhanh. Hãy thử lại sau một chút.', errorCode: 'RATE_LIMITED' };
+      }
+      if (details.errorCode === 'NOT_CONFIGURED' || details.status === 503 || error.message?.includes('not configured')) {
         return { success: false, error: 'AI Tutor chưa được cấu hình.', errorCode: 'NOT_CONFIGURED' };
       }
       return { success: false, error: 'Lỗi kết nối. Vui lòng thử lại.', errorCode: 'NETWORK_ERROR' };
@@ -120,7 +158,18 @@ export async function sendTutorMessage(params: SendMessageParams): Promise<SendM
       return { success: false, error: 'Không nhận được phản hồi từ AI.', errorCode: 'SERVER_ERROR' };
     }
 
-    return { success: true, assistantMessage: data.assistantMessage as Message };
+    const assistantMessage = normalizeStoredMessage(data.assistantMessage);
+    if (!assistantMessage.structured_data) {
+      return { success: false, error: 'Phản hồi AI không đúng định dạng.', errorCode: 'MALFORMED_RESPONSE' };
+    }
+
+    const used = Number(data?.usage?.used);
+    const limit = Number(data?.usage?.limit);
+    const usage = Number.isFinite(used) && Number.isFinite(limit)
+      ? { used: Math.max(0, used), limit: Math.max(0, limit) }
+      : undefined;
+
+    return { success: true, assistantMessage, usage };
   } catch (err: any) {
     return { success: false, error: 'Lỗi kết nối. Vui lòng kiểm tra mạng.', errorCode: 'NETWORK_ERROR' };
   }
@@ -171,16 +220,42 @@ export async function checkDailyLimit(): Promise<{ allowed: boolean; used: numbe
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) return { allowed: false, used: 0, limit: 0 };
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const { data, error } = await supabase.rpc('get_ai_daily_usage');
+  if (error) throw error;
 
-  const { count } = await supabase
-    .from('ai_messages')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', user.id)
-    .eq('role', 'user')
-    .gte('created_at', today.toISOString());
+  const used = Number(data?.used);
+  const limit = Number(data?.limit);
+  if (!Number.isFinite(used) || !Number.isFinite(limit) || limit < 0) {
+    throw new Error('Invalid AI usage response');
+  }
 
-  const limit = 20; // Default, could fetch from ai_user_settings
-  return { allowed: (count ?? 0) < limit, used: count ?? 0, limit };
+  return {
+    allowed: Boolean(data?.allowed) && used < limit,
+    used: Math.max(0, used),
+    limit: Math.max(0, limit),
+  };
+}
+
+function normalizeStoredMessage(value: any): Message {
+  return {
+    ...value,
+    content: typeof value?.content === 'string' ? value.content : '',
+    structured_data: normalizeTutorResponse(value?.structured_data),
+  } as Message;
+}
+
+async function readFunctionError(error: any): Promise<{ status?: number; errorCode?: string }> {
+  const response = error?.context;
+  if (!response || typeof response.clone !== 'function') return {};
+
+  try {
+    const clone = response.clone();
+    const payload = await clone.json();
+    return {
+      status: response.status,
+      errorCode: typeof payload?.errorCode === 'string' ? payload.errorCode : undefined,
+    };
+  } catch {
+    return { status: response.status };
+  }
 }

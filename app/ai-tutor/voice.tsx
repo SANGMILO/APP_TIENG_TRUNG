@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -6,9 +6,9 @@ import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { useAudioRecorder } from '@/hooks/useAudioRecorder';
 import { AudioPlayer } from '@/components/media';
-import { Button, ProgressBar } from '@/components/ui';
-import { createConversation } from '@/services/ai-tutor-service';
-import { createVoiceSession, endVoiceSession, executeVoiceTurn, VoiceTurnResult } from '@/services/voice-conversation-service';
+import { Button } from '@/components/ui';
+import { createConversation, fetchAiCapabilities } from '@/services/ai-tutor-service';
+import { createVoiceSession, endVoiceSession, executeVoiceTurn } from '@/services/voice-conversation-service';
 import { VoiceState, VoiceTurn, VoiceSessionSummary } from '@/lib/voice';
 import { TutorResponse, ConversationMode } from '@/lib/ai';
 import { FontSize, Spacing, BorderRadius, Shadow, FontWeight } from '@/constants/theme';
@@ -37,8 +37,8 @@ export default function VoiceTutorScreen() {
   const [ttsAudioUri, setTtsAudioUri] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sessionSummary, setSessionSummary] = useState<VoiceSessionSummary | null>(null);
-  const [totalUserSpeechMs, setTotalUserSpeechMs] = useState(0);
-  const [totalAiSpeechMs, setTotalAiSpeechMs] = useState(0);
+  const [failedTurn, setFailedTurn] = useState<{ uri: string; durationMs: number; turnId: string } | null>(null);
+  const [isEnding, setIsEnding] = useState(false);
   const sessionStartRef = useRef(Date.now());
 
   const recorder = useAudioRecorder({
@@ -51,7 +51,12 @@ export default function VoiceTutorScreen() {
 
   const initSession = async () => {
     setVoiceState('connecting');
+    setError(null);
     try {
+      const capabilities = await fetchAiCapabilities();
+      if (!capabilities.voiceConfigured) {
+        throw new Error('Hội thoại AI chưa được quản trị viên cấu hình.');
+      }
       const conv = await createConversation(mode, profile?.chinese_level || 'beginner');
       setConversationId(conv.id);
       const sid = await createVoiceSession({
@@ -71,6 +76,13 @@ export default function VoiceTutorScreen() {
     }
   };
 
+  useEffect(() => {
+    if (recorder.error) {
+      setError(recorder.error);
+      setVoiceState('ready');
+    }
+  }, [recorder.error]);
+
   const handleStartRecording = async () => {
     setError(null);
     setCurrentTranscript(null);
@@ -80,26 +92,23 @@ export default function VoiceTutorScreen() {
     await recorder.startRecording();
   };
 
-  const handleStopRecording = async () => {
-    const result = await recorder.stopRecording();
-    if (!result || !conversationId || !sessionId) {
-      setVoiceState('ready');
-      return;
-    }
-
-    setTotalUserSpeechMs(prev => prev + result.durationMs);
+  const processVoiceTurn = async (result: { uri: string; durationMs: number }, turnId: string) => {
+    if (!conversationId || !sessionId) return;
     setVoiceState('transcribing');
 
-    const turnId = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
     const turnResult = await executeVoiceTurn(result.uri, conversationId, sessionId, mode, turnId);
 
     if (!turnResult.success) {
+      setCurrentTranscript(turnResult.transcript || null);
+      setCurrentResponse(turnResult.aiResponse || null);
+      setFailedTurn({ ...result, turnId });
       setError(turnResult.error || 'Đã có lỗi xảy ra.');
       setVoiceState('ready');
       return;
     }
 
-    setCurrentTranscript(turnResult.transcript || '');
+    setFailedTurn(null);
+    setCurrentTranscript(null);
     setVoiceState('thinking');
 
     if (turnResult.aiResponse) {
@@ -114,7 +123,7 @@ export default function VoiceTutorScreen() {
     }
 
     setTurns(prev => [...prev, {
-      id: turnId,
+      id: turnResult.turnId || turnId,
       userTranscript: turnResult.transcript || '',
       assistantTranscript: turnResult.aiResponse?.reply?.chinese || turnResult.aiText || '',
       assistantChinese: turnResult.aiResponse?.reply?.chinese,
@@ -124,19 +133,43 @@ export default function VoiceTutorScreen() {
       aiLatencyMs: turnResult.latency.aiMs,
       ttsLatencyMs: turnResult.latency.ttsMs,
       totalLatencyMs: turnResult.latency.totalMs,
-      userAudioDurationMs: result.durationMs,
-      assistantAudioDurationMs: null,
+      userAudioDurationMs: turnResult.userAudioDurationMs ?? result.durationMs,
+      assistantAudioDurationMs: turnResult.assistantAudioDurationMs ?? null,
     }]);
 
     recorder.reset();
   };
 
+  const handleStopRecording = async () => {
+    const result = await recorder.stopRecording();
+    if (!result || !conversationId || !sessionId) {
+      setVoiceState('ready');
+      return;
+    }
+
+    await processVoiceTurn(result, `${Date.now()}_${Math.random().toString(36).slice(2)}`);
+  };
+
+  const handleRetryTurn = async () => {
+    if (!failedTurn || isEnding) return;
+    setError(null);
+    await processVoiceTurn(failedTurn, failedTurn.turnId);
+  };
+
   const handleEndSession = async () => {
     if (!sessionId) { router.back(); return; }
-    const totalDuration = Date.now() - sessionStartRef.current;
-    const summary = await endVoiceSession(sessionId, totalDuration, totalUserSpeechMs, totalAiSpeechMs, turns.length);
-    setSessionSummary(summary);
-    setVoiceState('ended');
+    setIsEnding(true);
+    setError(null);
+    try {
+      const summary = await endVoiceSession(sessionId);
+      setSessionSummary(summary);
+      setVoiceState('ended');
+    } catch {
+      setError('Không thể kết thúc phiên. Hãy thử lại.');
+      setVoiceState('ready');
+    } finally {
+      setIsEnding(false);
+    }
   };
 
   const handleTtsEnd = () => {
@@ -175,7 +208,11 @@ export default function VoiceTutorScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleEndSession} style={[styles.endBtn, { backgroundColor: colors.errorLight }]}>
+        <TouchableOpacity
+          onPress={handleEndSession}
+          disabled={isEnding}
+          style={[styles.endBtn, { backgroundColor: colors.errorLight, opacity: isEnding ? 0.55 : 1 }]}
+        >
           <Ionicons name="stop" size={14} color={colors.error} />
           <Text style={[styles.endBtnText, { color: colors.error }]}>Kết thúc</Text>
         </TouchableOpacity>
@@ -243,6 +280,16 @@ export default function VoiceTutorScreen() {
         <View style={[styles.errorBar, { backgroundColor: colors.errorLight }]}>
           <Ionicons name="alert-circle" size={14} color={colors.error} />
           <Text style={[styles.errorText, { color: colors.error }]}>{error}</Text>
+          {failedTurn && (
+            <TouchableOpacity onPress={handleRetryTurn} disabled={isEnding}>
+              <Text style={[styles.errorRetry, { color: colors.error }]}>Thử lại</Text>
+            </TouchableOpacity>
+          )}
+          {voiceState === 'error' && !sessionId && (
+            <TouchableOpacity onPress={initSession}>
+              <Text style={[styles.errorRetry, { color: colors.error }]}>Kết nối lại</Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
 
@@ -352,6 +399,7 @@ const styles = StyleSheet.create({
   // Error
   errorBar: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginHorizontal: Spacing.xl, paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm, borderRadius: BorderRadius.lg },
   errorText: { fontSize: FontSize.sm, flex: 1 },
+  errorRetry: { fontSize: FontSize.sm, fontWeight: FontWeight.bold },
 
   // TTS
   ttsArea: { paddingHorizontal: Spacing.xl, paddingVertical: Spacing.sm },

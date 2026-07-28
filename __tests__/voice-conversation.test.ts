@@ -5,6 +5,9 @@ jest.mock('../lib/supabase', () => ({
   supabase: { from: jest.fn(), rpc: jest.fn(), auth: { getUser: jest.fn() }, functions: { invoke: jest.fn() } },
 }));
 
+import { supabase } from '../lib/supabase';
+import { endVoiceSession } from '../services/voice-conversation-service';
+
 describe('Voice Conversation Types', () => {
   describe('VoiceState transitions', () => {
     const validTransitions: Record<VoiceState, VoiceState[]> = {
@@ -100,29 +103,44 @@ describe('Voice Conversation Types', () => {
     });
   });
 
-  describe('Session XP rules', () => {
-    const MIN_SPEECH_MS = 30000;
-    const MIN_TURNS = 3;
-
-    it('awards XP for meaningful session', () => {
-      const userSpeechMs = 45000;
-      const turnCount = 5;
-      const eligible = userSpeechMs >= MIN_SPEECH_MS && turnCount >= MIN_TURNS;
-      expect(eligible).toBe(true);
+  describe('Authoritative session completion', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
     });
 
-    it('denies XP for too short session', () => {
-      const userSpeechMs = 10000;
-      const turnCount = 1;
-      const eligible = userSpeechMs >= MIN_SPEECH_MS && turnCount >= MIN_TURNS;
-      expect(eligible).toBe(false);
+    it('uses only the server summary and does not submit client totals', async () => {
+      (supabase.rpc as jest.Mock).mockResolvedValue({
+        data: {
+          sessionId: 'session-1',
+          totalDurationMs: 62000,
+          userSpeechMs: 33000,
+          aiSpeechMs: 12000,
+          turnCount: 3,
+          newWordsCount: 2,
+          correctionsCount: 1,
+          xpEarned: 10,
+        },
+        error: null,
+      });
+
+      await expect(endVoiceSession('session-1')).resolves.toMatchObject({
+        userSpeechMs: 33000,
+        turnCount: 3,
+        xpEarned: 10,
+      });
+      expect(supabase.rpc).toHaveBeenCalledWith(
+        'complete_voice_session_authoritative',
+        { p_session_id: 'session-1' },
+      );
     });
 
-    it('denies XP for too few turns even with enough time', () => {
-      const userSpeechMs = 60000;
-      const turnCount = 2;
-      const eligible = userSpeechMs >= MIN_SPEECH_MS && turnCount >= MIN_TURNS;
-      expect(eligible).toBe(false);
+    it('does not show a successful summary when completion fails', async () => {
+      (supabase.rpc as jest.Mock).mockResolvedValue({
+        data: null,
+        error: new Error('save failed'),
+      });
+
+      await expect(endVoiceSession('session-1')).rejects.toThrow('save failed');
     });
   });
 });

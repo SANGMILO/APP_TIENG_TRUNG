@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, Platform, ActivityIndicator, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Crypto from 'expo-crypto';
 import { useLocalSearchParams, router } from 'expo-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
-import { createConversation, fetchMessages, sendTutorMessage } from '@/services/ai-tutor-service';
-import { parseStructuredResponse } from '@/services/ai-context-builder';
+import { createConversation, fetchAiCapabilities, fetchMessages, sendTutorMessage } from '@/services/ai-tutor-service';
 import { Message, TutorResponse, ConversationMode } from '@/lib/ai';
 import { FontSize, Spacing, BorderRadius, Shadow, FontWeight } from '@/constants/theme';
 
@@ -22,6 +23,7 @@ export default function AiChatScreen() {
   const params = useLocalSearchParams<{ mode?: string; conversationId?: string }>();
   const { colors } = useThemeStore();
   const { profile } = useAuthStore();
+  const queryClient = useQueryClient();
 
   const [conversationId, setConversationId] = useState<string | null>(params.conversationId ?? null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -29,6 +31,7 @@ export default function AiChatScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [initError, setInitError] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const mode = (params.mode as ConversationMode) || 'general';
 
@@ -38,7 +41,13 @@ export default function AiChatScreen() {
 
   const initConversation = async () => {
     setIsLoading(true);
+    setInitError(false);
+    setError(null);
     try {
+      const capabilities = await fetchAiCapabilities();
+      if (!capabilities.textChatConfigured) {
+        throw new Error('AI_NOT_CONFIGURED');
+      }
       if (params.conversationId) {
         const msgs = await fetchMessages(params.conversationId);
         setMessages(msgs);
@@ -48,31 +57,40 @@ export default function AiChatScreen() {
         setConversationId(conv.id);
       }
     } catch (err) {
-      setError('Không thể tải cuộc trò chuyện.');
+      setError(
+        err instanceof Error && err.message === 'AI_NOT_CONFIGURED'
+          ? 'AI Tutor chưa được quản trị viên cấu hình.'
+          : 'Không thể tải cuộc trò chuyện.',
+      );
+      setInitError(true);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSend = async () => {
-    if (!input.trim() || !conversationId || isSending) return;
+  const sendMessage = async (userMessage: string, clientMessageId: string, isRetry: boolean) => {
+    if (!conversationId || isSending) return;
 
-    const userMessage = input.trim();
-    setInput('');
+    if (isRetry) {
+      setMessages(prev => prev.map(message => (
+        message.id === clientMessageId ? { ...message, status: 'sending' } : message
+      )));
+      setInput(current => current.trim() === userMessage ? '' : current);
+    } else {
+      const userMsg: Message = {
+        id: clientMessageId,
+        conversation_id: conversationId,
+        role: 'user',
+        content: userMessage,
+        structured_data: null,
+        status: 'sending',
+        created_at: new Date().toISOString(),
+      };
+      setMessages(prev => [...prev, userMsg]);
+      setInput('');
+    }
     setIsSending(true);
     setError(null);
-
-    const clientMessageId = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const userMsg: Message = {
-      id: clientMessageId,
-      conversation_id: conversationId,
-      role: 'user',
-      content: userMessage,
-      structured_data: null,
-      status: 'completed',
-      created_at: new Date().toISOString(),
-    };
-    setMessages(prev => [...prev, userMsg]);
 
     try {
       const result = await sendTutorMessage({
@@ -83,15 +101,47 @@ export default function AiChatScreen() {
       });
 
       if (result.success && result.assistantMessage) {
-        setMessages(prev => [...prev, result.assistantMessage!]);
+        setMessages(prev => {
+          const delivered = prev.map(message => (
+            message.id === clientMessageId ? { ...message, status: 'completed' as const } : message
+          ));
+          return delivered.some(message => message.id === result.assistantMessage!.id)
+            ? delivered
+            : [...delivered, result.assistantMessage!];
+        });
+        if (result.usage) {
+          queryClient.setQueryData(['ai-daily-limit'], {
+            allowed: result.usage.used < result.usage.limit,
+            ...result.usage,
+          });
+        }
       } else {
+        setMessages(prev => prev.map(message => (
+          message.id === clientMessageId ? { ...message, status: 'failed' } : message
+        )));
+        setInput(current => current.trim() ? current : userMessage);
         setError(result.error || 'Không nhận được phản hồi.');
       }
     } catch {
+      setMessages(prev => prev.map(message => (
+        message.id === clientMessageId ? { ...message, status: 'failed' } : message
+      )));
+      setInput(current => current.trim() ? current : userMessage);
       setError('Lỗi kết nối. Kiểm tra mạng và thử lại.');
     } finally {
       setIsSending(false);
     }
+  };
+
+  const handleSend = async () => {
+    const userMessage = input.trim();
+    if (!userMessage || !conversationId || isSending) return;
+    await sendMessage(userMessage, Crypto.randomUUID(), false);
+  };
+
+  const handleRetry = async (message: Message) => {
+    if (message.status !== 'failed') return;
+    await sendMessage(message.content, message.id, true);
   };
 
   const handleSuggestedReply = (reply: string) => {
@@ -102,6 +152,28 @@ export default function AiChatScreen() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.center}><ActivityIndicator size="large" color={colors.primary} /></View>
+      </SafeAreaView>
+    );
+  }
+
+  if (initError) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.center}>
+          <Ionicons name="cloud-offline-outline" size={34} color={colors.textTertiary} />
+          <Text style={[styles.initErrorTitle, { color: colors.text }]}>
+            {error?.includes('chưa được') ? 'AI Tutor chưa khả dụng' : 'Không thể mở cuộc trò chuyện'}
+          </Text>
+          <Text style={[styles.initErrorText, { color: colors.textSecondary }]}>
+            {error || 'Kiểm tra kết nối rồi thử lại.'}
+          </Text>
+          <TouchableOpacity
+            style={[styles.retryButton, { backgroundColor: colors.primary }]}
+            onPress={() => void initConversation()}
+          >
+            <Text style={styles.retryButtonText}>Thử lại</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     );
   }
@@ -132,7 +204,12 @@ export default function AiChatScreen() {
           contentContainerStyle={styles.messageList}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
           renderItem={({ item }) => (
-            <MessageBubble message={item} colors={colors} onSuggestedReply={handleSuggestedReply} />
+            <MessageBubble
+              message={item}
+              colors={colors}
+              onSuggestedReply={handleSuggestedReply}
+              onRetry={handleRetry}
+            />
           )}
           ListEmptyComponent={
             <View style={styles.emptyChat}>
@@ -195,7 +272,17 @@ export default function AiChatScreen() {
   );
 }
 
-function MessageBubble({ message, colors, onSuggestedReply }: { message: Message; colors: any; onSuggestedReply: (r: string) => void }) {
+function MessageBubble({
+  message,
+  colors,
+  onSuggestedReply,
+  onRetry,
+}: {
+  message: Message;
+  colors: any;
+  onSuggestedReply: (r: string) => void;
+  onRetry: (message: Message) => void;
+}) {
   const isUser = message.role === 'user';
   const structured = message.structured_data as TutorResponse | null;
 
@@ -215,6 +302,12 @@ function MessageBubble({ message, colors, onSuggestedReply }: { message: Message
           <Text style={[styles.bubbleText, { color: colors.text }]}>{message.content}</Text>
         )}
       </View>
+      {isUser && message.status === 'failed' && (
+        <TouchableOpacity style={styles.deliveryError} onPress={() => onRetry(message)}>
+          <Ionicons name="alert-circle-outline" size={13} color={colors.error} />
+          <Text style={[styles.deliveryErrorText, { color: colors.error }]}>Gửi thất bại · Thử lại</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -286,6 +379,10 @@ function StructuredMessage({ structured, colors, onSuggestedReply }: { structure
 const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  initErrorTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.semibold, marginTop: Spacing.md },
+  initErrorText: { fontSize: FontSize.sm, marginTop: Spacing.xs },
+  retryButton: { marginTop: Spacing.lg, paddingHorizontal: Spacing.xl, paddingVertical: Spacing.sm, borderRadius: BorderRadius.full },
+  retryButtonText: { color: '#fff', fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
 
   // Header
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.lg, paddingVertical: Spacing.sm, gap: Spacing.md, ...Shadow.xs },
@@ -309,6 +406,8 @@ const styles = StyleSheet.create({
   bubbleLeft: { alignItems: 'flex-start' },
   bubble: { maxWidth: '82%', padding: Spacing.md, borderRadius: BorderRadius.xl },
   bubbleText: { fontSize: FontSize.base, lineHeight: 22 },
+  deliveryError: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4, paddingHorizontal: Spacing.xs },
+  deliveryErrorText: { fontSize: FontSize.xs, fontWeight: FontWeight.medium },
 
   // Structured
   structuredMsg: { gap: Spacing.sm },

@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
-import { fetchConversations, checkDailyLimit } from '@/services/ai-tutor-service';
+import { fetchAiCapabilities, fetchConversations, checkDailyLimit } from '@/services/ai-tutor-service';
 import { FadeInView, AnimatedPressable, EmptyState } from '@/components/ui';
 import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
 import { Shadow, FontWeight, FontFamily } from '@/constants/theme';
@@ -20,18 +20,17 @@ interface ScenarioData {
   title: string;
   desc: string;
   iconName: string;
-  xp: number;
   difficulty: string;
   difficultyColor: 'easy' | 'hard' | 'medium';
 }
 
 const SCENARIOS: ScenarioData[] = [
-  { mode: 'restaurant', title: 'Tại nhà hàng', desc: 'Gọi món, thanh toán, hỏi đường.', iconName: 'restaurant-outline', xp: 50, difficulty: 'Dễ', difficultyColor: 'easy' },
-  { mode: 'work', title: 'Phỏng vấn xin việc', desc: 'Giới thiệu bản thân, kỹ năng, kinh nghiệm.', iconName: 'briefcase-outline', xp: 150, difficulty: 'Khó', difficultyColor: 'hard' },
-  { mode: 'travel', title: 'Đi du lịch', desc: 'Hỏi đường, đặt vé, mua sắm.', iconName: 'airplane-outline', xp: 100, difficulty: 'Trung bình', difficultyColor: 'medium' },
-  { mode: 'general', title: 'Trò chuyện', desc: 'Chat tự do về mọi chủ đề.', iconName: 'chatbubbles-outline', xp: 25, difficulty: 'Mọi cấp', difficultyColor: 'easy' },
-  { mode: 'hsk', title: 'Luyện HSK', desc: 'Ôn tập từ vựng và ngữ pháp HSK.', iconName: 'school-outline', xp: 45, difficulty: 'Theo HSK', difficultyColor: 'medium' },
-  { mode: 'grammar', title: 'Ngữ pháp', desc: 'Sửa lỗi và giải thích cấu trúc.', iconName: 'construct-outline', xp: 30, difficulty: 'Mọi cấp', difficultyColor: 'easy' },
+  { mode: 'restaurant', title: 'Tại nhà hàng', desc: 'Gọi món, thanh toán, hỏi đường.', iconName: 'restaurant-outline', difficulty: 'Dễ', difficultyColor: 'easy' },
+  { mode: 'work', title: 'Phỏng vấn xin việc', desc: 'Giới thiệu bản thân, kỹ năng, kinh nghiệm.', iconName: 'briefcase-outline', difficulty: 'Khó', difficultyColor: 'hard' },
+  { mode: 'travel', title: 'Đi du lịch', desc: 'Hỏi đường, đặt vé, mua sắm.', iconName: 'airplane-outline', difficulty: 'Trung bình', difficultyColor: 'medium' },
+  { mode: 'general', title: 'Trò chuyện', desc: 'Chat tự do về mọi chủ đề.', iconName: 'chatbubbles-outline', difficulty: 'Mọi cấp', difficultyColor: 'easy' },
+  { mode: 'hsk', title: 'Luyện HSK', desc: 'Ôn tập từ vựng và ngữ pháp HSK.', iconName: 'school-outline', difficulty: 'Theo HSK', difficultyColor: 'medium' },
+  { mode: 'grammar', title: 'Ngữ pháp', desc: 'Sửa lỗi và giải thích cấu trúc.', iconName: 'construct-outline', difficulty: 'Mọi cấp', difficultyColor: 'easy' },
 ];
 
 export default function AiTutorScreen() {
@@ -51,6 +50,16 @@ export default function AiTutorScreen() {
   });
 
   const {
+    data: capabilities,
+    isError: capabilitiesError,
+    refetch: refetchCapabilities,
+  } = useQuery({
+    queryKey: ['ai-capabilities'],
+    queryFn: fetchAiCapabilities,
+    enabled: !!profile,
+  });
+
+  const {
     data: limitInfo,
     isError: limitError,
     refetch: refetchLimit,
@@ -62,7 +71,7 @@ export default function AiTutorScreen() {
 
   const recentConversations = (conversations ?? []).slice(0, 3);
   const limitUsed = limitInfo?.used ?? 0;
-  const limitTotal = limitInfo?.limit ?? 50;
+  const limitTotal = limitInfo?.limit ?? 0;
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
@@ -72,12 +81,12 @@ export default function AiTutorScreen() {
           <Ionicons name="flame" size={20} color={colors.primary} />
           <Text style={[styles.topBarBrand, { color: colors.primary }]}>Học Tiếng Trung</Text>
         </View>
-        <TouchableOpacity style={[styles.topBarXpPill]} activeOpacity={0.7}>
+        <View style={styles.topBarXpPill}>
           <Text style={[styles.topBarXpText, { color: colors.primary }]}>
             {profile?.total_xp ?? 0} XP
           </Text>
           <Ionicons name="star" size={12} color={colors.primary} />
-        </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView
@@ -111,16 +120,20 @@ export default function AiTutorScreen() {
               <AnimatedPressable
                 scaleValue={0.98}
                 onPress={() => router.push('/ai-tutor/voice')}
+                disabled={!capabilities?.voiceConfigured}
+                accessibilityState={{ disabled: !capabilities?.voiceConfigured }}
                 style={styles.heroCtaWrap}
               >
                 <LinearGradient
                   colors={[colors.primary, colors.primaryLight]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
-                  style={styles.heroCta}
+                  style={[styles.heroCta, { opacity: capabilities?.voiceConfigured ? 1 : 0.5 }]}
                 >
                   <Ionicons name="mic" size={20} color="#FFFFFF" />
-                  <Text style={styles.heroCtaText}>Bắt đầu hội thoại</Text>
+                  <Text style={styles.heroCtaText}>
+                    {capabilities?.voiceConfigured ? 'Bắt đầu hội thoại' : 'Hội thoại chưa khả dụng'}
+                  </Text>
                 </LinearGradient>
               </AnimatedPressable>
             </View>
@@ -146,13 +159,23 @@ export default function AiTutorScreen() {
               </Text>
               <View style={{ flex: 1 }} />
               <View style={[styles.usageBar, { backgroundColor: colors.border }]}>
-                <View style={[styles.usageBarFill, { backgroundColor: colors.jade, width: `${Math.min(100, (limitUsed / limitTotal) * 100)}%` as any }]} />
+                <View style={[styles.usageBarFill, { backgroundColor: colors.jade, width: `${limitTotal > 0 ? Math.min(100, (limitUsed / limitTotal) * 100) : 0}%` as any }]} />
               </View>
             </View>
           </FadeInView>
         )}
 
-        {(conversationsError || limitError) && (
+        {capabilities && !capabilities.textChatConfigured && (
+          <FadeInView delay={110} animation="slideUp">
+            <EmptyState
+              iconName="construct-outline"
+              title="AI Tutor chưa được cấu hình"
+              description="Quản trị viên cần kết nối nhà cung cấp AI trước khi bạn có thể bắt đầu trò chuyện."
+            />
+          </FadeInView>
+        )}
+
+        {(conversationsError || limitError || capabilitiesError) && (
           <FadeInView delay={120} animation="slideUp">
             <EmptyState
               iconName="cloud-offline-outline"
@@ -162,6 +185,7 @@ export default function AiTutorScreen() {
               onAction={() => {
                 void refetchConversations();
                 void refetchLimit();
+                void refetchCapabilities();
               }}
             />
           </FadeInView>
@@ -175,7 +199,11 @@ export default function AiTutorScreen() {
         <View style={styles.scenarioGrid}>
           {SCENARIOS.slice(0, 3).map((scenario, i) => (
             <FadeInView key={scenario.mode} delay={250 + i * 80} animation="slideUp">
-              <ScenarioCard scenario={scenario} colors={colors} />
+              <ScenarioCard
+                scenario={scenario}
+                colors={colors}
+                disabled={!capabilities?.textChatConfigured}
+              />
             </FadeInView>
           ))}
         </View>
@@ -188,14 +216,20 @@ export default function AiTutorScreen() {
                 key={scenario.mode}
                 scaleValue={0.96}
                 onPress={() => router.push(`/ai-chat?mode=${scenario.mode}`)}
+                disabled={!capabilities?.textChatConfigured}
+                accessibilityState={{ disabled: !capabilities?.textChatConfigured }}
                 style={styles.miniCardWrap}
               >
-                <View style={[styles.miniCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                <View style={[styles.miniCard, {
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                  opacity: capabilities?.textChatConfigured ? 1 : 0.5,
+                }]}>
                   <View style={[styles.miniIcon, { backgroundColor: colors.surfaceElevated }]}>
                     <Ionicons name={scenario.iconName as any} size={20} color={colors.text} />
                   </View>
                   <Text style={[styles.miniTitle, { color: colors.text }]}>{scenario.title}</Text>
-                  <Text style={[styles.miniXp, { color: colors.primary }]}>+{scenario.xp}</Text>
+                  <Text style={[styles.miniXp, { color: colors.textTertiary }]}>{scenario.difficulty}</Text>
                 </View>
               </AnimatedPressable>
             ))}
@@ -237,7 +271,15 @@ export default function AiTutorScreen() {
 
 // ─── Scenario Card (Stitch style) ───
 
-function ScenarioCard({ scenario, colors }: { scenario: ScenarioData; colors: any }) {
+function ScenarioCard({
+  scenario,
+  colors,
+  disabled,
+}: {
+  scenario: ScenarioData;
+  colors: any;
+  disabled: boolean;
+}) {
   const diffBg = scenario.difficultyColor === 'easy'
     ? colors.jadeLight + '30'
     : scenario.difficultyColor === 'hard'
@@ -253,16 +295,18 @@ function ScenarioCard({ scenario, colors }: { scenario: ScenarioData; colors: an
     <AnimatedPressable
       scaleValue={0.97}
       onPress={() => router.push(`/ai-chat?mode=${scenario.mode}`)}
+      disabled={disabled}
+      accessibilityState={{ disabled }}
     >
-      <View style={[styles.scenarioCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-        {/* Header: difficulty + XP */}
+      <View style={[styles.scenarioCard, {
+        backgroundColor: colors.card,
+        borderColor: colors.border,
+        opacity: disabled ? 0.5 : 1,
+      }]}>
+        {/* Header: scenario difficulty */}
         <View style={styles.scenarioHeader}>
           <View style={[styles.diffBadge, { backgroundColor: diffBg }]}>
             <Text style={[styles.diffText, { color: diffColor }]}>{scenario.difficulty}</Text>
-          </View>
-          <View style={styles.xpBadge}>
-            <Text style={[styles.xpText, { color: colors.primary }]}>+{scenario.xp}</Text>
-            <Ionicons name="flash" size={12} color={colors.primary} />
           </View>
         </View>
 

@@ -6,6 +6,7 @@
  */
 
 import { LearningContext } from '@/lib/ai';
+import { normalizeTutorResponse } from '@/supabase/functions/_shared/tutor-response';
 
 // Max items to include in context (token budget)
 const MAX_RECENT_VOCABULARY = 15;
@@ -136,25 +137,7 @@ export function parseStructuredResponse(raw: string): import('@/lib/ai').TutorRe
       jsonStr = jsonMatch[1].trim();
     }
 
-    const parsed = JSON.parse(jsonStr);
-
-    // Basic validation
-    if (!parsed.reply || typeof parsed.reply.chinese !== 'string') {
-      return null;
-    }
-
-    return {
-      reply: {
-        chinese: parsed.reply.chinese || '',
-        pinyin: parsed.reply.pinyin || '',
-        translationVi: parsed.reply.translationVi || '',
-      },
-      correction: parsed.correction || null,
-      newVocabulary: Array.isArray(parsed.newVocabulary) ? parsed.newVocabulary.slice(0, 5) : [],
-      suggestedReplies: Array.isArray(parsed.suggestedReplies) ? parsed.suggestedReplies.slice(0, 3) : [],
-      learningTip: parsed.learningTip || null,
-      practiceExercise: parsed.practiceExercise || null,
-    };
+    return normalizeTutorResponse(JSON.parse(jsonStr));
   } catch {
     return null;
   }
