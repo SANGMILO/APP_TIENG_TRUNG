@@ -21,6 +21,7 @@ import { supabase } from '@/lib/supabase';
 import { FadeInView, AnimatedPressable, GoogleLogo } from '@/components/ui';
 import { Spacing, BorderRadius, Shadow, FontWeight, FontFamily } from '@/constants/theme';
 import { loginWithPassword } from '@/services/auth-flow';
+import { useGoogleOAuth } from '@/hooks/useGoogleOAuth';
 
 const loginSchema = z.object({
   email: z.string().email('Email không hợp lệ'),
@@ -41,6 +42,10 @@ export default function LoginScreen() {
     beginAuthTransition,
     endAuthTransition,
   } = useAuthStore();
+  const {
+    isGoogleLoading,
+    startGoogleOAuth,
+  } = useGoogleOAuth(setError);
 
   const { control, handleSubmit, formState: { errors } } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -48,7 +53,7 @@ export default function LoginScreen() {
   });
 
   const onSubmit = async (data: LoginForm) => {
-    if (isLoading) return;
+    if (isLoading || isGoogleLoading) return;
 
     setIsLoading(true);
     setError('');
@@ -225,10 +230,10 @@ export default function LoginScreen() {
             <AnimatedPressable
               scaleValue={0.98}
               onPress={handleSubmit(onSubmit)}
-              disabled={isLoading}
+              disabled={isLoading || isGoogleLoading}
               style={styles.ctaWrap}
             >
-              <View style={[styles.ctaButton, { backgroundColor: colors.primary, opacity: isLoading ? 0.7 : 1 }]}>
+              <View style={[styles.ctaButton, { backgroundColor: colors.primary, opacity: isLoading || isGoogleLoading ? 0.7 : 1 }]}>
                 <Text style={styles.ctaText}>
                   {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                 </Text>
@@ -248,15 +253,27 @@ export default function LoginScreen() {
           {/* Social buttons */}
           <View style={styles.socialSection}>
             <TouchableOpacity
-              style={[styles.socialButton, { backgroundColor: colors.card, borderColor: colors.border }]}
+              style={[
+                styles.socialButton,
+                {
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                  opacity: isGoogleLoading ? 0.65 : 1,
+                },
+              ]}
+              onPress={() => void startGoogleOAuth()}
+              disabled={isLoading || isGoogleLoading}
               activeOpacity={0.7}
             >
               <GoogleLogo size={20} />
-              <Text style={[styles.socialText, { color: colors.text }]}>Tiếp tục với Google</Text>
+              <Text style={[styles.socialText, { color: colors.text }]}>
+                {isGoogleLoading ? 'Đang kết nối Google...' : 'Tiếp tục với Google'}
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.socialButton, { backgroundColor: colors.card, borderColor: colors.border }]}
+              disabled={isLoading || isGoogleLoading}
               activeOpacity={0.7}
             >
               <Ionicons name="logo-apple" size={20} color={colors.text} />

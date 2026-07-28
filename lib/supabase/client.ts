@@ -57,6 +57,8 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     storage: createStorageAdapter(),
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: Platform.OS === 'web',
+    flowType: 'pkce',
+    // Callback routes exchange PKCE codes explicitly on both Web and native.
+    detectSessionInUrl: false,
   },
 });

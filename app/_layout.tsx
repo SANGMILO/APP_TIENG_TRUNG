@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
+import * as WebBrowser from 'expo-web-browser';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
@@ -15,6 +16,7 @@ import { isBootstrapReady } from '@/services/bootstrap';
 void SplashScreen.preventAutoHideAsync().catch(() => {
   // The web runtime may not expose a native splash screen.
 });
+WebBrowser.maybeCompleteAuthSession();
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { Profile } from '@/types';
 import { signOutSession } from '@/services/auth-flow';
 import type { ProfileStatus } from '@/services/auth-navigation';
+import { createProfileLoader } from '@/services/profile-service';
 
 export type EditableProfileUpdate = Partial<Pick<
   Profile,
@@ -24,6 +25,7 @@ interface AuthState {
   user: User | null;
   profile: Profile | null;
   profileStatus: ProfileStatus;
+  profileError: string | null;
   isLoading: boolean;
   isInitialized: boolean;
   initializationError: string | null;
@@ -45,6 +47,25 @@ interface AuthState {
 
 let authSubscription: { unsubscribe: () => void } | null = null;
 
+const loadAuthenticatedProfile = createProfileLoader({
+  queryProfile: async (userId) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle();
+
+    return {
+      data: data as Profile | null,
+      error,
+    };
+  },
+  ensureCurrentUserProfile: async () => {
+    const { error } = await supabase.rpc('ensure_current_user_profile');
+    return { error };
+  },
+});
+
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
@@ -62,6 +83,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   profile: null,
   profileStatus: 'idle',
+  profileError: null,
   isLoading: true,
   isInitialized: false,
   initializationError: null,
@@ -82,6 +104,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           user: null,
           profile: null,
           profileStatus: 'idle',
+          profileError: null,
           isRecoverySession: false,
         });
         return;
@@ -103,7 +126,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       ) && (
         currentUserId !== session.user.id
         || get().profileStatus === 'idle'
-      );
+      ) && !get().isAuthTransitioning;
 
       if (shouldRefreshProfile) {
         void get().fetchProfile(session.user.id);
@@ -127,7 +150,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (session?.user) {
         const profile = await get().fetchProfile(session.user.id);
         if (!profile) {
-          throw new Error('Không thể tải hồ sơ người dùng. Vui lòng thử lại.');
+          throw new Error(
+            get().profileError
+              ?? 'Không thể tải hồ sơ người dùng. Vui lòng thử lại.',
+          );
         }
       }
     } catch (error) {
@@ -143,37 +169,47 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   setProfile: (profile) => {
-    set({ profile, profileStatus: profile ? 'ready' : 'idle' });
+    set({
+      profile,
+      profileStatus: profile ? 'ready' : 'idle',
+      profileError: null,
+    });
   },
 
   fetchProfile: async (userId) => {
     const resolvedUserId = userId ?? get().user?.id;
     if (!resolvedUserId) {
-      set({ profile: null, profileStatus: 'idle' });
+      set({
+        profile: null,
+        profileStatus: 'idle',
+        profileError: null,
+      });
       return null;
     }
 
-    set({ profileStatus: 'loading' });
-
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', resolvedUserId)
-      .single();
-
-    if (error) {
-      console.error('Error fetching profile:', error);
-      set({ profile: null, profileStatus: 'error' });
-      return null;
-    }
-
-    const profile = data as Profile;
     set({
-      profile,
-      profileStatus: 'ready',
-      initializationError: null,
+      profileStatus: 'loading',
+      profileError: null,
     });
-    return profile;
+
+    try {
+      const profile = await loadAuthenticatedProfile(resolvedUserId);
+      set({
+        profile,
+        profileStatus: 'ready',
+        profileError: null,
+        initializationError: null,
+      });
+      return profile;
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      set({
+        profile: null,
+        profileStatus: 'error',
+        profileError: getErrorMessage(error),
+      });
+      return null;
+    }
   },
 
   clearLocalSession: () => {
@@ -182,6 +218,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       user: null,
       profile: null,
       profileStatus: 'idle',
+      profileError: null,
       isRecoverySession: false,
     });
   },
