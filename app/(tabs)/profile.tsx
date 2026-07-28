@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
+import { supabase } from '@/lib/supabase';
 import { FadeInView, Avatar, ProgressBar } from '@/components/ui';
 import { getPremiumTabContentInset } from '@/components/navigation/PremiumTabBar';
 import {
@@ -46,9 +47,10 @@ interface AchievementBadgeProps {
 interface SettingRowProps {
   iconName: string;
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
   colors: any;
   isLast?: boolean;
+  disabledLabel?: string;
 }
 
 // ─── Main Component ─────────────────────────────────────────────────────────────
@@ -57,6 +59,7 @@ export default function ProfileScreen() {
   const { colors, mode, toggleMode } = useThemeStore();
   const {
     profile,
+    user,
     signOut,
     beginAuthTransition,
     endAuthTransition,
@@ -72,6 +75,18 @@ export default function ProfileScreen() {
   } = useQuery({
     queryKey: ['achievements', profile?.id],
     queryFn: fetchAchievements,
+    enabled: Boolean(profile),
+  });
+  const { data: learnedVocabularyCount = 0 } = useQuery({
+    queryKey: ['profile-learned-vocabulary-count', profile?.id],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('user_vocabulary_progress')
+        .select('vocabulary_id', { count: 'exact', head: true })
+        .eq('user_id', profile!.id);
+      if (error) throw error;
+      return count ?? 0;
+    },
     enabled: Boolean(profile),
   });
   const {
@@ -112,6 +127,14 @@ export default function ProfileScreen() {
   const visibleAchievements = (achievements ?? [])
     .filter((achievement) => !achievement.is_hidden)
     .slice(0, 4);
+  const oauthName = typeof user?.user_metadata?.full_name === 'string'
+    ? user.user_metadata.full_name.trim()
+    : '';
+  const email = profile?.email || user?.email || '';
+  const displayName = profile?.display_name?.trim()
+    || oauthName
+    || email.split('@')[0]
+    || 'Người học';
 
   const memberSinceDate = profile?.created_at
     ? new Date(profile.created_at).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })
@@ -145,7 +168,7 @@ export default function ProfileScreen() {
               <View style={styles.avatarContainer}>
                 <View style={[styles.avatarBorder, { borderColor: colors.secondary }]}>
                   <Avatar
-                    name={profile?.display_name || profile?.email || undefined}
+                    name={displayName}
                     size="2xl"
                   />
                 </View>
@@ -157,7 +180,7 @@ export default function ProfileScreen() {
 
               {/* Name */}
               <Text style={[styles.profileName, { color: colors.text }]}>
-                {profile?.display_name || profile?.username || 'Người học'}
+                {displayName}
               </Text>
 
               {/* Subtitle: Premium + member since */}
@@ -210,9 +233,17 @@ export default function ProfileScreen() {
               colors={colors}
             />
             <StatCard
+              icon="book"
+              value={learnedVocabularyCount}
+              label="Từ đã học"
+              iconColor={colors.jade}
+              iconBgColor={colors.jade + '12'}
+              colors={colors}
+            />
+            <StatCard
               icon="wallet"
               value={profile?.total_coins ?? 0}
-              label="Đồng Vàng"
+              label="Đồng vàng"
               iconColor={colors.secondary}
               iconBgColor={colors.secondary + '12'}
               colors={colors}
@@ -356,6 +387,12 @@ export default function ProfileScreen() {
               colors={colors}
             />
             <SettingRow
+              iconName="diamond-outline"
+              title="Quản lý gói Premium"
+              disabledLabel="Sắp có"
+              colors={colors}
+            />
+            <SettingRow
               iconName={mode === 'dark' ? 'moon' : 'moon-outline'}
               title={mode === 'dark' ? 'Chế độ tối' : 'Chế độ sáng'}
               onPress={toggleMode}
@@ -446,19 +483,34 @@ function getAchievementStatus(achievement: AchievementItem): string {
   return `Mở ${new Date(achievement.unlocked_at).toLocaleDateString('vi-VN')}`;
 }
 
-function SettingRow({ iconName, title, onPress, colors, isLast = false }: SettingRowProps) {
+function SettingRow({
+  iconName,
+  title,
+  onPress,
+  colors,
+  isLast = false,
+  disabledLabel,
+}: SettingRowProps) {
   return (
     <>
       <TouchableOpacity
-        style={styles.settingRow}
         onPress={onPress}
+        disabled={!onPress}
+        accessibilityState={{ disabled: !onPress }}
         activeOpacity={0.6}
+        style={[styles.settingRow, !onPress && { opacity: 0.65 }]}
       >
         <View style={[styles.settingIconCircle, { backgroundColor: colors.surfaceElevated }]}>
           <Ionicons name={iconName as any} size={20} color={colors.textSecondary} />
         </View>
         <Text style={[styles.settingText, { color: colors.text }]}>{title}</Text>
-        <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
+        {disabledLabel ? (
+          <Text style={[styles.settingDisabledLabel, { color: colors.textTertiary }]}>
+            {disabledLabel}
+          </Text>
+        ) : (
+          <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
+        )}
       </TouchableOpacity>
       {!isLast && (
         <View style={[styles.settingDivider, { backgroundColor: colors.borderLight }]} />
@@ -785,6 +837,11 @@ const styles = StyleSheet.create({
     fontWeight: FontWeight.semibold,
     lineHeight: 16,
     letterSpacing: 1.5, // Stitch tracking-wider
+  },
+  settingDisabledLabel: {
+    fontSize: 11,
+    fontFamily: FontFamily.semibold,
+    fontWeight: FontWeight.semibold,
   },
   signOutError: {
     fontSize: FontSize.sm,

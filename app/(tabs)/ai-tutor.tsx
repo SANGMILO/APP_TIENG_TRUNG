@@ -167,11 +167,20 @@ export default function AiTutorScreen() {
 
         {capabilities && !capabilities.textChatConfigured && (
           <FadeInView delay={110} animation="slideUp">
-            <EmptyState
-              iconName="construct-outline"
-              title="AI Tutor chưa được cấu hình"
-              description="Quản trị viên cần kết nối nhà cung cấp AI trước khi bạn có thể bắt đầu trò chuyện."
-            />
+            <View style={[styles.configWarning, {
+              backgroundColor: colors.warning + '12',
+              borderColor: colors.warning + '40',
+            }]}>
+              <Ionicons name="construct-outline" size={18} color={colors.warning} />
+              <View style={styles.configWarningCopy}>
+                <Text style={[styles.configWarningTitle, { color: colors.text }]}>
+                  AI đang chờ cấu hình
+                </Text>
+                <Text style={[styles.configWarningText, { color: colors.textSecondary }]}>
+                  Các tình huống vẫn hiển thị; trò chuyện sẽ mở khi quản trị viên cấu hình nhà cung cấp.
+                </Text>
+              </View>
+            </View>
           </FadeInView>
         )}
 
@@ -479,6 +488,28 @@ const styles = StyleSheet.create({
   usageBarFill: {
     height: '100%',
     borderRadius: 2,
+  },
+  configWarning: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderRadius: 16,
+    marginBottom: 20,
+  },
+  configWarningCopy: { flex: 1 },
+  configWarningTitle: {
+    fontSize: 13,
+    fontFamily: FontFamily.semibold,
+    fontWeight: FontWeight.semibold,
+  },
+  configWarningText: {
+    marginTop: 2,
+    fontSize: 12,
+    lineHeight: 17,
+    fontFamily: FontFamily.regular,
   },
 
   // ─── Section title ───
