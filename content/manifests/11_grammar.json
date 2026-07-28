@@ -1,0 +1,597 @@
+{
+  "schemaVersion": 1,
+  "batchKey": "batch-11-grammar",
+  "version": 1,
+  "migrationName": "20260729200000_content_batch_11_grammar",
+  "description": "Chinese Grammar core curriculum; review-stage pending qualified linguistic approval.",
+  "courses": [
+    {
+      "slug": "chinese-grammar",
+      "title": "Chinese Grammar",
+      "titleZh": "汉语语法",
+      "descriptionVi": "Hệ thống hóa cấu trúc câu từ cơ bản đến phức hợp.",
+      "level": "upper-intermediate",
+      "orderIndex": 10,
+      "status": "review",
+      "estimatedMinutes": 78,
+      "objectives": [
+        "Phân tích thành phần câu",
+        "Chọn cấu trúc theo ý nghĩa",
+        "Sửa lỗi trật tự và liên kết"
+      ],
+      "units": [
+        {
+          "slug": "grammar-nen-tang",
+          "title": "Nền tảng",
+          "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+          "orderIndex": 1,
+          "status": "review",
+          "objectives": [
+            "Phân tích thành phần câu",
+            "Chọn cấu trúc theo ý nghĩa"
+          ],
+          "chapters": [
+            {
+              "slug": "grammar-nen-tang-chapter",
+              "title": "Khái niệm cốt lõi",
+              "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Phân tích thành phần câu",
+                "Chọn cấu trúc theo ý nghĩa"
+              ],
+              "lessons": [
+                {
+                  "slug": "thanh-phan-cau",
+                  "title": "句子成分 — Thành phần câu",
+                  "descriptionVi": "Nhận diện chủ ngữ, vị ngữ và tân ngữ.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Phân tích cấu trúc câu"
+                  ],
+                  "culturalNote": "Trạng ngữ thường đứng trước động từ vị ngữ.",
+                  "reviewVocabularyKeys": [],
+                  "reviewGrammarKeys": [],
+                  "vocabulary": [
+                    {
+                      "key": "grammar:主语",
+                      "chinese": "主语",
+                      "pinyin": "zhǔyǔ",
+                      "meaningVi": "chủ ngữ",
+                      "meaningEn": "subject",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "thanh-phan-cau",
+                      "status": "review",
+                      "exampleSentence": "这个句子的主语是“学生”。",
+                      "examplePinyin": "Zhège jùzi de zhǔyǔ shì “xuésheng”.",
+                      "exampleMeaningVi": "Chủ ngữ của câu này là “học sinh”."
+                    },
+                    {
+                      "key": "grammar:谓语",
+                      "chinese": "谓语",
+                      "pinyin": "wèiyǔ",
+                      "meaningVi": "vị ngữ",
+                      "meaningEn": "predicate",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "thanh-phan-cau",
+                      "status": "review",
+                      "exampleSentence": "形容词也可以作谓语。",
+                      "examplePinyin": "Xíngróngcí yě kěyǐ zuò wèiyǔ.",
+                      "exampleMeaningVi": "Tính từ cũng có thể làm vị ngữ."
+                    },
+                    {
+                      "key": "grammar:宾语",
+                      "chinese": "宾语",
+                      "pinyin": "bīnyǔ",
+                      "meaningVi": "tân ngữ",
+                      "meaningEn": "object",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "thanh-phan-cau",
+                      "status": "review",
+                      "exampleSentence": "“汉语”是动词“学习”的宾语。",
+                      "examplePinyin": "“Hànyǔ” shì dòngcí “xuéxí” de bīnyǔ.",
+                      "exampleMeaningVi": "“Tiếng Trung” là tân ngữ của động từ “học”."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "grammar:thanh-phan-cau",
+                      "title": "Trật tự câu cơ bản",
+                      "pattern": "chủ ngữ + vị ngữ + tân ngữ",
+                      "explanationVi": "Trật tự cơ bản đặt người thực hiện trước động từ và đối tượng sau động từ.",
+                      "exampleChinese": "学生认真学习汉语。",
+                      "examplePinyin": "Xuésheng rènzhēn xuéxí Hànyǔ.",
+                      "exampleMeaningVi": "Học sinh chăm chỉ học tiếng Trung.",
+                      "level": "upper-intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "grammar:主语",
+                    "distractorKeys": [
+                      "grammar:谓语",
+                      "grammar:宾语"
+                    ],
+                    "sentenceTokens": [
+                      "学生",
+                      "认真",
+                      "学习",
+                      "汉语",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "学生认真学习汉语。",
+                    "translationPromptVi": "Học sinh chăm chỉ học tiếng Trung.",
+                    "translationAnswerZh": "学生认真学习汉语。",
+                    "grammarQuestion": "Câu nào có trật tự cơ bản đúng?",
+                    "grammarOptions": [
+                      "学生认真学习汉语。",
+                      "。汉语学习认真学生",
+                      "认真学习汉语。学生"
+                    ],
+                    "grammarCorrect": "学生认真学习汉语。",
+                    "grammarExplanationVi": "Trật tự cơ bản đặt người thực hiện trước động từ và đối tượng sau động từ.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "grammar:thanh-phan-cau",
+                    "speakingTextZh": "学生认真学习汉语。",
+                    "speakingPinyin": "Xuésheng rènzhēn xuéxí Hànyǔ."
+                  }
+                },
+                {
+                  "slug": "dinh-ngu",
+                  "title": "复杂定语 — Định ngữ phức",
+                  "descriptionVi": "Đặt cụm bổ nghĩa trước danh từ với 的.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Tạo cụm danh từ dài đúng trật tự"
+                  ],
+                  "culturalNote": "Danh từ trung tâm luôn đứng sau toàn bộ định ngữ.",
+                  "reviewVocabularyKeys": [
+                    "grammar:主语",
+                    "grammar:谓语",
+                    "grammar:宾语"
+                  ],
+                  "reviewGrammarKeys": [
+                    "grammar:thanh-phan-cau"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "grammar:定语",
+                      "chinese": "定语",
+                      "pinyin": "dìngyǔ",
+                      "meaningVi": "định ngữ",
+                      "meaningEn": "attributive",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "dinh-ngu",
+                      "status": "review",
+                      "exampleSentence": "定语一般放在名词前面。",
+                      "examplePinyin": "Dìngyǔ yìbān fàng zài míngcí qiánmiàn.",
+                      "exampleMeaningVi": "Định ngữ thường đặt trước danh từ."
+                    },
+                    {
+                      "key": "grammar:修饰",
+                      "chinese": "修饰",
+                      "pinyin": "xiūshì",
+                      "meaningVi": "bổ nghĩa",
+                      "meaningEn": "modify",
+                      "partOfSpeech": "động từ",
+                      "level": "upper-intermediate",
+                      "category": "dinh-ngu",
+                      "status": "review",
+                      "exampleSentence": "这个短语用来修饰名词。",
+                      "examplePinyin": "Zhège duǎnyǔ yònglái xiūshì míngcí.",
+                      "exampleMeaningVi": "Cụm này dùng để bổ nghĩa cho danh từ."
+                    },
+                    {
+                      "key": "grammar:中心语",
+                      "chinese": "中心语",
+                      "pinyin": "zhōngxīnyǔ",
+                      "meaningVi": "trung tâm ngữ",
+                      "meaningEn": "head word",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "dinh-ngu",
+                      "status": "review",
+                      "exampleSentence": "“书”是这个名词短语的中心语。",
+                      "examplePinyin": "“Shū” shì zhège míngcí duǎnyǔ de zhōngxīnyǔ.",
+                      "exampleMeaningVi": "“Sách” là trung tâm ngữ của cụm danh từ này."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "grammar:dinh-ngu",
+                      "title": "Định ngữ với 的",
+                      "pattern": "cụm bổ nghĩa + 的 + danh từ trung tâm",
+                      "explanationVi": "Định ngữ dài hoặc có quan hệ sở hữu thường dùng 的.",
+                      "exampleChinese": "这是我昨天在书店买的书。",
+                      "examplePinyin": "Zhè shì wǒ zuótiān zài shūdiàn mǎi de shū.",
+                      "exampleMeaningVi": "Đây là cuốn sách tôi mua ở hiệu sách hôm qua.",
+                      "level": "upper-intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "grammar:定语",
+                    "distractorKeys": [
+                      "grammar:修饰",
+                      "grammar:中心语"
+                    ],
+                    "sentenceTokens": [
+                      "这",
+                      "是",
+                      "我",
+                      "昨天",
+                      "在",
+                      "书店",
+                      "买",
+                      "的",
+                      "书",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "这是我昨天在书店买的书。",
+                    "translationPromptVi": "Đây là cuốn sách tôi mua ở hiệu sách hôm qua.",
+                    "translationAnswerZh": "这是我昨天在书店买的书。",
+                    "grammarQuestion": "Cụm định ngữ nào đúng trật tự?",
+                    "grammarOptions": [
+                      "这是我昨天在书店买的书。",
+                      "。书的买书店在昨天我是这",
+                      "是我昨天在书店买的书。这"
+                    ],
+                    "grammarCorrect": "这是我昨天在书店买的书。",
+                    "grammarExplanationVi": "Định ngữ dài hoặc có quan hệ sở hữu thường dùng 的.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "grammar:dinh-ngu",
+                    "speakingTextZh": "这是我昨天在书店买的书。",
+                    "speakingPinyin": "Zhè shì wǒ zuótiān zài shūdiàn mǎi de shū."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "grammar-van-dung",
+          "title": "Vận dụng",
+          "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+          "orderIndex": 2,
+          "status": "review",
+          "objectives": [
+            "Chọn cấu trúc theo ý nghĩa",
+            "Sửa lỗi trật tự và liên kết"
+          ],
+          "chapters": [
+            {
+              "slug": "grammar-van-dung-chapter",
+              "title": "Ngữ cảnh thực tế",
+              "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Chọn cấu trúc theo ý nghĩa",
+                "Sửa lỗi trật tự và liên kết"
+              ],
+              "lessons": [
+                {
+                  "slug": "bo-ngu",
+                  "title": "补语系统 — Hệ thống bổ ngữ",
+                  "descriptionVi": "Phân biệt bổ ngữ kết quả, xu hướng và khả năng.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Chọn bổ ngữ theo mục đích diễn đạt"
+                  ],
+                  "culturalNote": "Không nhầm 看不懂 với 没看懂: một bên là khả năng, một bên là kết quả quá khứ.",
+                  "reviewVocabularyKeys": [
+                    "grammar:定语",
+                    "grammar:修饰",
+                    "grammar:中心语"
+                  ],
+                  "reviewGrammarKeys": [
+                    "grammar:dinh-ngu"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "grammar:补语",
+                      "chinese": "补语",
+                      "pinyin": "bǔyǔ",
+                      "meaningVi": "bổ ngữ",
+                      "meaningEn": "complement",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "bo-ngu",
+                      "status": "review",
+                      "exampleSentence": "补语说明动作的结果或程度。",
+                      "examplePinyin": "Bǔyǔ shuōmíng dòngzuò de jiéguǒ huò chéngdù.",
+                      "exampleMeaningVi": "Bổ ngữ giải thích kết quả hoặc mức độ của hành động."
+                    },
+                    {
+                      "key": "grammar:程度",
+                      "chinese": "程度",
+                      "pinyin": "chéngdù",
+                      "meaningVi": "mức độ",
+                      "meaningEn": "degree",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "bo-ngu",
+                      "status": "review",
+                      "exampleSentence": "这个副词表示程度很高。",
+                      "examplePinyin": "Zhège fùcí biǎoshì chéngdù hěn gāo.",
+                      "exampleMeaningVi": "Phó từ này biểu thị mức độ rất cao."
+                    },
+                    {
+                      "key": "grammar:可能",
+                      "chinese": "可能",
+                      "pinyin": "kěnéng",
+                      "meaningVi": "khả năng; có thể",
+                      "meaningEn": "possibility; possible",
+                      "partOfSpeech": "danh từ/tính từ",
+                      "level": "upper-intermediate",
+                      "category": "bo-ngu",
+                      "status": "review",
+                      "exampleSentence": "这种情况完全可能发生。",
+                      "examplePinyin": "Zhè zhǒng qíngkuàng wánquán kěnéng fāshēng.",
+                      "exampleMeaningVi": "Tình huống này hoàn toàn có thể xảy ra."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "grammar:bo-ngu",
+                      "title": "Bổ ngữ khả năng",
+                      "pattern": "động từ + 得/不 + bổ ngữ kết quả",
+                      "explanationVi": "得 cho biết có khả năng đạt kết quả; 不 cho biết không thể.",
+                      "exampleChinese": "这篇文章我看得懂。",
+                      "examplePinyin": "Zhè piān wénzhāng wǒ kàn de dǒng.",
+                      "exampleMeaningVi": "Bài này tôi đọc hiểu được.",
+                      "level": "upper-intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "grammar:补语",
+                    "distractorKeys": [
+                      "grammar:程度",
+                      "grammar:可能"
+                    ],
+                    "sentenceTokens": [
+                      "这",
+                      "篇",
+                      "文章",
+                      "我",
+                      "看",
+                      "得",
+                      "懂",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "这篇文章我看得懂。",
+                    "translationPromptVi": "Bài này tôi đọc hiểu được.",
+                    "translationAnswerZh": "这篇文章我看得懂。",
+                    "grammarQuestion": "Câu nào dùng bổ ngữ khả năng?",
+                    "grammarOptions": [
+                      "这篇文章我看得懂。",
+                      "。懂得看我文章篇这",
+                      "篇文章我看得懂。这"
+                    ],
+                    "grammarCorrect": "这篇文章我看得懂。",
+                    "grammarExplanationVi": "得 cho biết có khả năng đạt kết quả; 不 cho biết không thể.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "grammar:bo-ngu",
+                    "speakingTextZh": "这篇文章我看得懂。",
+                    "speakingPinyin": "Zhè piān wénzhāng wǒ kàn de dǒng."
+                  }
+                },
+                {
+                  "slug": "lien-ket",
+                  "title": "复句关系 — Quan hệ câu phức",
+                  "descriptionVi": "Chọn cặp liên từ theo logic.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Kết nối mệnh đề mạch lạc"
+                  ],
+                  "culturalNote": "Hai vế nên cùng một chủ đề hoặc đặt chủ ngữ đúng vị trí.",
+                  "reviewVocabularyKeys": [
+                    "grammar:补语",
+                    "grammar:程度",
+                    "grammar:可能"
+                  ],
+                  "reviewGrammarKeys": [
+                    "grammar:bo-ngu"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "grammar:转折",
+                      "chinese": "转折",
+                      "pinyin": "zhuǎnzhé",
+                      "meaningVi": "chuyển ý, tương phản",
+                      "meaningEn": "contrast",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "lien-ket",
+                      "status": "review",
+                      "exampleSentence": "这两个分句之间是转折关系。",
+                      "examplePinyin": "Zhè liǎng ge fēnjù zhījiān shì zhuǎnzhé guānxì.",
+                      "exampleMeaningVi": "Giữa hai mệnh đề là quan hệ tương phản."
+                    },
+                    {
+                      "key": "grammar:递进",
+                      "chinese": "递进",
+                      "pinyin": "dìjìn",
+                      "meaningVi": "tăng tiến",
+                      "meaningEn": "progression",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "lien-ket",
+                      "status": "review",
+                      "exampleSentence": "“不但…而且…”表示递进。",
+                      "examplePinyin": "“Búdàn… érqiě…” biǎoshì dìjìn.",
+                      "exampleMeaningVi": "“Không những… mà còn…” biểu thị tăng tiến."
+                    },
+                    {
+                      "key": "grammar:假设",
+                      "chinese": "假设",
+                      "pinyin": "jiǎshè",
+                      "meaningVi": "giả thiết",
+                      "meaningEn": "hypothesis",
+                      "partOfSpeech": "danh từ",
+                      "level": "upper-intermediate",
+                      "category": "lien-ket",
+                      "status": "review",
+                      "exampleSentence": "“如果”常用来提出假设。",
+                      "examplePinyin": "“Rúguǒ” cháng yònglái tíchū jiǎshè.",
+                      "exampleMeaningVi": "“Nếu” thường dùng để nêu giả thiết."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "grammar:lien-ket",
+                      "title": "Tăng tiến với 不但",
+                      "pattern": "不但 A，而且 B",
+                      "explanationVi": "Vế B bổ sung thông tin mạnh hơn hoặc quan trọng hơn A.",
+                      "exampleChinese": "这个方法不但简单，而且有效。",
+                      "examplePinyin": "Zhège fāngfǎ búdàn jiǎndān, érqiě yǒuxiào.",
+                      "exampleMeaningVi": "Phương pháp này không những đơn giản mà còn hiệu quả.",
+                      "level": "upper-intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "grammar:转折",
+                    "distractorKeys": [
+                      "grammar:递进",
+                      "grammar:假设"
+                    ],
+                    "sentenceTokens": [
+                      "这个",
+                      "方法",
+                      "不但",
+                      "简单",
+                      "，",
+                      "而且",
+                      "有效",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "这个方法不但简单，而且有效。",
+                    "translationPromptVi": "Phương pháp này không những đơn giản mà còn hiệu quả.",
+                    "translationAnswerZh": "这个方法不但简单，而且有效。",
+                    "grammarQuestion": "Câu nào có quan hệ tăng tiến?",
+                    "grammarOptions": [
+                      "这个方法不但简单，而且有效。",
+                      "。有效而且，简单不但方法这个",
+                      "方法不但简单，而且有效。这个"
+                    ],
+                    "grammarCorrect": "这个方法不但简单，而且有效。",
+                    "grammarExplanationVi": "Vế B bổ sung thông tin mạnh hơn hoặc quan trọng hơn A.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "grammar:lien-ket",
+                    "speakingTextZh": "这个方法不但简单，而且有效。",
+                    "speakingPinyin": "Zhège fāngfǎ búdàn jiǎndān, érqiě yǒuxiào."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "grammar-on-tap",
+          "title": "Ôn tập",
+          "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+          "orderIndex": 3,
+          "status": "review",
+          "objectives": [
+            "Ôn từ vựng",
+            "Ôn mẫu câu"
+          ],
+          "chapters": [
+            {
+              "slug": "grammar-on-tap-chapter",
+              "title": "Củng cố lộ trình",
+              "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Ôn từ vựng",
+                "Ôn mẫu câu"
+              ],
+              "lessons": [
+                {
+                  "slug": "grammar-review",
+                  "title": "Ôn tập Chinese Grammar",
+                  "descriptionVi": "Củng cố từ vựng, mẫu câu và khả năng diễn đạt của toàn khóa.",
+                  "orderIndex": 1,
+                  "xpReward": 30,
+                  "status": "review",
+                  "lessonType": "review",
+                  "estimatedMinutes": 18,
+                  "objectives": [
+                    "Vận dụng lại từ vựng trọng tâm",
+                    "Tự kiểm tra mẫu câu đã học"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "grammar:转折",
+                    "grammar:递进",
+                    "grammar:假设"
+                  ],
+                  "reviewGrammarKeys": [
+                    "grammar:lien-ket"
+                  ],
+                  "vocabulary": [],
+                  "grammar": [],
+                  "practice": {
+                    "targetKey": "grammar:转折",
+                    "distractorKeys": [
+                      "grammar:递进",
+                      "grammar:假设"
+                    ],
+                    "sentenceTokens": [
+                      "这个",
+                      "方法",
+                      "不但",
+                      "简单",
+                      "，",
+                      "而且",
+                      "有效",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "这个方法不但简单，而且有效。",
+                    "translationPromptVi": "Phương pháp này không những đơn giản mà còn hiệu quả.",
+                    "translationAnswerZh": "这个方法不但简单，而且有效。",
+                    "grammarQuestion": "Câu nào có quan hệ tăng tiến?",
+                    "grammarOptions": [
+                      "这个方法不但简单，而且有效。",
+                      "。有效而且，简单不但方法这个",
+                      "方法不但简单，而且有效。这个"
+                    ],
+                    "grammarCorrect": "这个方法不但简单，而且有效。",
+                    "grammarExplanationVi": "Vế B bổ sung thông tin mạnh hơn hoặc quan trọng hơn A.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "grammar:lien-ket",
+                    "speakingTextZh": "这个方法不但简单，而且有效。",
+                    "speakingPinyin": "Zhège fāngfǎ búdàn jiǎndān, érqiě yǒuxiào."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
