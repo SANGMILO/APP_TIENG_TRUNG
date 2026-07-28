@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 1,
+  "batchKey": "batch-05-hsk4",
+  "version": 1,
+  "migrationName": "20260729140000_content_batch_05_hsk4",
+  "description": "HSK 4 core curriculum; review-stage pending qualified linguistic approval.",
+  "courses": [
+    {
+      "slug": "hsk-4",
+      "title": "HSK 4",
+      "titleZh": "HSK 四级",
+      "descriptionVi": "Rèn diễn đạt có tổ chức, câu 把/被 và lập luận.",
+      "level": "intermediate",
+      "orderIndex": 5,
+      "status": "review",
+      "estimatedMinutes": 78,
+      "objectives": [
+        "Dùng câu 把 và 被",
+        "Trình bày điều kiện",
+        "Tóm tắt ý kiến có liên kết"
+      ],
+      "units": [
+        {
+          "slug": "hsk4-nen-tang",
+          "title": "Nền tảng",
+          "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+          "orderIndex": 1,
+          "status": "review",
+          "objectives": [
+            "Dùng câu 把 và 被",
+            "Trình bày điều kiện"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk4-nen-tang-chapter",
+              "title": "Khái niệm cốt lõi",
+              "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Dùng câu 把 và 被",
+                "Trình bày điều kiện"
+              ],
+              "lessons": [
+                {
+                  "slug": "cau-ba",
+                  "title": "把文件放好 — Câu 把",
+                  "descriptionVi": "Đưa tân ngữ xác định lên trước động từ.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Mô tả xử lý đồ vật"
+                  ],
+                  "culturalNote": "Sau động từ thường cần kết quả, hướng, số lượng hoặc nơi chốn.",
+                  "reviewVocabularyKeys": [],
+                  "reviewGrammarKeys": [],
+                  "vocabulary": [
+                    {
+                      "key": "hsk4:整理",
+                      "chinese": "整理",
+                      "pinyin": "zhěnglǐ",
+                      "meaningVi": "sắp xếp, chỉnh lý",
+                      "meaningEn": "organize",
+                      "partOfSpeech": "động từ",
+                      "level": "intermediate",
+                      "category": "cau-ba",
+                      "status": "review",
+                      "exampleSentence": "我先整理桌上的文件。",
+                      "examplePinyin": "Wǒ xiān zhěnglǐ zhuō shàng de wénjiàn.",
+                      "exampleMeaningVi": "Tôi sắp xếp tài liệu trên bàn trước."
+                    },
+                    {
+                      "key": "hsk4:材料",
+                      "chinese": "材料",
+                      "pinyin": "cáiliào",
+                      "meaningVi": "tài liệu, vật liệu",
+                      "meaningEn": "material",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "cau-ba",
+                      "status": "review",
+                      "exampleSentence": "请把申请材料发给我。",
+                      "examplePinyin": "Qǐng bǎ shēnqǐng cáiliào fā gěi wǒ.",
+                      "exampleMeaningVi": "Hãy gửi tài liệu đăng ký cho tôi."
+                    },
+                    {
+                      "key": "hsk4:位置",
+                      "chinese": "位置",
+                      "pinyin": "wèizhi",
+                      "meaningVi": "vị trí",
+                      "meaningEn": "position",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "cau-ba",
+                      "status": "review",
+                      "exampleSentence": "我把椅子放回原来的位置。",
+                      "examplePinyin": "Wǒ bǎ yǐzi fàng huí yuánlái de wèizhi.",
+                      "exampleMeaningVi": "Tôi đặt ghế về vị trí cũ."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk4:cau-ba",
+                      "title": "Câu xử lý 把",
+                      "pattern": "chủ ngữ + 把 + tân ngữ xác định + động từ + kết quả",
+                      "explanationVi": "把 nhấn mạnh đối tượng được xử lý và kết quả của hành động.",
+                      "exampleChinese": "请把这些材料整理好。",
+                      "examplePinyin": "Qǐng bǎ zhèxiē cáiliào zhěnglǐ hǎo.",
+                      "exampleMeaningVi": "Hãy sắp xếp tốt những tài liệu này.",
+                      "level": "intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk4:整理",
+                    "distractorKeys": [
+                      "hsk4:材料",
+                      "hsk4:位置"
+                    ],
+                    "sentenceTokens": [
+                      "请",
+                      "把",
+                      "这些",
+                      "材料",
+                      "整理",
+                      "好",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "请把这些材料整理好。",
+                    "translationPromptVi": "Hãy sắp xếp tốt những tài liệu này.",
+                    "translationAnswerZh": "请把这些材料整理好。",
+                    "grammarQuestion": "Câu 把 nào đầy đủ kết quả?",
+                    "grammarOptions": [
+                      "请把这些材料整理好。",
+                      "。好整理材料这些把请",
+                      "把这些材料整理好。请"
+                    ],
+                    "grammarCorrect": "请把这些材料整理好。",
+                    "grammarExplanationVi": "把 nhấn mạnh đối tượng được xử lý và kết quả của hành động.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk4:cau-ba",
+                    "speakingTextZh": "请把这些材料整理好。",
+                    "speakingPinyin": "Qǐng bǎ zhèxiē cáiliào zhěnglǐ hǎo."
+                  }
+                },
+                {
+                  "slug": "cau-bi",
+                  "title": "航班被取消了 — Câu 被",
+                  "descriptionVi": "Diễn đạt bị động và tác nhân.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Dùng 被 khi tác động quan trọng"
+                  ],
+                  "culturalNote": "Tác nhân có thể lược khi không rõ hoặc không quan trọng.",
+                  "reviewVocabularyKeys": [
+                    "hsk4:整理",
+                    "hsk4:材料",
+                    "hsk4:位置"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk4:cau-ba"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk4:通知",
+                      "chinese": "通知",
+                      "pinyin": "tōngzhī",
+                      "meaningVi": "thông báo",
+                      "meaningEn": "notify; notice",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "intermediate",
+                      "category": "cau-bi",
+                      "status": "review",
+                      "exampleSentence": "公司通知我们明天开会。",
+                      "examplePinyin": "Gōngsī tōngzhī wǒmen míngtiān kāihuì.",
+                      "exampleMeaningVi": "Công ty thông báo ngày mai họp."
+                    },
+                    {
+                      "key": "hsk4:取消",
+                      "chinese": "取消",
+                      "pinyin": "qǔxiāo",
+                      "meaningVi": "hủy bỏ",
+                      "meaningEn": "cancel",
+                      "partOfSpeech": "động từ",
+                      "level": "intermediate",
+                      "category": "cau-bi",
+                      "status": "review",
+                      "exampleSentence": "因为大雪，航班取消了。",
+                      "examplePinyin": "Yīnwèi dàxuě, hángbān qǔxiāo le.",
+                      "exampleMeaningVi": "Do tuyết lớn, chuyến bay bị hủy."
+                    },
+                    {
+                      "key": "hsk4:影响",
+                      "chinese": "影响",
+                      "pinyin": "yǐngxiǎng",
+                      "meaningVi": "ảnh hưởng",
+                      "meaningEn": "influence",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "intermediate",
+                      "category": "cau-bi",
+                      "status": "review",
+                      "exampleSentence": "睡眠不足会影响工作。",
+                      "examplePinyin": "Shuìmián bùzú huì yǐngxiǎng gōngzuò.",
+                      "exampleMeaningVi": "Thiếu ngủ sẽ ảnh hưởng công việc."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk4:cau-bi",
+                      "title": "Câu bị động với 被",
+                      "pattern": "đối tượng + 被 + tác nhân + động từ + kết quả",
+                      "explanationVi": "被 đưa đối tượng chịu tác động lên làm chủ đề.",
+                      "exampleChinese": "航班被航空公司取消了。",
+                      "examplePinyin": "Hángbān bèi hángkōng gōngsī qǔxiāo le.",
+                      "exampleMeaningVi": "Chuyến bay đã bị hãng hàng không hủy.",
+                      "level": "intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk4:通知",
+                    "distractorKeys": [
+                      "hsk4:取消",
+                      "hsk4:影响"
+                    ],
+                    "sentenceTokens": [
+                      "航班",
+                      "被",
+                      "航空公司",
+                      "取消",
+                      "了",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "航班被航空公司取消了。",
+                    "translationPromptVi": "Chuyến bay đã bị hãng hàng không hủy.",
+                    "translationAnswerZh": "航班被航空公司取消了。",
+                    "grammarQuestion": "Câu bị động nào đúng?",
+                    "grammarOptions": [
+                      "航班被航空公司取消了。",
+                      "。了取消航空公司被航班",
+                      "被航空公司取消了。航班"
+                    ],
+                    "grammarCorrect": "航班被航空公司取消了。",
+                    "grammarExplanationVi": "被 đưa đối tượng chịu tác động lên làm chủ đề.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk4:cau-bi",
+                    "speakingTextZh": "航班被航空公司取消了。",
+                    "speakingPinyin": "Hángbān bèi hángkōng gōngsī qǔxiāo le."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "hsk4-van-dung",
+          "title": "Vận dụng",
+          "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+          "orderIndex": 2,
+          "status": "review",
+          "objectives": [
+            "Trình bày điều kiện",
+            "Tóm tắt ý kiến có liên kết"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk4-van-dung-chapter",
+              "title": "Ngữ cảnh thực tế",
+              "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Trình bày điều kiện",
+                "Tóm tắt ý kiến có liên kết"
+              ],
+              "lessons": [
+                {
+                  "slug": "dieu-kien",
+                  "title": "只要…就… — Điều kiện đủ",
+                  "descriptionVi": "Nêu điều kiện đủ để có kết quả.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Trình bày điều kiện và hệ quả"
+                  ],
+                  "culturalNote": "只有…才… diễn tả điều kiện cần và có sắc thái chặt hơn.",
+                  "reviewVocabularyKeys": [
+                    "hsk4:通知",
+                    "hsk4:取消",
+                    "hsk4:影响"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk4:cau-bi"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk4:条件",
+                      "chinese": "条件",
+                      "pinyin": "tiáojiàn",
+                      "meaningVi": "điều kiện",
+                      "meaningEn": "condition",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "dieu-kien",
+                      "status": "review",
+                      "exampleSentence": "这个工作条件很不错。",
+                      "examplePinyin": "Zhège gōngzuò tiáojiàn hěn búcuò.",
+                      "exampleMeaningVi": "Điều kiện công việc này khá tốt."
+                    },
+                    {
+                      "key": "hsk4:坚持",
+                      "chinese": "坚持",
+                      "pinyin": "jiānchí",
+                      "meaningVi": "kiên trì",
+                      "meaningEn": "persist",
+                      "partOfSpeech": "động từ",
+                      "level": "intermediate",
+                      "category": "dieu-kien",
+                      "status": "review",
+                      "exampleSentence": "只要坚持练习，就会进步。",
+                      "examplePinyin": "Zhǐyào jiānchí liànxí, jiù huì jìnbù.",
+                      "exampleMeaningVi": "Chỉ cần kiên trì luyện tập thì sẽ tiến bộ."
+                    },
+                    {
+                      "key": "hsk4:成功",
+                      "chinese": "成功",
+                      "pinyin": "chénggōng",
+                      "meaningVi": "thành công",
+                      "meaningEn": "succeed; success",
+                      "partOfSpeech": "động từ/danh từ",
+                      "level": "intermediate",
+                      "category": "dieu-kien",
+                      "status": "review",
+                      "exampleSentence": "团队终于成功完成任务。",
+                      "examplePinyin": "Tuánduì zhōngyú chénggōng wánchéng rènwu.",
+                      "exampleMeaningVi": "Nhóm cuối cùng đã hoàn thành nhiệm vụ thành công."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk4:dieu-kien",
+                      "title": "Điều kiện với 只要",
+                      "pattern": "只要 + điều kiện，就 + kết quả",
+                      "explanationVi": "只要 nhấn mạnh điều kiện tối thiểu đủ để kết quả xảy ra.",
+                      "exampleChinese": "只要认真准备，就能成功。",
+                      "examplePinyin": "Zhǐyào rènzhēn zhǔnbèi, jiù néng chénggōng.",
+                      "exampleMeaningVi": "Chỉ cần chuẩn bị nghiêm túc thì có thể thành công.",
+                      "level": "intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk4:条件",
+                    "distractorKeys": [
+                      "hsk4:坚持",
+                      "hsk4:成功"
+                    ],
+                    "sentenceTokens": [
+                      "只要",
+                      "认真",
+                      "准备",
+                      "，",
+                      "就",
+                      "能",
+                      "成功",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "只要认真准备，就能成功。",
+                    "translationPromptVi": "Chỉ cần chuẩn bị nghiêm túc thì có thể thành công.",
+                    "translationAnswerZh": "只要认真准备，就能成功。",
+                    "grammarQuestion": "Câu nào nêu điều kiện đủ?",
+                    "grammarOptions": [
+                      "只要认真准备，就能成功。",
+                      "。成功能就，准备认真只要",
+                      "认真准备，就能成功。只要"
+                    ],
+                    "grammarCorrect": "只要认真准备，就能成功。",
+                    "grammarExplanationVi": "只要 nhấn mạnh điều kiện tối thiểu đủ để kết quả xảy ra.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk4:dieu-kien",
+                    "speakingTextZh": "只要认真准备，就能成功。",
+                    "speakingPinyin": "Zhǐyào rènzhēn zhǔnbèi, jiù néng chénggōng."
+                  }
+                },
+                {
+                  "slug": "lap-luan",
+                  "title": "一方面…另一方面… — Hai mặt",
+                  "descriptionVi": "Tổ chức ý kiến theo hai phương diện.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Trình bày quan điểm cân bằng"
+                  ],
+                  "culturalNote": "Hai vế nên cùng bàn về một chủ đề và cân xứng về ý.",
+                  "reviewVocabularyKeys": [
+                    "hsk4:条件",
+                    "hsk4:坚持",
+                    "hsk4:成功"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk4:dieu-kien"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk4:方面",
+                      "chinese": "方面",
+                      "pinyin": "fāngmiàn",
+                      "meaningVi": "phương diện",
+                      "meaningEn": "aspect",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "lap-luan",
+                      "status": "review",
+                      "exampleSentence": "我们需要从两个方面考虑。",
+                      "examplePinyin": "Wǒmen xūyào cóng liǎng ge fāngmiàn kǎolǜ.",
+                      "exampleMeaningVi": "Chúng ta cần cân nhắc từ hai phương diện."
+                    },
+                    {
+                      "key": "hsk4:优点",
+                      "chinese": "优点",
+                      "pinyin": "yōudiǎn",
+                      "meaningVi": "ưu điểm",
+                      "meaningEn": "advantage",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "lap-luan",
+                      "status": "review",
+                      "exampleSentence": "这个方案的优点很明显。",
+                      "examplePinyin": "Zhège fāngàn de yōudiǎn hěn míngxiǎn.",
+                      "exampleMeaningVi": "Ưu điểm của phương án này rất rõ."
+                    },
+                    {
+                      "key": "hsk4:缺点",
+                      "chinese": "缺点",
+                      "pinyin": "quēdiǎn",
+                      "meaningVi": "khuyết điểm",
+                      "meaningEn": "disadvantage",
+                      "partOfSpeech": "danh từ",
+                      "level": "intermediate",
+                      "category": "lap-luan",
+                      "status": "review",
+                      "exampleSentence": "我们也要看到它的缺点。",
+                      "examplePinyin": "Wǒmen yě yào kàndào tā de quēdiǎn.",
+                      "exampleMeaningVi": "Chúng ta cũng cần thấy khuyết điểm của nó."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk4:lap-luan",
+                      "title": "Hai phương diện",
+                      "pattern": "一方面 A，另一方面 B",
+                      "explanationVi": "Cặp nối tổ chức hai khía cạnh song song hoặc đối lập.",
+                      "exampleChinese": "一方面很方便，另一方面成本较高。",
+                      "examplePinyin": "Yì fāngmiàn hěn fāngbiàn, lìng yì fāngmiàn chéngběn jiào gāo.",
+                      "exampleMeaningVi": "Một mặt rất tiện, mặt khác chi phí khá cao.",
+                      "level": "intermediate",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk4:方面",
+                    "distractorKeys": [
+                      "hsk4:优点",
+                      "hsk4:缺点"
+                    ],
+                    "sentenceTokens": [
+                      "一方面",
+                      "很",
+                      "方便",
+                      "，",
+                      "另一方面",
+                      "成本",
+                      "较高",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "一方面很方便，另一方面成本较高。",
+                    "translationPromptVi": "Một mặt rất tiện, mặt khác chi phí khá cao.",
+                    "translationAnswerZh": "一方面很方便，另一方面成本较高。",
+                    "grammarQuestion": "Câu nào trình bày hai mặt của vấn đề?",
+                    "grammarOptions": [
+                      "一方面很方便，另一方面成本较高。",
+                      "。较高成本另一方面，方便很一方面",
+                      "很方便，另一方面成本较高。一方面"
+                    ],
+                    "grammarCorrect": "一方面很方便，另一方面成本较高。",
+                    "grammarExplanationVi": "Cặp nối tổ chức hai khía cạnh song song hoặc đối lập.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk4:lap-luan",
+                    "speakingTextZh": "一方面很方便，另一方面成本较高。",
+                    "speakingPinyin": "Yì fāngmiàn hěn fāngbiàn, lìng yì fāngmiàn chéngběn jiào gāo."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "hsk4-on-tap",
+          "title": "Ôn tập",
+          "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+          "orderIndex": 3,
+          "status": "review",
+          "objectives": [
+            "Ôn từ vựng",
+            "Ôn mẫu câu"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk4-on-tap-chapter",
+              "title": "Củng cố lộ trình",
+              "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Ôn từ vựng",
+                "Ôn mẫu câu"
+              ],
+              "lessons": [
+                {
+                  "slug": "hsk4-review",
+                  "title": "Ôn tập HSK 4",
+                  "descriptionVi": "Củng cố từ vựng, mẫu câu và khả năng diễn đạt của toàn khóa.",
+                  "orderIndex": 1,
+                  "xpReward": 30,
+                  "status": "review",
+                  "lessonType": "review",
+                  "estimatedMinutes": 18,
+                  "objectives": [
+                    "Vận dụng lại từ vựng trọng tâm",
+                    "Tự kiểm tra mẫu câu đã học"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk4:方面",
+                    "hsk4:优点",
+                    "hsk4:缺点"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk4:lap-luan"
+                  ],
+                  "vocabulary": [],
+                  "grammar": [],
+                  "practice": {
+                    "targetKey": "hsk4:方面",
+                    "distractorKeys": [
+                      "hsk4:优点",
+                      "hsk4:缺点"
+                    ],
+                    "sentenceTokens": [
+                      "一方面",
+                      "很",
+                      "方便",
+                      "，",
+                      "另一方面",
+                      "成本",
+                      "较高",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "一方面很方便，另一方面成本较高。",
+                    "translationPromptVi": "Một mặt rất tiện, mặt khác chi phí khá cao.",
+                    "translationAnswerZh": "一方面很方便，另一方面成本较高。",
+                    "grammarQuestion": "Câu nào trình bày hai mặt của vấn đề?",
+                    "grammarOptions": [
+                      "一方面很方便，另一方面成本较高。",
+                      "。较高成本另一方面，方便很一方面",
+                      "很方便，另一方面成本较高。一方面"
+                    ],
+                    "grammarCorrect": "一方面很方便，另一方面成本较高。",
+                    "grammarExplanationVi": "Cặp nối tổ chức hai khía cạnh song song hoặc đối lập.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk4:lap-luan",
+                    "speakingTextZh": "一方面很方便，另一方面成本较高。",
+                    "speakingPinyin": "Yì fāngmiàn hěn fāngbiàn, lìng yì fāngmiàn chéngběn jiào gāo."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
