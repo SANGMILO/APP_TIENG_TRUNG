@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_audio_count": 0,
-  "pending_audio_count": 93,
+  "pending_audio_count": 134,
   "requests": [
     {
       "lesson_id": "0c573448-400a-5235-9bd7-629c7480b6ee",
@@ -576,6 +576,17 @@
       "output_filename": "vocabulary/bacac630-deda-55d4-980e-dd68f365dbc1.mp3"
     },
     {
+      "lesson_id": "39bde3c1-9cfe-5b7b-9c15-d39dc0d2bc1c",
+      "item_type": "sentence",
+      "item_id": "aad7e35b-8778-5bff-8afd-a1153ba12064",
+      "chinese_text": "我们怎么去火车站？",
+      "pinyin": "Wǒmen zěnme qù huǒchēzhàn?",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/aad7e35b-8778-5bff-8afd-a1153ba12064.mp3"
+    },
+    {
       "lesson_id": "4c9084f4-7c21-52fb-b1c5-e88cf5c19ba3",
       "item_type": "sentence",
       "item_id": "2a786106-5fa3-5db8-a13f-2af9495b3de4",
@@ -686,6 +697,116 @@
       "output_filename": "vocabulary/ec49092c-4c6e-57d8-af17-a3e7836c8d9a.mp3"
     },
     {
+      "lesson_id": "880b7a2f-d83a-59f3-878b-f1f9a5ff385e",
+      "item_type": "sentence",
+      "item_id": "5b742962-0719-5d1e-95ce-6b79761c562e",
+      "chinese_text": "我们怎么去火车站？",
+      "pinyin": "Wǒmen zěnme qù huǒchēzhàn?",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/5b742962-0719-5d1e-95ce-6b79761c562e.mp3"
+    },
+    {
+      "lesson_id": "880b7a2f-d83a-59f3-878b-f1f9a5ff385e",
+      "item_type": "vocabulary",
+      "item_id": "3497ed6e-d317-5aa9-a4e2-726bd22c16d6",
+      "chinese_text": "前面",
+      "pinyin": "qiánmiàn",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/3497ed6e-d317-5aa9-a4e2-726bd22c16d6.mp3"
+    },
+    {
+      "lesson_id": "880b7a2f-d83a-59f3-878b-f1f9a5ff385e",
+      "item_type": "vocabulary",
+      "item_id": "7756d1a3-ab23-5f6a-8cf7-13cf842f7f25",
+      "chinese_text": "后面",
+      "pinyin": "hòumiàn",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/7756d1a3-ab23-5f6a-8cf7-13cf842f7f25.mp3"
+    },
+    {
+      "lesson_id": "880b7a2f-d83a-59f3-878b-f1f9a5ff385e",
+      "item_type": "vocabulary",
+      "item_id": "9cbcdd99-075f-5cb3-bd9c-5d9c4322a188",
+      "chinese_text": "怎么",
+      "pinyin": "zěnme",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/9cbcdd99-075f-5cb3-bd9c-5d9c4322a188.mp3"
+    },
+    {
+      "lesson_id": "880b7a2f-d83a-59f3-878b-f1f9a5ff385e",
+      "item_type": "vocabulary",
+      "item_id": "b80b60b4-fc1e-558c-a439-baa930198a96",
+      "chinese_text": "公共汽车",
+      "pinyin": "gōnggòng qìchē",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/b80b60b4-fc1e-558c-a439-baa930198a96.mp3"
+    },
+    {
+      "lesson_id": "9258d179-6e23-5c1d-a5d9-78f1614f899d",
+      "item_type": "sentence",
+      "item_id": "40b54661-bc27-5d77-82fd-2169a05cddd2",
+      "chinese_text": "我家有四口人。",
+      "pinyin": "Wǒ jiā yǒu sì kǒu rén.",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/40b54661-bc27-5d77-82fd-2169a05cddd2.mp3"
+    },
+    {
+      "lesson_id": "9258d179-6e23-5c1d-a5d9-78f1614f899d",
+      "item_type": "vocabulary",
+      "item_id": "2c126f1e-db14-5ab5-9221-49e3cc057505",
+      "chinese_text": "个",
+      "pinyin": "gè",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/2c126f1e-db14-5ab5-9221-49e3cc057505.mp3"
+    },
+    {
+      "lesson_id": "9258d179-6e23-5c1d-a5d9-78f1614f899d",
+      "item_type": "vocabulary",
+      "item_id": "3c2c0d8c-c709-573c-bd7a-8364bb5cb121",
+      "chinese_text": "岁",
+      "pinyin": "suì",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/3c2c0d8c-c709-573c-bd7a-8364bb5cb121.mp3"
+    },
+    {
+      "lesson_id": "9258d179-6e23-5c1d-a5d9-78f1614f899d",
+      "item_type": "vocabulary",
+      "item_id": "b4718490-fa71-522e-ae64-b0790070bb9f",
+      "chinese_text": "有",
+      "pinyin": "yǒu",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/b4718490-fa71-522e-ae64-b0790070bb9f.mp3"
+    },
+    {
+      "lesson_id": "9258d179-6e23-5c1d-a5d9-78f1614f899d",
+      "item_type": "vocabulary",
+      "item_id": "e2f93d13-475e-55aa-8cc3-4b8e912ca715",
+      "chinese_text": "几",
+      "pinyin": "jǐ",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/e2f93d13-475e-55aa-8cc3-4b8e912ca715.mp3"
+    },
+    {
       "lesson_id": "954f9f30-034a-502e-8703-555242f1aff3",
       "item_type": "sentence",
       "item_id": "de255b18-f99c-5d5b-b901-31a6937035fc",
@@ -752,6 +873,116 @@
       "output_filename": "vocabulary/dbba2bd2-41e5-553a-854f-821f81d80c43.mp3"
     },
     {
+      "lesson_id": "9710f45f-7a87-55ee-b54e-856b955194aa",
+      "item_type": "sentence",
+      "item_id": "076ffed1-457b-53e1-be3f-01419b41ef2d",
+      "chinese_text": "她是我的同学。",
+      "pinyin": "Tā shì wǒ de tóngxué.",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/076ffed1-457b-53e1-be3f-01419b41ef2d.mp3"
+    },
+    {
+      "lesson_id": "9710f45f-7a87-55ee-b54e-856b955194aa",
+      "item_type": "vocabulary",
+      "item_id": "376c5db5-b63d-5152-964f-c207d2f36d44",
+      "chinese_text": "先生",
+      "pinyin": "xiānsheng",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/376c5db5-b63d-5152-964f-c207d2f36d44.mp3"
+    },
+    {
+      "lesson_id": "9710f45f-7a87-55ee-b54e-856b955194aa",
+      "item_type": "vocabulary",
+      "item_id": "44afe437-86b4-5306-896f-e70d2960aeb6",
+      "chinese_text": "医生",
+      "pinyin": "yīshēng",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/44afe437-86b4-5306-896f-e70d2960aeb6.mp3"
+    },
+    {
+      "lesson_id": "9710f45f-7a87-55ee-b54e-856b955194aa",
+      "item_type": "vocabulary",
+      "item_id": "90b68c4e-94bc-5105-b01c-6a4001d2e1cb",
+      "chinese_text": "同学",
+      "pinyin": "tóngxué",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/90b68c4e-94bc-5105-b01c-6a4001d2e1cb.mp3"
+    },
+    {
+      "lesson_id": "9710f45f-7a87-55ee-b54e-856b955194aa",
+      "item_type": "vocabulary",
+      "item_id": "ea61e78e-a574-5237-a177-c50ffc1c0c55",
+      "chinese_text": "老师",
+      "pinyin": "lǎoshī",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/ea61e78e-a574-5237-a177-c50ffc1c0c55.mp3"
+    },
+    {
+      "lesson_id": "9e581056-541a-564d-91ca-cd74373a20e1",
+      "item_type": "sentence",
+      "item_id": "19baf5d3-7060-543d-bcdd-59f81ec301f7",
+      "chinese_text": "我会说一点儿汉语。",
+      "pinyin": "Wǒ huì shuō yìdiǎnr Hànyǔ.",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/19baf5d3-7060-543d-bcdd-59f81ec301f7.mp3"
+    },
+    {
+      "lesson_id": "9e581056-541a-564d-91ca-cd74373a20e1",
+      "item_type": "vocabulary",
+      "item_id": "2efd2b87-af22-53a4-bab5-5811201d6072",
+      "chinese_text": "喜欢",
+      "pinyin": "xǐhuan",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/2efd2b87-af22-53a4-bab5-5811201d6072.mp3"
+    },
+    {
+      "lesson_id": "9e581056-541a-564d-91ca-cd74373a20e1",
+      "item_type": "vocabulary",
+      "item_id": "b7ef7103-8d4e-5323-87a2-d70f1f2dfaf6",
+      "chinese_text": "会",
+      "pinyin": "huì",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/b7ef7103-8d4e-5323-87a2-d70f1f2dfaf6.mp3"
+    },
+    {
+      "lesson_id": "9e581056-541a-564d-91ca-cd74373a20e1",
+      "item_type": "vocabulary",
+      "item_id": "bbb7463f-b64c-5950-b099-dc9c4cf4956c",
+      "chinese_text": "说",
+      "pinyin": "shuō",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/bbb7463f-b64c-5950-b099-dc9c4cf4956c.mp3"
+    },
+    {
+      "lesson_id": "9e581056-541a-564d-91ca-cd74373a20e1",
+      "item_type": "vocabulary",
+      "item_id": "be9be0f1-72ed-590a-88ae-08222750eda6",
+      "chinese_text": "看",
+      "pinyin": "kàn",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/be9be0f1-72ed-590a-88ae-08222750eda6.mp3"
+    },
+    {
       "lesson_id": "a31244dd-d46d-5763-821c-909302dcf743",
       "item_type": "sentence",
       "item_id": "608bc3ad-ce30-55c4-9955-18f5638fab75",
@@ -816,6 +1047,171 @@
       "speaking_rate": 0.9,
       "audio_status": "pending",
       "output_filename": "vocabulary/fafc9144-dfe6-590a-818e-55b052a3b54d.mp3"
+    },
+    {
+      "lesson_id": "a34b965d-1f05-5ceb-a797-a3613c08ee88",
+      "item_type": "sentence",
+      "item_id": "3e4ef3fc-16b5-5c97-a7d8-9d6252e00d04",
+      "chinese_text": "我想喝一杯热茶。",
+      "pinyin": "Wǒ xiǎng hē yì bēi rè chá.",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/3e4ef3fc-16b5-5c97-a7d8-9d6252e00d04.mp3"
+    },
+    {
+      "lesson_id": "a34b965d-1f05-5ceb-a797-a3613c08ee88",
+      "item_type": "vocabulary",
+      "item_id": "796263c4-6f4f-56de-af2d-37814f782717",
+      "chinese_text": "苹果",
+      "pinyin": "píngguǒ",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/796263c4-6f4f-56de-af2d-37814f782717.mp3"
+    },
+    {
+      "lesson_id": "a34b965d-1f05-5ceb-a797-a3613c08ee88",
+      "item_type": "vocabulary",
+      "item_id": "9fede698-76e6-5906-a9a1-8d86c9b692ef",
+      "chinese_text": "想",
+      "pinyin": "xiǎng",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/9fede698-76e6-5906-a9a1-8d86c9b692ef.mp3"
+    },
+    {
+      "lesson_id": "a34b965d-1f05-5ceb-a797-a3613c08ee88",
+      "item_type": "vocabulary",
+      "item_id": "a962ac2d-b9b9-5e13-bd16-f3427cdc5aea",
+      "chinese_text": "块",
+      "pinyin": "kuài",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/a962ac2d-b9b9-5e13-bd16-f3427cdc5aea.mp3"
+    },
+    {
+      "lesson_id": "a34b965d-1f05-5ceb-a797-a3613c08ee88",
+      "item_type": "vocabulary",
+      "item_id": "cc65ac7a-8cae-59ac-8b43-43c17ed3945a",
+      "chinese_text": "喝",
+      "pinyin": "hē",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/cc65ac7a-8cae-59ac-8b43-43c17ed3945a.mp3"
+    },
+    {
+      "lesson_id": "b77fab37-7af9-5e46-b7f4-9cadce226a8a",
+      "item_type": "sentence",
+      "item_id": "3bc15bf1-c8e6-526f-a814-e21fe9d1a349",
+      "chinese_text": "我的生日是五月九号。",
+      "pinyin": "Wǒ de shēngrì shì wǔ yuè jiǔ hào.",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/3bc15bf1-c8e6-526f-a814-e21fe9d1a349.mp3"
+    },
+    {
+      "lesson_id": "b77fab37-7af9-5e46-b7f4-9cadce226a8a",
+      "item_type": "vocabulary",
+      "item_id": "0461ec91-bd5b-5442-9064-614b156582a9",
+      "chinese_text": "号",
+      "pinyin": "hào",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/0461ec91-bd5b-5442-9064-614b156582a9.mp3"
+    },
+    {
+      "lesson_id": "b77fab37-7af9-5e46-b7f4-9cadce226a8a",
+      "item_type": "vocabulary",
+      "item_id": "b5a4e63a-06bc-5632-89db-d7df91e98044",
+      "chinese_text": "生日",
+      "pinyin": "shēngrì",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/b5a4e63a-06bc-5632-89db-d7df91e98044.mp3"
+    },
+    {
+      "lesson_id": "b77fab37-7af9-5e46-b7f4-9cadce226a8a",
+      "item_type": "vocabulary",
+      "item_id": "b86cff26-6bb1-593c-bef3-ee4982d48252",
+      "chinese_text": "星期",
+      "pinyin": "xīngqī",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/b86cff26-6bb1-593c-bef3-ee4982d48252.mp3"
+    },
+    {
+      "lesson_id": "b77fab37-7af9-5e46-b7f4-9cadce226a8a",
+      "item_type": "vocabulary",
+      "item_id": "f5e5de26-1eaa-5f81-8188-6d807e9b79a3",
+      "chinese_text": "月",
+      "pinyin": "yuè",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/f5e5de26-1eaa-5f81-8188-6d807e9b79a3.mp3"
+    },
+    {
+      "lesson_id": "c069c208-1e99-52b9-833c-67939fb1fb5d",
+      "item_type": "sentence",
+      "item_id": "410d8aab-ab26-51fc-a961-bbd4929ccd31",
+      "chinese_text": "医院在银行旁边。",
+      "pinyin": "Yīyuàn zài yínháng pángbiān.",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/410d8aab-ab26-51fc-a961-bbd4929ccd31.mp3"
+    },
+    {
+      "lesson_id": "c069c208-1e99-52b9-833c-67939fb1fb5d",
+      "item_type": "vocabulary",
+      "item_id": "14890f3e-8da5-5ba6-9a67-af085c82d012",
+      "chinese_text": "谁",
+      "pinyin": "shéi",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/14890f3e-8da5-5ba6-9a67-af085c82d012.mp3"
+    },
+    {
+      "lesson_id": "c069c208-1e99-52b9-833c-67939fb1fb5d",
+      "item_type": "vocabulary",
+      "item_id": "3b16a062-a1c4-549b-bf7d-d4c476c2dae2",
+      "chinese_text": "哪儿",
+      "pinyin": "nǎr",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/3b16a062-a1c4-549b-bf7d-d4c476c2dae2.mp3"
+    },
+    {
+      "lesson_id": "c069c208-1e99-52b9-833c-67939fb1fb5d",
+      "item_type": "vocabulary",
+      "item_id": "861ecff4-5aeb-5b4a-ab9e-33f5d36a3e7d",
+      "chinese_text": "学校",
+      "pinyin": "xuéxiào",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/861ecff4-5aeb-5b4a-ab9e-33f5d36a3e7d.mp3"
+    },
+    {
+      "lesson_id": "c069c208-1e99-52b9-833c-67939fb1fb5d",
+      "item_type": "vocabulary",
+      "item_id": "cb6f55f5-b2d2-5c1a-83fb-6d5127b63758",
+      "chinese_text": "医院",
+      "pinyin": "yīyuàn",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/cb6f55f5-b2d2-5c1a-83fb-6d5127b63758.mp3"
     },
     {
       "lesson_id": "c44683a2-76ec-52f4-8a2c-192346300aa4",
@@ -893,6 +1289,61 @@
       "speaking_rate": 0.88,
       "audio_status": "pending",
       "output_filename": "sentences/c78f12c8-05e2-5f0f-a7fa-d51088dd89b0.mp3"
+    },
+    {
+      "lesson_id": "cd97bc6a-cfbd-5e9e-a2a0-ec9aaf890232",
+      "item_type": "sentence",
+      "item_id": "fd2909c5-e589-5cfe-93dc-b6f3a0c867bf",
+      "chinese_text": "请问您贵姓？",
+      "pinyin": "Qǐngwèn nín guìxìng?",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.88,
+      "audio_status": "pending",
+      "output_filename": "sentences/fd2909c5-e589-5cfe-93dc-b6f3a0c867bf.mp3"
+    },
+    {
+      "lesson_id": "cd97bc6a-cfbd-5e9e-a2a0-ec9aaf890232",
+      "item_type": "vocabulary",
+      "item_id": "16302ca3-ea03-5554-8585-1005c2995fd1",
+      "chinese_text": "您",
+      "pinyin": "nín",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/16302ca3-ea03-5554-8585-1005c2995fd1.mp3"
+    },
+    {
+      "lesson_id": "cd97bc6a-cfbd-5e9e-a2a0-ec9aaf890232",
+      "item_type": "vocabulary",
+      "item_id": "8f30f717-1579-5142-9e2a-a61e4556f7bb",
+      "chinese_text": "请问",
+      "pinyin": "qǐngwèn",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/8f30f717-1579-5142-9e2a-a61e4556f7bb.mp3"
+    },
+    {
+      "lesson_id": "cd97bc6a-cfbd-5e9e-a2a0-ec9aaf890232",
+      "item_type": "vocabulary",
+      "item_id": "98ace347-6976-5dcf-a254-2baa97ee5361",
+      "chinese_text": "贵姓",
+      "pinyin": "guìxìng",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/98ace347-6976-5dcf-a254-2baa97ee5361.mp3"
+    },
+    {
+      "lesson_id": "cd97bc6a-cfbd-5e9e-a2a0-ec9aaf890232",
+      "item_type": "vocabulary",
+      "item_id": "fc9bbbc2-b0e0-5940-bcd9-0f9e07ac6676",
+      "chinese_text": "认识",
+      "pinyin": "rènshi",
+      "desired_voice": "zh-CN-XiaoxiaoNeural",
+      "speaking_rate": 0.9,
+      "audio_status": "pending",
+      "output_filename": "vocabulary/fc9bbbc2-b0e0-5940-bcd9-0f9e07ac6676.mp3"
     },
     {
       "lesson_id": "e5a77950-bd6d-5080-8434-b7ec4b17e279",

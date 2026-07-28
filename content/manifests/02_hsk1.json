@@ -1,0 +1,1156 @@
+{
+  "schemaVersion": 1,
+  "batchKey": "batch-02-hsk1",
+  "version": 1,
+  "migrationName": "20260729110000_content_batch_02_hsk1",
+  "description": "A coherent HSK 1 foundation track kept in review pending qualified linguistic approval.",
+  "courses": [
+    {
+      "slug": "hsk-1",
+      "title": "HSK 1",
+      "titleZh": "HSK 一级",
+      "descriptionVi": "Nền tảng giao tiếp và đọc hiểu ở trình độ HSK 1.",
+      "level": "beginner",
+      "orderIndex": 2,
+      "status": "review",
+      "estimatedMinutes": 138,
+      "objectives": [
+        "Hiểu và dùng mẫu câu HSK 1 trong tình huống quen thuộc",
+        "Đọc, nói và viết các câu ngắn với trật tự từ cơ bản",
+        "Chuẩn bị nền tảng chuyển tiếp lên HSK 2"
+      ],
+      "units": [
+        {
+          "slug": "hsk1-giao-tiep",
+          "title": "Giao tiếp ban đầu",
+          "descriptionVi": "Xưng hô, làm quen và mô tả người.",
+          "orderIndex": 1,
+          "status": "review",
+          "objectives": [
+            "Chào hỏi lịch sự",
+            "Giới thiệu quan hệ và nghề nghiệp"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk1-giao-tiep-chapter",
+              "title": "Chào hỏi và con người",
+              "descriptionVi": "Xưng hô, làm quen và mô tả người.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Chào hỏi lịch sự",
+                "Giới thiệu quan hệ và nghề nghiệp"
+              ],
+              "lessons": [
+                {
+                  "slug": "xung-ho-lich-su",
+                  "title": "您好！— Chào hỏi lịch sự",
+                  "descriptionVi": "Dùng 您, 请 và cách hỏi họ lịch sự.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Chào người lớn tuổi hoặc khách hàng",
+                    "Hỏi họ và làm quen"
+                  ],
+                  "culturalNote": "贵姓 là cách hỏi họ lịch sự; không dùng để tự nói họ của mình.",
+                  "reviewVocabularyKeys": [
+                    "foundation:你好",
+                    "foundation:名字",
+                    "foundation:中国"
+                  ],
+                  "reviewGrammarKeys": [
+                    "foundation:called-name"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk1:您",
+                      "chinese": "您",
+                      "pinyin": "nín",
+                      "meaningVi": "ngài, ông/bà (lịch sự)",
+                      "meaningEn": "you (polite)",
+                      "partOfSpeech": "đại từ",
+                      "level": "beginner",
+                      "category": "xung-ho-lich-su",
+                      "status": "review",
+                      "exampleSentence": "您好，请问您贵姓？",
+                      "examplePinyin": "Nín hǎo, qǐngwèn nín guìxìng?",
+                      "exampleMeaningVi": "Xin chào, xin hỏi quý danh của ngài?"
+                    },
+                    {
+                      "key": "hsk1:请问",
+                      "chinese": "请问",
+                      "pinyin": "qǐngwèn",
+                      "meaningVi": "xin hỏi",
+                      "meaningEn": "may I ask",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "xung-ho-lich-su",
+                      "status": "review",
+                      "exampleSentence": "请问，地铁站在哪儿？",
+                      "examplePinyin": "Qǐngwèn, dìtiě zhàn zài nǎr?",
+                      "exampleMeaningVi": "Xin hỏi, ga tàu điện ngầm ở đâu?"
+                    },
+                    {
+                      "key": "hsk1:贵姓",
+                      "chinese": "贵姓",
+                      "pinyin": "guìxìng",
+                      "meaningVi": "quý danh, họ của ngài",
+                      "meaningEn": "your surname",
+                      "partOfSpeech": "cụm từ lịch sự",
+                      "level": "beginner",
+                      "category": "xung-ho-lich-su",
+                      "status": "review",
+                      "exampleSentence": "请问您贵姓？",
+                      "examplePinyin": "Qǐngwèn nín guìxìng?",
+                      "exampleMeaningVi": "Xin hỏi quý danh của ngài?"
+                    },
+                    {
+                      "key": "hsk1:认识",
+                      "chinese": "认识",
+                      "pinyin": "rènshi",
+                      "meaningVi": "quen, biết",
+                      "meaningEn": "to know; meet",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "xung-ho-lich-su",
+                      "status": "review",
+                      "exampleSentence": "很高兴认识您。",
+                      "examplePinyin": "Hěn gāoxìng rènshi nín.",
+                      "exampleMeaningVi": "Rất vui được làm quen với ngài."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk1:xung-ho-lich-su",
+                      "title": "Câu hỏi lịch sự với 请问",
+                      "pattern": "请问 + câu hỏi",
+                      "explanationVi": "Đặt 请问 trước câu hỏi để mở lời lịch sự.",
+                      "exampleChinese": "请问您贵姓？",
+                      "examplePinyin": "Qǐngwèn nín guìxìng?",
+                      "exampleMeaningVi": "Xin hỏi quý danh của ngài?",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk1:您",
+                    "distractorKeys": [
+                      "hsk1:请问",
+                      "hsk1:贵姓",
+                      "hsk1:认识"
+                    ],
+                    "sentenceTokens": [
+                      "请问",
+                      "您",
+                      "贵姓",
+                      "？"
+                    ],
+                    "sentenceAnswerZh": "请问您贵姓？",
+                    "translationPromptVi": "Xin hỏi quý danh của ngài?",
+                    "translationAnswerZh": "请问您贵姓？",
+                    "grammarQuestion": "Câu nào hỏi họ một cách lịch sự?",
+                    "grammarOptions": [
+                      "请问您贵姓？",
+                      "您贵姓请问？",
+                      "贵姓您不请问。"
+                    ],
+                    "grammarCorrect": "请问您贵姓？",
+                    "grammarExplanationVi": "Đặt 请问 trước câu hỏi để mở lời lịch sự.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:xung-ho-lich-su",
+                    "speakingTextZh": "请问您贵姓？",
+                    "speakingPinyin": "Qǐngwèn nín guìxìng?"
+                  }
+                },
+                {
+                  "slug": "ban-be-va-nghe-nghiep",
+                  "title": "同学和老师 — Bạn học và giáo viên",
+                  "descriptionVi": "Giới thiệu quan hệ và nghề nghiệp gần gũi.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Nói ai là ai",
+                    "Dùng 的 để chỉ quan hệ"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk1:您",
+                    "hsk1:请问",
+                    "hsk1:贵姓",
+                    "hsk1:认识"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk1:xung-ho-lich-su"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk1:老师",
+                      "chinese": "老师",
+                      "pinyin": "lǎoshī",
+                      "meaningVi": "giáo viên",
+                      "meaningEn": "teacher",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "ban-be-va-nghe-nghiep",
+                      "status": "review",
+                      "exampleSentence": "王老师教我们汉语。",
+                      "examplePinyin": "Wáng lǎoshī jiāo wǒmen Hànyǔ.",
+                      "exampleMeaningVi": "Thầy Vương dạy chúng tôi tiếng Trung."
+                    },
+                    {
+                      "key": "hsk1:同学",
+                      "chinese": "同学",
+                      "pinyin": "tóngxué",
+                      "meaningVi": "bạn học",
+                      "meaningEn": "classmate",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "ban-be-va-nghe-nghiep",
+                      "status": "review",
+                      "exampleSentence": "她是我的同学。",
+                      "examplePinyin": "Tā shì wǒ de tóngxué.",
+                      "exampleMeaningVi": "Cô ấy là bạn học của tôi."
+                    },
+                    {
+                      "key": "hsk1:先生",
+                      "chinese": "先生",
+                      "pinyin": "xiānsheng",
+                      "meaningVi": "ông, ngài",
+                      "meaningEn": "Mr.; sir",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "ban-be-va-nghe-nghiep",
+                      "status": "review",
+                      "exampleSentence": "李先生是医生。",
+                      "examplePinyin": "Lǐ xiānsheng shì yīshēng.",
+                      "exampleMeaningVi": "Ông Lý là bác sĩ."
+                    },
+                    {
+                      "key": "hsk1:医生",
+                      "chinese": "医生",
+                      "pinyin": "yīshēng",
+                      "meaningVi": "bác sĩ",
+                      "meaningEn": "doctor",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "ban-be-va-nghe-nghiep",
+                      "status": "review",
+                      "exampleSentence": "我姐姐是医生。",
+                      "examplePinyin": "Wǒ jiějie shì yīshēng.",
+                      "exampleMeaningVi": "Chị gái tôi là bác sĩ."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk1:ban-be-va-nghe-nghiep",
+                      "title": "Quan hệ sở hữu với 的",
+                      "pattern": "A + 的 + B",
+                      "explanationVi": "的 nối người sở hữu hoặc quan hệ với danh từ đứng sau.",
+                      "exampleChinese": "她是我的同学。",
+                      "examplePinyin": "Tā shì wǒ de tóngxué.",
+                      "exampleMeaningVi": "Cô ấy là bạn học của tôi.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk1:老师",
+                    "distractorKeys": [
+                      "hsk1:同学",
+                      "hsk1:先生",
+                      "hsk1:医生"
+                    ],
+                    "sentenceTokens": [
+                      "她",
+                      "是",
+                      "我",
+                      "的",
+                      "同学",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "她是我的同学。",
+                    "translationPromptVi": "Cô ấy là bạn học của tôi.",
+                    "translationAnswerZh": "她是我的同学。",
+                    "grammarQuestion": "Câu nào nói “Cô ấy là bạn học của tôi”?",
+                    "grammarOptions": [
+                      "她是我的同学。",
+                      "她我的同学是。",
+                      "她是我同学的。"
+                    ],
+                    "grammarCorrect": "她是我的同学。",
+                    "grammarExplanationVi": "的 nối người sở hữu hoặc quan hệ với danh từ đứng sau.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:ban-be-va-nghe-nghiep",
+                    "speakingTextZh": "她是我的同学。",
+                    "speakingPinyin": "Tā shì wǒ de tóngxué."
+                  }
+                },
+                {
+                  "slug": "hoi-ai-va-o-dau",
+                  "title": "谁在哪儿？— Ai ở đâu?",
+                  "descriptionVi": "Hỏi người và vị trí bằng 谁, 哪儿.",
+                  "orderIndex": 3,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Đặt câu hỏi về người",
+                    "Nói vị trí với 在"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk1:老师",
+                    "hsk1:同学",
+                    "hsk1:先生",
+                    "hsk1:医生"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk1:ban-be-va-nghe-nghiep"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk1:谁",
+                      "chinese": "谁",
+                      "pinyin": "shéi",
+                      "meaningVi": "ai",
+                      "meaningEn": "who",
+                      "partOfSpeech": "đại từ nghi vấn",
+                      "level": "beginner",
+                      "category": "hoi-ai-va-o-dau",
+                      "status": "review",
+                      "exampleSentence": "门口的人是谁？",
+                      "examplePinyin": "Ménkǒu de rén shì shéi?",
+                      "exampleMeaningVi": "Người ở cửa là ai?"
+                    },
+                    {
+                      "key": "hsk1:哪儿",
+                      "chinese": "哪儿",
+                      "pinyin": "nǎr",
+                      "meaningVi": "đâu, nơi nào",
+                      "meaningEn": "where",
+                      "partOfSpeech": "đại từ nghi vấn",
+                      "level": "beginner",
+                      "category": "hoi-ai-va-o-dau",
+                      "status": "review",
+                      "exampleSentence": "你的学校在哪儿？",
+                      "examplePinyin": "Nǐ de xuéxiào zài nǎr?",
+                      "exampleMeaningVi": "Trường của bạn ở đâu?"
+                    },
+                    {
+                      "key": "hsk1:学校",
+                      "chinese": "学校",
+                      "pinyin": "xuéxiào",
+                      "meaningVi": "trường học",
+                      "meaningEn": "school",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "hoi-ai-va-o-dau",
+                      "status": "review",
+                      "exampleSentence": "学校离我家很近。",
+                      "examplePinyin": "Xuéxiào lí wǒ jiā hěn jìn.",
+                      "exampleMeaningVi": "Trường học rất gần nhà tôi."
+                    },
+                    {
+                      "key": "hsk1:医院",
+                      "chinese": "医院",
+                      "pinyin": "yīyuàn",
+                      "meaningVi": "bệnh viện",
+                      "meaningEn": "hospital",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "hoi-ai-va-o-dau",
+                      "status": "review",
+                      "exampleSentence": "医院在银行旁边。",
+                      "examplePinyin": "Yīyuàn zài yínháng pángbiān.",
+                      "exampleMeaningVi": "Bệnh viện ở cạnh ngân hàng."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk1:hoi-ai-va-o-dau",
+                      "title": "Vị trí với 在",
+                      "pattern": "chủ ngữ + 在 + địa điểm",
+                      "explanationVi": "在 đứng trước địa điểm để nói người hoặc vật đang ở đâu.",
+                      "exampleChinese": "医院在银行旁边。",
+                      "examplePinyin": "Yīyuàn zài yínháng pángbiān.",
+                      "exampleMeaningVi": "Bệnh viện ở cạnh ngân hàng.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk1:谁",
+                    "distractorKeys": [
+                      "hsk1:哪儿",
+                      "hsk1:学校",
+                      "hsk1:医院"
+                    ],
+                    "sentenceTokens": [
+                      "医院",
+                      "在",
+                      "银行",
+                      "旁边",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "医院在银行旁边。",
+                    "translationPromptVi": "Bệnh viện ở cạnh ngân hàng.",
+                    "translationAnswerZh": "医院在银行旁边。",
+                    "grammarQuestion": "Câu nào có trật tự vị trí đúng?",
+                    "grammarOptions": [
+                      "医院在银行旁边。",
+                      "医院银行在旁边。",
+                      "在医院旁边银行。"
+                    ],
+                    "grammarCorrect": "医院在银行旁边。",
+                    "grammarExplanationVi": "在 đứng trước địa điểm để nói người hoặc vật đang ở đâu.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:hoi-ai-va-o-dau",
+                    "speakingTextZh": "医院在银行旁边。",
+                    "speakingPinyin": "Yīyuàn zài yínháng pángbiān."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "hsk1-so-luong-thoi-gian",
+          "title": "Số lượng và thời gian",
+          "descriptionVi": "Hỏi số lượng, tuổi, ngày giờ và hoạt động.",
+          "orderIndex": 2,
+          "status": "review",
+          "objectives": [
+            "Dùng số và lượng từ",
+            "Nói thời gian và thói quen"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk1-so-luong-thoi-gian-chapter",
+              "title": "Số, ngày và lịch sinh hoạt",
+              "descriptionVi": "Hỏi số lượng, tuổi, ngày giờ và hoạt động.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Dùng số và lượng từ",
+                "Nói thời gian và thói quen"
+              ],
+              "lessons": [
+                {
+                  "slug": "so-luong-va-tuoi",
+                  "title": "几岁？— Số lượng và tuổi",
+                  "descriptionVi": "Hỏi tuổi và số lượng nhỏ bằng 几.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Hỏi tuổi trẻ em",
+                    "Dùng lượng từ 个"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk1:谁",
+                    "hsk1:哪儿",
+                    "hsk1:学校",
+                    "hsk1:医院"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk1:hoi-ai-va-o-dau"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk1:几",
+                      "chinese": "几",
+                      "pinyin": "jǐ",
+                      "meaningVi": "mấy, bao nhiêu",
+                      "meaningEn": "how many",
+                      "partOfSpeech": "đại từ nghi vấn",
+                      "level": "beginner",
+                      "category": "so-luong-va-tuoi",
+                      "status": "review",
+                      "exampleSentence": "你有几个汉语老师？",
+                      "examplePinyin": "Nǐ yǒu jǐ ge Hànyǔ lǎoshī?",
+                      "exampleMeaningVi": "Bạn có mấy giáo viên tiếng Trung?"
+                    },
+                    {
+                      "key": "hsk1:岁",
+                      "chinese": "岁",
+                      "pinyin": "suì",
+                      "meaningVi": "tuổi",
+                      "meaningEn": "years old",
+                      "partOfSpeech": "lượng từ",
+                      "level": "beginner",
+                      "category": "so-luong-va-tuoi",
+                      "status": "review",
+                      "exampleSentence": "我弟弟八岁。",
+                      "examplePinyin": "Wǒ dìdi bā suì.",
+                      "exampleMeaningVi": "Em trai tôi tám tuổi."
+                    },
+                    {
+                      "key": "hsk1:个",
+                      "chinese": "个",
+                      "pinyin": "gè",
+                      "meaningVi": "cái, người (lượng từ chung)",
+                      "meaningEn": "general measure word",
+                      "partOfSpeech": "lượng từ",
+                      "level": "beginner",
+                      "category": "so-luong-va-tuoi",
+                      "status": "review",
+                      "exampleSentence": "桌上有三个苹果。",
+                      "examplePinyin": "Zhuō shàng yǒu sān ge píngguǒ.",
+                      "exampleMeaningVi": "Trên bàn có ba quả táo."
+                    },
+                    {
+                      "key": "hsk1:有",
+                      "chinese": "有",
+                      "pinyin": "yǒu",
+                      "meaningVi": "có",
+                      "meaningEn": "to have; there is",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "so-luong-va-tuoi",
+                      "status": "review",
+                      "exampleSentence": "我家有四口人。",
+                      "examplePinyin": "Wǒ jiā yǒu sì kǒu rén.",
+                      "exampleMeaningVi": "Nhà tôi có bốn người."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk1:so-luong-va-tuoi",
+                      "title": "Câu tồn tại và sở hữu với 有",
+                      "pattern": "chủ ngữ + 有 + số lượng + danh từ",
+                      "explanationVi": "有 diễn tả sở hữu hoặc sự tồn tại; phủ định là 没有.",
+                      "exampleChinese": "我家有四口人。",
+                      "examplePinyin": "Wǒ jiā yǒu sì kǒu rén.",
+                      "exampleMeaningVi": "Nhà tôi có bốn người.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk1:几",
+                    "distractorKeys": [
+                      "hsk1:岁",
+                      "hsk1:个",
+                      "hsk1:有"
+                    ],
+                    "sentenceTokens": [
+                      "我家",
+                      "有",
+                      "四",
+                      "口",
+                      "人",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "我家有四口人。",
+                    "translationPromptVi": "Nhà tôi có bốn người.",
+                    "translationAnswerZh": "我家有四口人。",
+                    "grammarQuestion": "Câu nào nói đúng “Nhà tôi có bốn người”?",
+                    "grammarOptions": [
+                      "我家有四口人。",
+                      "我家是四口人有。",
+                      "我有家四人不。"
+                    ],
+                    "grammarCorrect": "我家有四口人。",
+                    "grammarExplanationVi": "有 diễn tả sở hữu hoặc sự tồn tại; phủ định là 没有.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:so-luong-va-tuoi",
+                    "speakingTextZh": "我家有四口人。",
+                    "speakingPinyin": "Wǒ jiā yǒu sì kǒu rén."
+                  }
+                },
+                {
+                  "slug": "ngay-va-thu",
+                  "title": "星期几？— Ngày và thứ",
+                  "descriptionVi": "Nói ngày tháng và thứ trong tuần.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Hỏi hôm nay thứ mấy",
+                    "Nói ngày theo trật tự năm-tháng-ngày"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk1:几",
+                    "hsk1:岁",
+                    "hsk1:个",
+                    "hsk1:有"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk1:so-luong-va-tuoi"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk1:星期",
+                      "chinese": "星期",
+                      "pinyin": "xīngqī",
+                      "meaningVi": "tuần; thứ",
+                      "meaningEn": "week; weekday",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "ngay-va-thu",
+                      "status": "review",
+                      "exampleSentence": "今天星期五。",
+                      "examplePinyin": "Jīntiān xīngqīwǔ.",
+                      "exampleMeaningVi": "Hôm nay là thứ Sáu."
+                    },
+                    {
+                      "key": "hsk1:月",
+                      "chinese": "月",
+                      "pinyin": "yuè",
+                      "meaningVi": "tháng",
+                      "meaningEn": "month",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "ngay-va-thu",
+                      "status": "review",
+                      "exampleSentence": "我的生日是五月九号。",
+                      "examplePinyin": "Wǒ de shēngrì shì wǔ yuè jiǔ hào.",
+                      "exampleMeaningVi": "Sinh nhật tôi là ngày 9 tháng 5."
+                    },
+                    {
+                      "key": "hsk1:号",
+                      "chinese": "号",
+                      "pinyin": "hào",
+                      "meaningVi": "ngày (khẩu ngữ)",
+                      "meaningEn": "day of month",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "ngay-va-thu",
+                      "status": "review",
+                      "exampleSentence": "明天是三月十号。",
+                      "examplePinyin": "Míngtiān shì sān yuè shí hào.",
+                      "exampleMeaningVi": "Ngày mai là mùng 10 tháng 3."
+                    },
+                    {
+                      "key": "hsk1:生日",
+                      "chinese": "生日",
+                      "pinyin": "shēngrì",
+                      "meaningVi": "sinh nhật",
+                      "meaningEn": "birthday",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "ngay-va-thu",
+                      "status": "review",
+                      "exampleSentence": "祝你生日快乐！",
+                      "examplePinyin": "Zhù nǐ shēngrì kuàilè!",
+                      "exampleMeaningVi": "Chúc bạn sinh nhật vui vẻ!"
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk1:ngay-va-thu",
+                      "title": "Trật tự ngày tháng",
+                      "pattern": "tháng + 月 + ngày + 号",
+                      "explanationVi": "Tiếng Trung nói đơn vị lớn trước đơn vị nhỏ: tháng rồi đến ngày.",
+                      "exampleChinese": "我的生日是五月九号。",
+                      "examplePinyin": "Wǒ de shēngrì shì wǔ yuè jiǔ hào.",
+                      "exampleMeaningVi": "Sinh nhật tôi là ngày 9 tháng 5.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk1:星期",
+                    "distractorKeys": [
+                      "hsk1:月",
+                      "hsk1:号",
+                      "hsk1:生日"
+                    ],
+                    "sentenceTokens": [
+                      "我",
+                      "的",
+                      "生日",
+                      "是",
+                      "五月",
+                      "九号",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "我的生日是五月九号。",
+                    "translationPromptVi": "Sinh nhật tôi là ngày 9 tháng 5.",
+                    "translationAnswerZh": "我的生日是五月九号。",
+                    "grammarQuestion": "Câu nào có trật tự ngày tháng đúng?",
+                    "grammarOptions": [
+                      "我的生日是五月九号。",
+                      "我的生日是九号五月。",
+                      "五月我的九生日号。"
+                    ],
+                    "grammarCorrect": "我的生日是五月九号。",
+                    "grammarExplanationVi": "Tiếng Trung nói đơn vị lớn trước đơn vị nhỏ: tháng rồi đến ngày.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:ngay-va-thu",
+                    "speakingTextZh": "我的生日是五月九号。",
+                    "speakingPinyin": "Wǒ de shēngrì shì wǔ yuè jiǔ hào."
+                  }
+                },
+                {
+                  "slug": "kha-nang-va-so-thich",
+                  "title": "会不会？— Khả năng và sở thích",
+                  "descriptionVi": "Nói biết làm gì và thích hoạt động nào.",
+                  "orderIndex": 3,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Dùng 会 cho kỹ năng đã học",
+                    "Dùng 喜欢 cho sở thích"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk1:星期",
+                    "hsk1:月",
+                    "hsk1:号",
+                    "hsk1:生日"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk1:ngay-va-thu"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk1:会",
+                      "chinese": "会",
+                      "pinyin": "huì",
+                      "meaningVi": "biết, có thể (kỹ năng)",
+                      "meaningEn": "can; know how to",
+                      "partOfSpeech": "động từ năng nguyện",
+                      "level": "beginner",
+                      "category": "kha-nang-va-so-thich",
+                      "status": "review",
+                      "exampleSentence": "我会说一点儿汉语。",
+                      "examplePinyin": "Wǒ huì shuō yìdiǎnr Hànyǔ.",
+                      "exampleMeaningVi": "Tôi biết nói một chút tiếng Trung."
+                    },
+                    {
+                      "key": "hsk1:说",
+                      "chinese": "说",
+                      "pinyin": "shuō",
+                      "meaningVi": "nói",
+                      "meaningEn": "to speak; say",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "kha-nang-va-so-thich",
+                      "status": "review",
+                      "exampleSentence": "请慢一点儿说。",
+                      "examplePinyin": "Qǐng màn yìdiǎnr shuō.",
+                      "exampleMeaningVi": "Xin hãy nói chậm một chút."
+                    },
+                    {
+                      "key": "hsk1:喜欢",
+                      "chinese": "喜欢",
+                      "pinyin": "xǐhuan",
+                      "meaningVi": "thích",
+                      "meaningEn": "to like",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "kha-nang-va-so-thich",
+                      "status": "review",
+                      "exampleSentence": "她喜欢看中国电影。",
+                      "examplePinyin": "Tā xǐhuan kàn Zhōngguó diànyǐng.",
+                      "exampleMeaningVi": "Cô ấy thích xem phim Trung Quốc."
+                    },
+                    {
+                      "key": "hsk1:看",
+                      "chinese": "看",
+                      "pinyin": "kàn",
+                      "meaningVi": "xem, nhìn, đọc",
+                      "meaningEn": "to look; watch; read",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "kha-nang-va-so-thich",
+                      "status": "review",
+                      "exampleSentence": "晚上我看书。",
+                      "examplePinyin": "Wǎnshang wǒ kàn shū.",
+                      "exampleMeaningVi": "Buổi tối tôi đọc sách."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk1:kha-nang-va-so-thich",
+                      "title": "Khả năng đã học với 会",
+                      "pattern": "chủ ngữ + 会 + động từ",
+                      "explanationVi": "会 đứng trước động từ để nói kỹ năng có được nhờ học tập.",
+                      "exampleChinese": "我会说一点儿汉语。",
+                      "examplePinyin": "Wǒ huì shuō yìdiǎnr Hànyǔ.",
+                      "exampleMeaningVi": "Tôi biết nói một chút tiếng Trung.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk1:会",
+                    "distractorKeys": [
+                      "hsk1:说",
+                      "hsk1:喜欢",
+                      "hsk1:看"
+                    ],
+                    "sentenceTokens": [
+                      "我",
+                      "会",
+                      "说",
+                      "一点儿",
+                      "汉语",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "我会说一点儿汉语。",
+                    "translationPromptVi": "Tôi biết nói một chút tiếng Trung.",
+                    "translationAnswerZh": "我会说一点儿汉语。",
+                    "grammarQuestion": "Câu nào diễn tả kỹ năng nói tiếng Trung?",
+                    "grammarOptions": [
+                      "我会说一点儿汉语。",
+                      "我说会汉语一点儿。",
+                      "会我一点儿说汉语。"
+                    ],
+                    "grammarCorrect": "我会说一点儿汉语。",
+                    "grammarExplanationVi": "会 đứng trước động từ để nói kỹ năng có được nhờ học tập.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:kha-nang-va-so-thich",
+                    "speakingTextZh": "我会说一点儿汉语。",
+                    "speakingPinyin": "Wǒ huì shuō yìdiǎnr Hànyǔ."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "hsk1-doi-song",
+          "title": "Đời sống thường ngày",
+          "descriptionVi": "Xử lý các nhu cầu đời sống cơ bản.",
+          "orderIndex": 3,
+          "status": "review",
+          "objectives": [
+            "Gọi món và mua hàng",
+            "Hỏi vị trí và phương tiện"
+          ],
+          "chapters": [
+            {
+              "slug": "hsk1-doi-song-chapter",
+              "title": "Ăn uống, mua sắm và đi lại",
+              "descriptionVi": "Xử lý các nhu cầu đời sống cơ bản.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Gọi món và mua hàng",
+                "Hỏi vị trí và phương tiện"
+              ],
+              "lessons": [
+                {
+                  "slug": "an-uong-va-mua-sam",
+                  "title": "想吃什么？— Ăn uống và mua sắm",
+                  "descriptionVi": "Nói nhu cầu, gọi món và hỏi giá đơn giản.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Dùng 想 để nói mong muốn",
+                    "Dùng 这/那 chỉ món đồ"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk1:会",
+                    "hsk1:说",
+                    "hsk1:喜欢",
+                    "hsk1:看"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk1:kha-nang-va-so-thich"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk1:想",
+                      "chinese": "想",
+                      "pinyin": "xiǎng",
+                      "meaningVi": "muốn; nghĩ",
+                      "meaningEn": "to want; think",
+                      "partOfSpeech": "động từ năng nguyện",
+                      "level": "beginner",
+                      "category": "an-uong-va-mua-sam",
+                      "status": "review",
+                      "exampleSentence": "我想喝一杯热茶。",
+                      "examplePinyin": "Wǒ xiǎng hē yì bēi rè chá.",
+                      "exampleMeaningVi": "Tôi muốn uống một cốc trà nóng."
+                    },
+                    {
+                      "key": "hsk1:喝",
+                      "chinese": "喝",
+                      "pinyin": "hē",
+                      "meaningVi": "uống",
+                      "meaningEn": "to drink",
+                      "partOfSpeech": "động từ",
+                      "level": "beginner",
+                      "category": "an-uong-va-mua-sam",
+                      "status": "review",
+                      "exampleSentence": "天气热，多喝水。",
+                      "examplePinyin": "Tiānqì rè, duō hē shuǐ.",
+                      "exampleMeaningVi": "Trời nóng, hãy uống nhiều nước."
+                    },
+                    {
+                      "key": "hsk1:苹果",
+                      "chinese": "苹果",
+                      "pinyin": "píngguǒ",
+                      "meaningVi": "quả táo",
+                      "meaningEn": "apple",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "an-uong-va-mua-sam",
+                      "status": "review",
+                      "exampleSentence": "这些苹果很甜。",
+                      "examplePinyin": "Zhèxiē píngguǒ hěn tián.",
+                      "exampleMeaningVi": "Những quả táo này rất ngọt."
+                    },
+                    {
+                      "key": "hsk1:块",
+                      "chinese": "块",
+                      "pinyin": "kuài",
+                      "meaningVi": "đồng; miếng",
+                      "meaningEn": "yuan; piece",
+                      "partOfSpeech": "lượng từ",
+                      "level": "beginner",
+                      "category": "an-uong-va-mua-sam",
+                      "status": "review",
+                      "exampleSentence": "这杯咖啡二十块。",
+                      "examplePinyin": "Zhè bēi kāfēi èrshí kuài.",
+                      "exampleMeaningVi": "Cốc cà phê này giá hai mươi tệ."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk1:an-uong-va-mua-sam",
+                      "title": "Mong muốn với 想",
+                      "pattern": "chủ ngữ + 想 + động từ/tân ngữ",
+                      "explanationVi": "想 diễn tả mong muốn tương đối nhẹ và lịch sự.",
+                      "exampleChinese": "我想喝一杯热茶。",
+                      "examplePinyin": "Wǒ xiǎng hē yì bēi rè chá.",
+                      "exampleMeaningVi": "Tôi muốn uống một cốc trà nóng.",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk1:想",
+                    "distractorKeys": [
+                      "hsk1:喝",
+                      "hsk1:苹果",
+                      "hsk1:块"
+                    ],
+                    "sentenceTokens": [
+                      "我",
+                      "想",
+                      "喝",
+                      "一杯",
+                      "热茶",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "我想喝一杯热茶。",
+                    "translationPromptVi": "Tôi muốn uống một cốc trà nóng.",
+                    "translationAnswerZh": "我想喝一杯热茶。",
+                    "grammarQuestion": "Câu nào nói mong muốn uống trà nóng?",
+                    "grammarOptions": [
+                      "我想喝一杯热茶。",
+                      "我喝想热茶一杯。",
+                      "想我一杯不热茶。"
+                    ],
+                    "grammarCorrect": "我想喝一杯热茶。",
+                    "grammarExplanationVi": "想 diễn tả mong muốn tương đối nhẹ và lịch sự.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:an-uong-va-mua-sam",
+                    "speakingTextZh": "我想喝一杯热茶。",
+                    "speakingPinyin": "Wǒ xiǎng hē yì bēi rè chá."
+                  }
+                },
+                {
+                  "slug": "di-lai-va-vi-tri",
+                  "title": "怎么去？— Đi lại và vị trí",
+                  "descriptionVi": "Hỏi cách đi và xác định vị trí gần.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Hỏi phương thức bằng 怎么",
+                    "Nói vị trí với 前面/后面"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk1:想",
+                    "hsk1:喝",
+                    "hsk1:苹果",
+                    "hsk1:块"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk1:an-uong-va-mua-sam"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "hsk1:怎么",
+                      "chinese": "怎么",
+                      "pinyin": "zěnme",
+                      "meaningVi": "thế nào, bằng cách nào",
+                      "meaningEn": "how",
+                      "partOfSpeech": "đại từ nghi vấn",
+                      "level": "beginner",
+                      "category": "di-lai-va-vi-tri",
+                      "status": "review",
+                      "exampleSentence": "我们怎么去火车站？",
+                      "examplePinyin": "Wǒmen zěnme qù huǒchēzhàn?",
+                      "exampleMeaningVi": "Chúng ta đi ga tàu hỏa bằng cách nào?"
+                    },
+                    {
+                      "key": "hsk1:公共汽车",
+                      "chinese": "公共汽车",
+                      "pinyin": "gōnggòng qìchē",
+                      "meaningVi": "xe buýt",
+                      "meaningEn": "bus",
+                      "partOfSpeech": "danh từ",
+                      "level": "beginner",
+                      "category": "di-lai-va-vi-tri",
+                      "status": "review",
+                      "exampleSentence": "我每天坐公共汽车上班。",
+                      "examplePinyin": "Wǒ měitiān zuò gōnggòng qìchē shàngbān.",
+                      "exampleMeaningVi": "Mỗi ngày tôi đi xe buýt đến chỗ làm."
+                    },
+                    {
+                      "key": "hsk1:前面",
+                      "chinese": "前面",
+                      "pinyin": "qiánmiàn",
+                      "meaningVi": "phía trước",
+                      "meaningEn": "in front",
+                      "partOfSpeech": "danh từ phương vị",
+                      "level": "beginner",
+                      "category": "di-lai-va-vi-tri",
+                      "status": "review",
+                      "exampleSentence": "超市就在前面。",
+                      "examplePinyin": "Chāoshì jiù zài qiánmiàn.",
+                      "exampleMeaningVi": "Siêu thị ở ngay phía trước."
+                    },
+                    {
+                      "key": "hsk1:后面",
+                      "chinese": "后面",
+                      "pinyin": "hòumiàn",
+                      "meaningVi": "phía sau",
+                      "meaningEn": "behind",
+                      "partOfSpeech": "danh từ phương vị",
+                      "level": "beginner",
+                      "category": "di-lai-va-vi-tri",
+                      "status": "review",
+                      "exampleSentence": "学校后面有一个公园。",
+                      "examplePinyin": "Xuéxiào hòumiàn yǒu yí ge gōngyuán.",
+                      "exampleMeaningVi": "Phía sau trường có một công viên."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "hsk1:di-lai-va-vi-tri",
+                      "title": "Hỏi cách thức bằng 怎么",
+                      "pattern": "chủ ngữ + 怎么 + động từ",
+                      "explanationVi": "怎么 đứng trước động từ để hỏi cách thực hiện hành động.",
+                      "exampleChinese": "我们怎么去火车站？",
+                      "examplePinyin": "Wǒmen zěnme qù huǒchēzhàn?",
+                      "exampleMeaningVi": "Chúng ta đi ga tàu hỏa bằng cách nào?",
+                      "level": "beginner",
+                      "status": "review"
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "hsk1:怎么",
+                    "distractorKeys": [
+                      "hsk1:公共汽车",
+                      "hsk1:前面",
+                      "hsk1:后面"
+                    ],
+                    "sentenceTokens": [
+                      "我们",
+                      "怎么",
+                      "去",
+                      "火车站",
+                      "？"
+                    ],
+                    "sentenceAnswerZh": "我们怎么去火车站？",
+                    "translationPromptVi": "Chúng ta đi ga tàu hỏa bằng cách nào?",
+                    "translationAnswerZh": "我们怎么去火车站？",
+                    "grammarQuestion": "Câu nào hỏi cách đi đến ga tàu hỏa?",
+                    "grammarOptions": [
+                      "我们怎么去火车站？",
+                      "我们去怎么火车站？",
+                      "怎么火车站我们不去？"
+                    ],
+                    "grammarCorrect": "我们怎么去火车站？",
+                    "grammarExplanationVi": "怎么 đứng trước động từ để hỏi cách thực hiện hành động.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:di-lai-va-vi-tri",
+                    "speakingTextZh": "我们怎么去火车站？",
+                    "speakingPinyin": "Wǒmen zěnme qù huǒchēzhàn?"
+                  }
+                },
+                {
+                  "slug": "hsk1-review",
+                  "title": "Ôn tập HSK 1",
+                  "descriptionVi": "Củng cố từ vựng, mẫu câu và khả năng diễn đạt của toàn khóa.",
+                  "orderIndex": 3,
+                  "xpReward": 30,
+                  "status": "review",
+                  "lessonType": "review",
+                  "estimatedMinutes": 18,
+                  "objectives": [
+                    "Vận dụng lại từ vựng trọng tâm",
+                    "Tự kiểm tra mẫu câu đã học"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "hsk1:怎么",
+                    "hsk1:公共汽车",
+                    "hsk1:前面",
+                    "hsk1:后面"
+                  ],
+                  "reviewGrammarKeys": [
+                    "hsk1:di-lai-va-vi-tri"
+                  ],
+                  "vocabulary": [],
+                  "grammar": [],
+                  "practice": {
+                    "targetKey": "hsk1:怎么",
+                    "distractorKeys": [
+                      "hsk1:公共汽车",
+                      "hsk1:前面",
+                      "hsk1:后面"
+                    ],
+                    "sentenceTokens": [
+                      "我们",
+                      "怎么",
+                      "去",
+                      "火车站",
+                      "？"
+                    ],
+                    "sentenceAnswerZh": "我们怎么去火车站？",
+                    "translationPromptVi": "Chúng ta đi ga tàu hỏa bằng cách nào?",
+                    "translationAnswerZh": "我们怎么去火车站？",
+                    "grammarQuestion": "Câu nào hỏi cách đi đến ga tàu hỏa?",
+                    "grammarOptions": [
+                      "我们怎么去火车站？",
+                      "我们去怎么火车站？",
+                      "怎么火车站我们不去？"
+                    ],
+                    "grammarCorrect": "我们怎么去火车站？",
+                    "grammarExplanationVi": "怎么 đứng trước động từ để hỏi cách thực hiện hành động.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "hsk1:di-lai-va-vi-tri",
+                    "speakingTextZh": "我们怎么去火车站？",
+                    "speakingPinyin": "Wǒmen zěnme qù huǒchēzhàn?"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
