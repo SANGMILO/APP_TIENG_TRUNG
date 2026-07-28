@@ -39,7 +39,7 @@ Stitch migration remains the visual source of truth.
 
 ### Phase 0 — Preflight, backup, and state reconciliation
 
-- Status: IN PROGRESS
+- Status: COMPLETE
 - Files created: `AUTONOMOUS_COMPLETION_PLAN.md`
 - Migrations: none
 - Deployments: pushed backup branch `backup/pre-full-completion-20260729`
@@ -50,16 +50,41 @@ Stitch migration remains the visual source of truth.
   - `npx.cmd supabase migration list`: local and remote matched
   - `npx.cmd supabase functions list`: passed
 - Blockers: none
-- Commit: pending
+- Commit: `1ffd2d2` (`chore: establish autonomous completion checkpoint`)
 
 ### Phase 1 — Lesson progression, review seeding, attempts, and mistakes
 
-- Status: PENDING
-- Files: pending
-- Migrations: pending
-- Deployments: pending
-- Validation: pending
-- Blockers: pending audit
+- Status: COMPLETE
+- Files:
+  - `components/lesson/LessonExperience.tsx`
+  - `services/lesson-engine.ts`
+  - `__tests__/lesson-engine.test.ts`
+  - `__tests__/transactional-lesson-completion.test.ts`
+  - `supabase/tests/p0_security_hardening.test.sql`
+  - `supabase/tests/transactional_lesson_completion.test.sql`
+- Migrations:
+  - `20260729010000_transactional_lesson_completion.sql`
+- Deployments:
+  - Migration `20260729010000` applied to linked Supabase project
+  - Remote schema independently dumped and verified; temporary dump removed
+- Validation:
+  - Local database recreated from all migrations successfully
+  - pgTAP: 3 files / 62 assertions passed
+  - TypeScript: 0 errors
+  - Jest: 18 suites / 235 tests passed
+  - Expo Web: 48 routes exported
+  - Hosted migration list: local and remote matched through `20260729010000`
+- Result:
+  - Completion is atomic, caller-owned, published/lock validated, and idempotent
+  - XP and perfect bonus are server-derived and awarded once per lesson
+  - Raw exercise answers are server-validated and persisted once per submission
+  - Incorrect answers aggregate into the real Mistakes model
+  - Lesson vocabulary seeds Review without overwriting advanced progress
+  - Only the next ordered published lesson is unlocked
+  - Client shows saving/failure/retry and displays success only after confirmation
+- Blockers:
+  - P1 content: published lessons 2–5 currently have no exercise content; the app
+    reports this honestly and does not fabricate lesson data
 - Commit: pending
 
 ### Phase 2 — Real video playback and progress

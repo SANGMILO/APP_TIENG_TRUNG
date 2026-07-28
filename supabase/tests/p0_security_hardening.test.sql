@@ -29,7 +29,19 @@ SELECT ok(NOT has_table_privilege('authenticated', 'public.xp_transactions', 'IN
 SELECT ok(NOT has_table_privilege('authenticated', 'public.coin_transactions', 'INSERT'), 'authenticated cannot insert coin ledger rows');
 SELECT ok(NOT has_function_privilege('authenticated', 'public.reward_xp(uuid,integer,text,text,uuid,text)', 'EXECUTE'), 'authenticated cannot call reward_xp');
 SELECT ok(NOT has_function_privilege('anon', 'public.reward_xp(uuid,integer,text,text,uuid,text)', 'EXECUTE'), 'anon cannot call reward_xp');
-SELECT ok(has_function_privilege('authenticated', 'public.complete_lesson(uuid,real,integer,integer,integer)', 'EXECUTE'), 'authenticated can complete a lesson');
+SELECT ok(
+  has_function_privilege(
+    'authenticated',
+    'public.complete_lesson_transactional(uuid,uuid,jsonb)',
+    'EXECUTE'
+  )
+  AND NOT has_function_privilege(
+    'authenticated',
+    'public.complete_lesson(uuid,real,integer,integer,integer)',
+    'EXECUTE'
+  ),
+  'authenticated can complete lessons only through the transactional RPC'
+);
 SELECT ok(has_function_privilege('authenticated', 'public.admin_update_user_role(uuid,text)', 'EXECUTE'), 'authenticated can reach the role RPC, which enforces super-admin in its body');
 SELECT ok(has_table_privilege('authenticated', 'public.xp_transactions', 'SELECT'), 'users retain read access to their XP ledger');
 SELECT ok(has_table_privilege('authenticated', 'public.profiles', 'SELECT'), 'users retain profile read access');

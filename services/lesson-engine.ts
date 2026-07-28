@@ -5,6 +5,25 @@ export interface LessonExercise extends Exercise {
   exercise_options?: ExerciseOption[];
 }
 
+export interface LessonCompletionResponse {
+  success: true;
+  completion_id: string;
+  lesson_id: string;
+  score: number;
+  correct_answers: number;
+  total_exercises: number;
+  xp_earned: number;
+  lesson_xp_total: number;
+  base_xp: number;
+  perfect_bonus: number;
+  already_processed: boolean;
+  next_lesson_id: string | null;
+  course_completed: boolean;
+  course_percent_complete: number;
+  review_words_seeded: number;
+  mistakes_recorded: number;
+}
+
 /**
  * Fetch all exercises for a lesson from database
  */
@@ -138,21 +157,49 @@ export function calculateLessonResult(
 }
 
 /**
- * Submit lesson completion to the server
+ * Submit lesson completion to the server.
+ *
+ * The server ignores client correctness and XP estimates. completionId must be
+ * retained across retries so a network replay cannot duplicate attempts or XP.
  */
-export async function submitLessonCompletion(result: LessonResult): Promise<boolean> {
-  const { data, error } = await supabase.rpc('complete_lesson', {
+export async function submitLessonCompletion(
+  result: LessonResult,
+  attempts: ExerciseResult[],
+  completionId: string,
+): Promise<LessonCompletionResponse> {
+  const { data, error } = await supabase.rpc('complete_lesson_transactional', {
+    p_completion_id: completionId,
     p_lesson_id: result.lesson_id,
-    p_score: result.accuracy,
-    p_xp_earned: result.xp_earned,
-    p_exercises_correct: result.correct_answers,
-    p_exercises_total: result.total_exercises,
+    p_attempts: attempts.map((attempt) => ({
+      exercise_id: attempt.exercise_id,
+      user_answer: attempt.user_answer,
+      time_spent_seconds: attempt.time_spent_seconds,
+    })),
   });
 
-  if (error) {
-    console.error('Error completing lesson:', error);
-    return false;
+  if (error) throw error;
+
+  if (
+    !data
+    || data.success !== true
+    || typeof data.completion_id !== 'string'
+    || typeof data.lesson_id !== 'string'
+    || typeof data.score !== 'number'
+    || typeof data.correct_answers !== 'number'
+    || typeof data.total_exercises !== 'number'
+    || typeof data.xp_earned !== 'number'
+    || typeof data.lesson_xp_total !== 'number'
+    || typeof data.base_xp !== 'number'
+    || typeof data.perfect_bonus !== 'number'
+    || typeof data.already_processed !== 'boolean'
+    || (data.next_lesson_id !== null && typeof data.next_lesson_id !== 'string')
+    || typeof data.course_completed !== 'boolean'
+    || typeof data.course_percent_complete !== 'number'
+    || typeof data.review_words_seeded !== 'number'
+    || typeof data.mistakes_recorded !== 'number'
+  ) {
+    throw new Error('The lesson completion response was invalid.');
   }
 
-  return true;
+  return data as LessonCompletionResponse;
 }

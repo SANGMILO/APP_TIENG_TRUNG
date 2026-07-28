@@ -11,8 +11,10 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Crypto from 'expo-crypto';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useQueryClient } from '@tanstack/react-query';
 import { AudioPlayer } from '@/components/media';
 import { SpeakingExercise } from '@/components/exercise';
 import { Button, FadeInView, ProgressBar } from '@/components/ui';
@@ -51,6 +53,7 @@ export default function LessonExperience() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useThemeStore();
   const { profile, fetchProfile } = useAuthStore();
+  const queryClient = useQueryClient();
   const [exercises, setExercises] = useState<LessonExercise[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -58,8 +61,9 @@ export default function LessonExperience() {
   const [lessonResult, setLessonResult] = useState<LessonResult | null>(null);
   const [xpReward, setXpReward] = useState(LESSON_XP_REWARD);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [syncWarning, setSyncWarning] = useState('');
+  const [submissionError, setSubmissionError] = useState('');
   const resultsRef = useRef<ExerciseResult[]>([]);
+  const completionIdRef = useRef<string | null>(null);
   const exerciseStartTime = useRef(Date.now());
 
   useEffect(() => {
@@ -122,15 +126,35 @@ export default function LessonExperience() {
       resultsRef.current,
       xpReward,
     );
-    setLessonResult(result);
     setIsSubmitting(true);
-    setSyncWarning('');
+    setSubmissionError('');
+    completionIdRef.current ??= Crypto.randomUUID();
+
     try {
-      const submitted = await submitLessonCompletion(result);
-      if (!submitted) setSyncWarning('Kết quả chưa đồng bộ. Vui lòng thử lại sau.');
+      const completed = await submitLessonCompletion(
+        result,
+        resultsRef.current,
+        completionIdRef.current,
+      );
+      setLessonResult({
+        ...result,
+        correct_answers: completed.correct_answers,
+        total_exercises: completed.total_exercises,
+        xp_earned: completed.xp_earned,
+        accuracy: completed.score,
+        perfect:
+          completed.total_exercises > 0
+          && completed.correct_answers === completed.total_exercises,
+      });
+
       await fetchProfile();
-    } catch {
-      setSyncWarning('Kết quả chưa đồng bộ. Vui lòng thử lại sau.');
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['lesson-progress'] }),
+        queryClient.invalidateQueries({ queryKey: ['review-stats'] }),
+        queryClient.invalidateQueries({ queryKey: ['mistakes'] }),
+      ]);
+    } catch (reason: unknown) {
+      setSubmissionError(getErrorMessage(reason));
     } finally {
       setIsSubmitting(false);
     }
@@ -168,14 +192,53 @@ export default function LessonExperience() {
     );
   }
 
+  if (isSubmitting && !lessonResult) {
+    return (
+      <StateScreen colors={colors}>
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={[styles.stateTitle, { color: colors.text }]}>
+          Đang lưu kết quả bài học...
+        </Text>
+        <Text style={[styles.stateDescription, { color: colors.textSecondary }]}>
+          Điểm và tiến độ chỉ được xác nhận sau khi máy chủ lưu thành công.
+        </Text>
+      </StateScreen>
+    );
+  }
+
+  if (submissionError && !lessonResult) {
+    return (
+      <StateScreen colors={colors}>
+        <View style={[styles.stateIcon, { backgroundColor: colors.errorLight }]}>
+          <Ionicons name="cloud-offline-outline" size={32} color={colors.error} />
+        </View>
+        <Text style={[styles.stateTitle, { color: colors.text }]}>
+          Chưa thể lưu kết quả
+        </Text>
+        <Text style={[styles.stateDescription, { color: colors.textSecondary }]}>
+          {submissionError}
+        </Text>
+        <Button
+          title="Thử lưu lại"
+          size="lg"
+          onPress={() => { void finishLesson(); }}
+        />
+        <Button
+          title="Thoát bài học"
+          variant="outline"
+          size="lg"
+          onPress={() => router.back()}
+        />
+      </StateScreen>
+    );
+  }
+
   if (lessonResult) {
     return (
       <CompleteView
         result={lessonResult}
         streak={profile?.current_streak ?? 0}
         colors={colors}
-        syncing={isSubmitting}
-        warning={syncWarning}
       />
     );
   }
@@ -640,14 +703,10 @@ function CompleteView({
   result,
   streak,
   colors,
-  syncing,
-  warning,
 }: {
   result: LessonResult;
   streak: number;
   colors: ColorScheme;
-  syncing: boolean;
-  warning: string;
 }) {
   return (
     <SafeAreaView
@@ -704,13 +763,11 @@ function CompleteView({
               {streak} <Text style={[styles.streakUnit, { color: colors.textSecondary }]}>ngày</Text>
             </Text>
           </View>
-          {warning ? <Text style={[styles.warning, { color: colors.error }]}>{warning}</Text> : null}
           <View style={styles.completeActions}>
             <Button
-              title={syncing ? 'Đang lưu kết quả...' : 'Tiếp tục'}
+              title="Tiếp tục"
               size="lg"
               fullWidth
-              loading={syncing}
               onPress={() => router.back()}
             />
             {result.correct_answers < result.total_exercises ? (
@@ -773,6 +830,19 @@ function formatDuration(seconds: number) {
   return `${Math.floor(safe / 60)}:${String(safe % 60).padStart(2, '0')}`;
 }
 
+function getErrorMessage(reason: unknown) {
+  if (
+    typeof reason === 'object'
+    && reason !== null
+    && 'message' in reason
+    && typeof reason.message === 'string'
+    && reason.message.trim()
+  ) {
+    return reason.message;
+  }
+  return 'Không thể kết nối với máy chủ. Tiến độ chưa bị thay đổi; vui lòng thử lại.';
+}
+
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   safeArea: { flex: 1 },
@@ -820,6 +890,13 @@ const styles = StyleSheet.create({
   },
   stateIcon: { width: 68, height: 68, borderRadius: 34, alignItems: 'center', justifyContent: 'center' },
   stateTitle: { fontFamily: FontFamily.heading, fontSize: FontSize.xl, lineHeight: 28, textAlign: 'center' },
+  stateDescription: {
+    maxWidth: 480,
+    fontFamily: FontFamily.regular,
+    fontSize: FontSize.base,
+    lineHeight: 24,
+    textAlign: 'center',
+  },
   completeScroll: { flexGrow: 1, paddingHorizontal: Spacing.xl, paddingVertical: Spacing['3xl'] },
   complete: { width: '100%', maxWidth: 620, alignSelf: 'center', alignItems: 'center', gap: Spacing.xl },
   successMark: {
@@ -842,6 +919,5 @@ const styles = StyleSheet.create({
   streakLabel: { fontFamily: FontFamily.semibold, fontSize: FontSize.lg },
   streakValue: { fontFamily: FontFamily.heading, fontSize: FontSize['2xl'] },
   streakUnit: { fontFamily: FontFamily.regular, fontSize: FontSize.base },
-  warning: { fontFamily: FontFamily.medium, fontSize: FontSize.sm, textAlign: 'center' },
   completeActions: { width: '100%', gap: Spacing.md, marginTop: Spacing.md },
 });
