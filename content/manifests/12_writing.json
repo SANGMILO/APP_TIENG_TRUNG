@@ -1,0 +1,667 @@
+{
+  "schemaVersion": 1,
+  "batchKey": "batch-12-writing",
+  "version": 1,
+  "migrationName": "20260729210000_content_batch_12_writing",
+  "description": "Chinese Characters and Writing core curriculum; review-stage pending qualified linguistic approval.",
+  "courses": [
+    {
+      "slug": "chinese-characters-writing",
+      "title": "Chinese Characters and Writing",
+      "titleZh": "汉字书写",
+      "descriptionVi": "Nền tảng cấu tạo, bộ thủ và quy tắc viết chữ Hán.",
+      "level": "starter",
+      "orderIndex": 11,
+      "status": "review",
+      "estimatedMinutes": 78,
+      "objectives": [
+        "Nhận biết nét và bộ thủ",
+        "Phân tích cấu tạo chữ",
+        "Viết theo thứ tự nét chuẩn"
+      ],
+      "units": [
+        {
+          "slug": "writing-nen-tang",
+          "title": "Nền tảng",
+          "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+          "orderIndex": 1,
+          "status": "review",
+          "objectives": [
+            "Nhận biết nét và bộ thủ",
+            "Phân tích cấu tạo chữ"
+          ],
+          "chapters": [
+            {
+              "slug": "writing-nen-tang-chapter",
+              "title": "Khái niệm cốt lõi",
+              "descriptionVi": "Xây dựng ngôn ngữ cốt lõi của lộ trình.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Nhận biết nét và bộ thủ",
+                "Phân tích cấu tạo chữ"
+              ],
+              "lessons": [
+                {
+                  "slug": "net-co-ban",
+                  "title": "基本笔画 — Nét cơ bản",
+                  "descriptionVi": "Nhận biết các nét thường gặp.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Gọi tên và phân biệt nét"
+                  ],
+                  "culturalNote": "Không có tài sản thứ tự nét giả; bài chỉ dạy quy tắc văn bản.",
+                  "reviewVocabularyKeys": [],
+                  "reviewGrammarKeys": [],
+                  "vocabulary": [
+                    {
+                      "key": "writing:横",
+                      "chinese": "横",
+                      "pinyin": "héng",
+                      "meaningVi": "nét ngang",
+                      "meaningEn": "horizontal stroke",
+                      "partOfSpeech": "danh từ",
+                      "level": "starter",
+                      "category": "net-co-ban",
+                      "status": "review",
+                      "exampleSentence": "写“一”时只有一个横。",
+                      "examplePinyin": "Xiě “yī” shí zhǐ yǒu yí ge héng.",
+                      "exampleMeaningVi": "Khi viết “一” chỉ có một nét ngang."
+                    },
+                    {
+                      "key": "writing:竖",
+                      "chinese": "竖",
+                      "pinyin": "shù",
+                      "meaningVi": "nét sổ",
+                      "meaningEn": "vertical stroke",
+                      "partOfSpeech": "danh từ",
+                      "level": "starter",
+                      "category": "net-co-ban",
+                      "status": "review",
+                      "exampleSentence": "“十”有一横一竖。",
+                      "examplePinyin": "“Shí” yǒu yì héng yí shù.",
+                      "exampleMeaningVi": "Chữ “十” có một nét ngang và một nét sổ."
+                    },
+                    {
+                      "key": "writing:捺",
+                      "chinese": "捺",
+                      "pinyin": "nà",
+                      "meaningVi": "nét mác",
+                      "meaningEn": "right-falling stroke",
+                      "partOfSpeech": "danh từ",
+                      "level": "starter",
+                      "category": "net-co-ban",
+                      "status": "review",
+                      "exampleSentence": "“人”的第二笔是捺。",
+                      "examplePinyin": "“Rén” de dì-èr bǐ shì nà.",
+                      "exampleMeaningVi": "Nét thứ hai của chữ “人” là nét mác."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "writing:net-co-ban",
+                      "title": "Đếm nét với 有",
+                      "pattern": "chữ + 有 + số + lượng từ 笔",
+                      "explanationVi": "笔 là lượng từ dùng để đếm nét chữ.",
+                      "exampleChinese": "“十”有两笔。",
+                      "examplePinyin": "“Shí” yǒu liǎng bǐ.",
+                      "exampleMeaningVi": "Chữ “十” có hai nét.",
+                      "level": "starter",
+                      "status": "review"
+                    }
+                  ],
+                  "characters": [
+                    {
+                      "key": "character:木",
+                      "character": "木",
+                      "pinyin": "mù",
+                      "meaningVi": "cây, gỗ",
+                      "radical": "木",
+                      "strokeCount": 4,
+                      "level": "starter",
+                      "status": "review",
+                      "componentBreakdown": {
+                        "note": "Chữ độc thể, cũng dùng làm bộ Mộc."
+                      },
+                      "commonWords": [
+                        "木头",
+                        "树木"
+                      ]
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "writing:横",
+                    "distractorKeys": [
+                      "writing:竖",
+                      "writing:捺"
+                    ],
+                    "sentenceTokens": [
+                      "“十”",
+                      "有",
+                      "两",
+                      "笔",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "“十”有两笔。",
+                    "translationPromptVi": "Chữ “十” có hai nét.",
+                    "translationAnswerZh": "“十”有两笔。",
+                    "grammarQuestion": "Câu nào đếm đúng số nét của 十?",
+                    "grammarOptions": [
+                      "“十”有两笔。",
+                      "。笔两有“十”",
+                      "有两笔。“十”"
+                    ],
+                    "grammarCorrect": "“十”有两笔。",
+                    "grammarExplanationVi": "笔 là lượng từ dùng để đếm nét chữ.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "writing:net-co-ban",
+                    "speakingTextZh": "“十”有两笔。",
+                    "speakingPinyin": "“Shí” yǒu liǎng bǐ."
+                  }
+                },
+                {
+                  "slug": "thu-tu-net",
+                  "title": "笔顺规则 — Thứ tự nét",
+                  "descriptionVi": "Học trên-trước-dưới-sau và trái-trước-phải-sau.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Áp dụng quy tắc nét cơ bản"
+                  ],
+                  "culturalNote": "Quy tắc chung có ngoại lệ; cần đối chiếu từ điển nét chuẩn khi xuất bản.",
+                  "reviewVocabularyKeys": [
+                    "writing:横",
+                    "writing:竖",
+                    "writing:捺"
+                  ],
+                  "reviewGrammarKeys": [
+                    "writing:net-co-ban"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "writing:笔顺",
+                      "chinese": "笔顺",
+                      "pinyin": "bǐshùn",
+                      "meaningVi": "thứ tự nét",
+                      "meaningEn": "stroke order",
+                      "partOfSpeech": "danh từ",
+                      "level": "starter",
+                      "category": "thu-tu-net",
+                      "status": "review",
+                      "exampleSentence": "正确的笔顺有助于写好汉字。",
+                      "examplePinyin": "Zhèngquè de bǐshùn yǒuzhùyú xiě hǎo Hànzì.",
+                      "exampleMeaningVi": "Thứ tự nét đúng giúp viết chữ Hán đẹp."
+                    },
+                    {
+                      "key": "writing:先",
+                      "chinese": "先",
+                      "pinyin": "xiān",
+                      "meaningVi": "trước",
+                      "meaningEn": "first",
+                      "partOfSpeech": "phó từ",
+                      "level": "starter",
+                      "category": "thu-tu-net",
+                      "status": "review",
+                      "exampleSentence": "写“二”时先写上面的横。",
+                      "examplePinyin": "Xiě “èr” shí xiān xiě shàngmiàn de héng.",
+                      "exampleMeaningVi": "Khi viết “二”, viết nét ngang trên trước."
+                    },
+                    {
+                      "key": "writing:后",
+                      "chinese": "后",
+                      "pinyin": "hòu",
+                      "meaningVi": "sau",
+                      "meaningEn": "after",
+                      "partOfSpeech": "danh từ/phó từ",
+                      "level": "starter",
+                      "category": "thu-tu-net",
+                      "status": "review",
+                      "exampleSentence": "一般先写左边，后写右边。",
+                      "examplePinyin": "Yìbān xiān xiě zuǒbian, hòu xiě yòubian.",
+                      "exampleMeaningVi": "Thông thường viết bên trái trước, bên phải sau."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "writing:thu-tu-net",
+                      "title": "Trình tự với 先…后…",
+                      "pattern": "先 + bước 1，后 + bước 2",
+                      "explanationVi": "Cấu trúc mô tả thứ tự hai thao tác.",
+                      "exampleChinese": "写“木”时先横后竖。",
+                      "examplePinyin": "Xiě “mù” shí xiān héng hòu shù.",
+                      "exampleMeaningVi": "Khi viết “木”, nét ngang trước, nét sổ sau.",
+                      "level": "starter",
+                      "status": "review"
+                    }
+                  ],
+                  "characters": [
+                    {
+                      "key": "character:明",
+                      "character": "明",
+                      "pinyin": "míng",
+                      "meaningVi": "sáng, rõ",
+                      "radical": "日",
+                      "strokeCount": 8,
+                      "level": "starter",
+                      "status": "review",
+                      "componentBreakdown": {
+                        "left": "日 (mặt trời)",
+                        "right": "月 (mặt trăng)"
+                      },
+                      "commonWords": [
+                        "明天",
+                        "明白"
+                      ]
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "writing:笔顺",
+                    "distractorKeys": [
+                      "writing:先",
+                      "writing:后"
+                    ],
+                    "sentenceTokens": [
+                      "写",
+                      "“木”",
+                      "时",
+                      "先",
+                      "横",
+                      "后",
+                      "竖",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "写“木”时先横后竖。",
+                    "translationPromptVi": "Khi viết “木”, nét ngang trước, nét sổ sau.",
+                    "translationAnswerZh": "写“木”时先横后竖。",
+                    "grammarQuestion": "Câu nào mô tả đúng trình tự?",
+                    "grammarOptions": [
+                      "写“木”时先横后竖。",
+                      "。竖后横先时“木”写",
+                      "“木”时先横后竖。写"
+                    ],
+                    "grammarCorrect": "写“木”时先横后竖。",
+                    "grammarExplanationVi": "Cấu trúc mô tả thứ tự hai thao tác.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "writing:thu-tu-net",
+                    "speakingTextZh": "写“木”时先横后竖。",
+                    "speakingPinyin": "Xiě “mù” shí xiān héng hòu shù."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "writing-van-dung",
+          "title": "Vận dụng",
+          "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+          "orderIndex": 2,
+          "status": "review",
+          "objectives": [
+            "Phân tích cấu tạo chữ",
+            "Viết theo thứ tự nét chuẩn"
+          ],
+          "chapters": [
+            {
+              "slug": "writing-van-dung-chapter",
+              "title": "Ngữ cảnh thực tế",
+              "descriptionVi": "Vận dụng mẫu câu trong ngữ cảnh có ý nghĩa.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Phân tích cấu tạo chữ",
+                "Viết theo thứ tự nét chuẩn"
+              ],
+              "lessons": [
+                {
+                  "slug": "bo-thu",
+                  "title": "常见部首 — Bộ thủ",
+                  "descriptionVi": "Nhận biết bộ liên quan nghĩa.",
+                  "orderIndex": 1,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Dùng bộ thủ để đoán trường nghĩa"
+                  ],
+                  "culturalNote": "Phân tích thành phần không thay thế dữ liệu lịch sử tự nguyên.",
+                  "reviewVocabularyKeys": [
+                    "writing:笔顺",
+                    "writing:先",
+                    "writing:后"
+                  ],
+                  "reviewGrammarKeys": [
+                    "writing:thu-tu-net"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "writing:部首",
+                      "chinese": "部首",
+                      "pinyin": "bùshǒu",
+                      "meaningVi": "bộ thủ",
+                      "meaningEn": "radical",
+                      "partOfSpeech": "danh từ",
+                      "level": "starter",
+                      "category": "bo-thu",
+                      "status": "review",
+                      "exampleSentence": "部首可以帮助我们查字典。",
+                      "examplePinyin": "Bùshǒu kěyǐ bāngzhù wǒmen chá zìdiǎn.",
+                      "exampleMeaningVi": "Bộ thủ có thể giúp chúng ta tra từ điển."
+                    },
+                    {
+                      "key": "writing:三点水",
+                      "chinese": "三点水",
+                      "pinyin": "sāndiǎnshuǐ",
+                      "meaningVi": "bộ ba chấm thủy",
+                      "meaningEn": "water radical",
+                      "partOfSpeech": "danh từ",
+                      "level": "starter",
+                      "category": "bo-thu",
+                      "status": "review",
+                      "exampleSentence": "“河”和“海”都有三点水。",
+                      "examplePinyin": "“Hé” hé “hǎi” dōu yǒu sāndiǎnshuǐ.",
+                      "exampleMeaningVi": "“河” và “海” đều có bộ ba chấm thủy."
+                    },
+                    {
+                      "key": "writing:提手旁",
+                      "chinese": "提手旁",
+                      "pinyin": "tíshǒupáng",
+                      "meaningVi": "bộ thủ",
+                      "meaningEn": "hand radical",
+                      "partOfSpeech": "danh từ",
+                      "level": "starter",
+                      "category": "bo-thu",
+                      "status": "review",
+                      "exampleSentence": "“打”的左边是提手旁。",
+                      "examplePinyin": "“Dǎ” de zuǒbian shì tíshǒupáng.",
+                      "exampleMeaningVi": "Bên trái chữ “打” là bộ thủ."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "writing:bo-thu",
+                      "title": "Cấu tạo với 由…组成",
+                      "pattern": "chữ + 由 + thành phần + 组成",
+                      "explanationVi": "由…组成 dùng để giải thích các bộ phận cấu tạo.",
+                      "exampleChinese": "“休”由单人旁和“木”组成。",
+                      "examplePinyin": "“Xiū” yóu dānrénpáng hé “mù” zǔchéng.",
+                      "exampleMeaningVi": "Chữ “休” gồm bộ nhân đứng và chữ “木”.",
+                      "level": "starter",
+                      "status": "review"
+                    }
+                  ],
+                  "characters": [
+                    {
+                      "key": "character:休",
+                      "character": "休",
+                      "pinyin": "xiū",
+                      "meaningVi": "nghỉ",
+                      "radical": "亻",
+                      "strokeCount": 6,
+                      "level": "starter",
+                      "status": "review",
+                      "componentBreakdown": {
+                        "left": "亻 (người)",
+                        "right": "木 (cây)"
+                      },
+                      "commonWords": [
+                        "休息",
+                        "休假"
+                      ]
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "writing:部首",
+                    "distractorKeys": [
+                      "writing:三点水",
+                      "writing:提手旁"
+                    ],
+                    "sentenceTokens": [
+                      "“休”",
+                      "由",
+                      "单人旁",
+                      "和",
+                      "“木”",
+                      "组成",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "“休”由单人旁和“木”组成。",
+                    "translationPromptVi": "Chữ “休” gồm bộ nhân đứng và chữ “木”.",
+                    "translationAnswerZh": "“休”由单人旁和“木”组成。",
+                    "grammarQuestion": "Câu nào phân tích cấu tạo chữ?",
+                    "grammarOptions": [
+                      "“休”由单人旁和“木”组成。",
+                      "。组成“木”和单人旁由“休”",
+                      "由单人旁和“木”组成。“休”"
+                    ],
+                    "grammarCorrect": "“休”由单人旁和“木”组成。",
+                    "grammarExplanationVi": "由…组成 dùng để giải thích các bộ phận cấu tạo.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "writing:bo-thu",
+                    "speakingTextZh": "“休”由单人旁和“木”组成。",
+                    "speakingPinyin": "“Xiū” yóu dānrénpáng hé “mù” zǔchéng."
+                  }
+                },
+                {
+                  "slug": "ket-cau",
+                  "title": "汉字结构 — Kết cấu chữ",
+                  "descriptionVi": "Phân biệt kết cấu trái-phải và trên-dưới.",
+                  "orderIndex": 2,
+                  "xpReward": 25,
+                  "status": "review",
+                  "lessonType": "standard",
+                  "estimatedMinutes": 15,
+                  "objectives": [
+                    "Phân tích bố cục chữ"
+                  ],
+                  "culturalNote": "Bố cục cần được kiểm tra trực quan khi QA trên thiết bị.",
+                  "reviewVocabularyKeys": [
+                    "writing:部首",
+                    "writing:三点水",
+                    "writing:提手旁"
+                  ],
+                  "reviewGrammarKeys": [
+                    "writing:bo-thu"
+                  ],
+                  "vocabulary": [
+                    {
+                      "key": "writing:结构",
+                      "chinese": "结构",
+                      "pinyin": "jiégòu",
+                      "meaningVi": "kết cấu",
+                      "meaningEn": "structure",
+                      "partOfSpeech": "danh từ",
+                      "level": "starter",
+                      "category": "ket-cau",
+                      "status": "review",
+                      "exampleSentence": "“好”是左右结构。",
+                      "examplePinyin": "“Hǎo” shì zuǒyòu jiégòu.",
+                      "exampleMeaningVi": "Chữ “好” có kết cấu trái-phải."
+                    },
+                    {
+                      "key": "writing:左右",
+                      "chinese": "左右",
+                      "pinyin": "zuǒyòu",
+                      "meaningVi": "trái-phải",
+                      "meaningEn": "left-right",
+                      "partOfSpeech": "danh từ phương vị",
+                      "level": "starter",
+                      "category": "ket-cau",
+                      "status": "review",
+                      "exampleSentence": "左右两部分要写得紧凑。",
+                      "examplePinyin": "Zuǒyòu liǎng bùfen yào xiě de jǐncòu.",
+                      "exampleMeaningVi": "Hai phần trái-phải cần viết cân gọn."
+                    },
+                    {
+                      "key": "writing:上下",
+                      "chinese": "上下",
+                      "pinyin": "shàngxià",
+                      "meaningVi": "trên-dưới",
+                      "meaningEn": "top-bottom",
+                      "partOfSpeech": "danh từ phương vị",
+                      "level": "starter",
+                      "category": "ket-cau",
+                      "status": "review",
+                      "exampleSentence": "“字”是上下结构。",
+                      "examplePinyin": "“Zì” shì shàngxià jiégòu.",
+                      "exampleMeaningVi": "Chữ “字” có kết cấu trên-dưới."
+                    }
+                  ],
+                  "grammar": [
+                    {
+                      "key": "writing:ket-cau",
+                      "title": "Phân loại với 是",
+                      "pattern": "chữ + 是 + loại kết cấu",
+                      "explanationVi": "Dùng 是 để xác định loại bố cục của chữ.",
+                      "exampleChinese": "“明”是左右结构。",
+                      "examplePinyin": "“Míng” shì zuǒyòu jiégòu.",
+                      "exampleMeaningVi": "Chữ “明” có kết cấu trái-phải.",
+                      "level": "starter",
+                      "status": "review"
+                    }
+                  ],
+                  "characters": [
+                    {
+                      "key": "character:河",
+                      "character": "河",
+                      "pinyin": "hé",
+                      "meaningVi": "sông",
+                      "radical": "氵",
+                      "strokeCount": 8,
+                      "level": "starter",
+                      "status": "review",
+                      "componentBreakdown": {
+                        "left": "氵 (nước)",
+                        "right": "可 (gợi âm)"
+                      },
+                      "commonWords": [
+                        "河水",
+                        "黄河"
+                      ]
+                    }
+                  ],
+                  "practice": {
+                    "targetKey": "writing:结构",
+                    "distractorKeys": [
+                      "writing:左右",
+                      "writing:上下"
+                    ],
+                    "sentenceTokens": [
+                      "“明”",
+                      "是",
+                      "左右",
+                      "结构",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "“明”是左右结构。",
+                    "translationPromptVi": "Chữ “明” có kết cấu trái-phải.",
+                    "translationAnswerZh": "“明”是左右结构。",
+                    "grammarQuestion": "Câu nào xác định kết cấu của 明?",
+                    "grammarOptions": [
+                      "“明”是左右结构。",
+                      "。结构左右是“明”",
+                      "是左右结构。“明”"
+                    ],
+                    "grammarCorrect": "“明”是左右结构。",
+                    "grammarExplanationVi": "Dùng 是 để xác định loại bố cục của chữ.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "writing:ket-cau",
+                    "speakingTextZh": "“明”是左右结构。",
+                    "speakingPinyin": "“Míng” shì zuǒyòu jiégòu."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "writing-on-tap",
+          "title": "Ôn tập",
+          "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+          "orderIndex": 3,
+          "status": "review",
+          "objectives": [
+            "Ôn từ vựng",
+            "Ôn mẫu câu"
+          ],
+          "chapters": [
+            {
+              "slug": "writing-on-tap-chapter",
+              "title": "Củng cố lộ trình",
+              "descriptionVi": "Kiểm tra và củng cố nội dung đã học.",
+              "orderIndex": 1,
+              "status": "review",
+              "objectives": [
+                "Ôn từ vựng",
+                "Ôn mẫu câu"
+              ],
+              "lessons": [
+                {
+                  "slug": "writing-review",
+                  "title": "Ôn tập Chinese Characters and Writing",
+                  "descriptionVi": "Củng cố từ vựng, mẫu câu và khả năng diễn đạt của toàn khóa.",
+                  "orderIndex": 1,
+                  "xpReward": 30,
+                  "status": "review",
+                  "lessonType": "review",
+                  "estimatedMinutes": 18,
+                  "objectives": [
+                    "Vận dụng lại từ vựng trọng tâm",
+                    "Tự kiểm tra mẫu câu đã học"
+                  ],
+                  "reviewVocabularyKeys": [
+                    "writing:结构",
+                    "writing:左右",
+                    "writing:上下"
+                  ],
+                  "reviewGrammarKeys": [
+                    "writing:ket-cau"
+                  ],
+                  "vocabulary": [],
+                  "grammar": [],
+                  "practice": {
+                    "targetKey": "writing:结构",
+                    "distractorKeys": [
+                      "writing:左右",
+                      "writing:上下"
+                    ],
+                    "sentenceTokens": [
+                      "“明”",
+                      "是",
+                      "左右",
+                      "结构",
+                      "。"
+                    ],
+                    "sentenceAnswerZh": "“明”是左右结构。",
+                    "translationPromptVi": "Chữ “明” có kết cấu trái-phải.",
+                    "translationAnswerZh": "“明”是左右结构。",
+                    "grammarQuestion": "Câu nào xác định kết cấu của 明?",
+                    "grammarOptions": [
+                      "“明”是左右结构。",
+                      "。结构左右是“明”",
+                      "是左右结构。“明”"
+                    ],
+                    "grammarCorrect": "“明”是左右结构。",
+                    "grammarExplanationVi": "Dùng 是 để xác định loại bố cục của chữ.",
+                    "grammarActivityType": "grammar_selection",
+                    "grammarKey": "writing:ket-cau",
+                    "speakingTextZh": "“明”是左右结构。",
+                    "speakingPinyin": "“Míng” shì zuǒyòu jiégòu."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
