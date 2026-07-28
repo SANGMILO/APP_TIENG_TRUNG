@@ -1,10 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { useAppFonts } from '@/hooks/useFonts';
+import { AuthGuard } from '@/components/auth/AuthGuard';
+import { Button } from '@/components/ui';
+import { FontFamily, FontSize, Spacing } from '@/constants/theme';
+import { isBootstrapReady } from '@/services/bootstrap';
+
+void SplashScreen.preventAutoHideAsync().catch(() => {
+  // The web runtime may not expose a native splash screen.
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,20 +27,71 @@ const queryClient = new QueryClient({
 
 export default function RootLayout() {
   const { mode, colors } = useThemeStore();
-  const { initialize, isInitialized } = useAuthStore();
-  const [fontsLoaded] = useAppFonts();
+  const {
+    initialize,
+    isInitialized,
+    isLoading,
+    initializationError,
+  } = useAuthStore();
+  const [fontsLoaded, fontError] = useAppFonts();
+  const [fontTimedOut, setFontTimedOut] = useState(false);
 
   useEffect(() => {
-    initialize();
-  }, []);
+    void initialize();
+  }, [initialize]);
 
-  if (!isInitialized || !fontsLoaded) {
-    return null; // Show splash screen while fonts + auth load
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      return;
+    }
+
+    const timeout = setTimeout(() => setFontTimedOut(true), 8000);
+    return () => clearTimeout(timeout);
+  }, [fontError, fontsLoaded]);
+
+  const bootstrapReady = isBootstrapReady({
+    isAuthInitialized: isInitialized,
+    fontsLoaded,
+    fontError,
+    fontTimedOut,
+  });
+
+  useEffect(() => {
+    if (bootstrapReady) {
+      void SplashScreen.hideAsync().catch(() => {
+        // Nothing else is required when the native splash is already hidden.
+      });
+    }
+  }, [bootstrapReady]);
+
+  if (!bootstrapReady) {
+    return null;
+  }
+
+  if (initializationError) {
+    return (
+      <View style={[styles.bootstrapContainer, { backgroundColor: colors.background }]}>
+        <Text style={[styles.bootstrapTitle, { color: colors.text }]}>
+          Không thể khởi tạo ứng dụng
+        </Text>
+        <Text style={[styles.bootstrapMessage, { color: colors.textSecondary }]}>
+          {initializationError}
+        </Text>
+        <Button
+          title="Thử lại"
+          variant="primary"
+          size="lg"
+          loading={isLoading}
+          onPress={() => void initialize()}
+        />
+      </View>
+    );
   }
 
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+      <AuthGuard />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -59,3 +120,25 @@ export default function RootLayout() {
     </QueryClientProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  bootstrapContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing['2xl'],
+  },
+  bootstrapTitle: {
+    fontFamily: FontFamily.heading,
+    fontSize: FontSize['2xl'],
+    textAlign: 'center',
+    marginBottom: Spacing.md,
+  },
+  bootstrapMessage: {
+    fontFamily: FontFamily.regular,
+    fontSize: FontSize.base,
+    lineHeight: 24,
+    textAlign: 'center',
+    marginBottom: Spacing['2xl'],
+  },
+});

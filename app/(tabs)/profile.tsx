@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeStore } from '@/stores/theme-store';
 import { useAuthStore } from '@/stores/auth-store';
@@ -48,8 +49,37 @@ interface SettingRowProps {
 
 export default function ProfileScreen() {
   const { colors, mode, toggleMode } = useThemeStore();
-  const { profile, signOut } = useAuthStore();
+  const {
+    profile,
+    signOut,
+    beginAuthTransition,
+    endAuthTransition,
+  } = useAuthStore();
   const insets = useSafeAreaInsets();
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState('');
+
+  const handleSignOut = async () => {
+    if (isSigningOut) return;
+
+    setIsSigningOut(true);
+    setSignOutError('');
+    beginAuthTransition();
+
+    try {
+      await signOut();
+      router.replace('/(auth)/welcome');
+    } catch (error: unknown) {
+      endAuthTransition();
+      setSignOutError(
+        error instanceof Error && error.message
+          ? error.message
+          : 'Không thể đăng xuất. Vui lòng thử lại.',
+      );
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
 
   const currentLevel = profile?.current_level ?? 1;
   const totalXp = profile?.total_xp ?? 0;
@@ -297,15 +327,27 @@ export default function ProfileScreen() {
 
             {/* Sign Out Button */}
             <TouchableOpacity
-              style={[styles.signOutButton, { backgroundColor: colors.surfaceElevated }]}
-              onPress={signOut}
+              style={[
+                styles.signOutButton,
+                {
+                  backgroundColor: colors.surfaceElevated,
+                  opacity: isSigningOut ? 0.65 : 1,
+                },
+              ]}
+              onPress={() => void handleSignOut()}
+              disabled={isSigningOut}
               activeOpacity={0.7}
             >
               <Ionicons name="log-out-outline" size={18} color={colors.error} />
               <Text style={[styles.signOutText, { color: colors.error }]}>
-                ĐĂNG XUẤT
+                {isSigningOut ? 'ĐANG ĐĂNG XUẤT...' : 'ĐĂNG XUẤT'}
               </Text>
             </TouchableOpacity>
+            {signOutError ? (
+              <Text style={[styles.signOutError, { color: colors.error }]}>
+                {signOutError}
+              </Text>
+            ) : null}
           </View>
         </FadeInView>
       </ScrollView>
@@ -679,5 +721,11 @@ const styles = StyleSheet.create({
     fontWeight: FontWeight.semibold,
     lineHeight: 16,
     letterSpacing: 1.5, // Stitch tracking-wider
+  },
+  signOutError: {
+    fontSize: FontSize.sm,
+    fontFamily: FontFamily.medium,
+    textAlign: 'center',
+    marginTop: Spacing.sm,
   },
 });

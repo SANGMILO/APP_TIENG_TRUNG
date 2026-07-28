@@ -16,9 +16,11 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useThemeStore } from '@/stores/theme-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
 import { FadeInView, AnimatedPressable, GoogleLogo } from '@/components/ui';
 import { Spacing, BorderRadius, Shadow, FontWeight, FontFamily } from '@/constants/theme';
+import { loginWithPassword } from '@/services/auth-flow';
 
 const loginSchema = z.object({
   email: z.string().email('Email không hợp lệ'),
@@ -33,6 +35,12 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const {
+    setSession,
+    fetchProfile,
+    beginAuthTransition,
+    endAuthTransition,
+  } = useAuthStore();
 
   const { control, handleSubmit, formState: { errors } } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -40,25 +48,33 @@ export default function LoginScreen() {
   });
 
   const onSubmit = async (data: LoginForm) => {
+    if (isLoading) return;
+
     setIsLoading(true);
     setError('');
+    beginAuthTransition();
 
     try {
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email: data.email,
+      const result = await loginWithPassword({
+        signInWithPassword: (credentials) => supabase.auth.signInWithPassword(credentials),
+        completeSession: async (session) => {
+          setSession(session);
+          return fetchProfile(session.user.id);
+        },
+      }, {
+        email: data.email.trim(),
         password: data.password,
       });
 
-      if (authError) {
-        setError(
-          authError.message === 'Invalid login credentials'
-            ? 'Email hoặc mật khẩu không đúng'
-            : authError.message
-        );
-        return;
-      }
-    } catch (err) {
-      setError('Đã có lỗi xảy ra. Vui lòng thử lại.');
+      router.replace(result.destination);
+    } catch (err: unknown) {
+      endAuthTransition();
+      const message = err instanceof Error ? err.message : '';
+      setError(
+        message === 'Invalid login credentials'
+          ? 'Email hoặc mật khẩu không đúng'
+          : message || 'Đã có lỗi xảy ra. Vui lòng thử lại.'
+      );
     } finally {
       setIsLoading(false);
     }

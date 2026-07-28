@@ -16,9 +16,11 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useThemeStore } from '@/stores/theme-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
-import { FadeInView, AnimatedPressable, GoogleLogo } from '@/components/ui';
+import { FadeInView, AnimatedPressable, GoogleLogo, Button } from '@/components/ui';
 import { Spacing, BorderRadius, Shadow, FontWeight, FontFamily } from '@/constants/theme';
+import { registerWithPassword } from '@/services/auth-flow';
 
 const registerSchema = z.object({
   fullName: z.string().min(2, 'Tên ít nhất 2 ký tự'),
@@ -42,6 +44,13 @@ export default function RegisterScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [confirmationEmail, setConfirmationEmail] = useState('');
+  const {
+    setSession,
+    fetchProfile,
+    beginAuthTransition,
+    endAuthTransition,
+  } = useAuthStore();
 
   const { control, handleSubmit, watch, formState: { errors } } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
@@ -53,34 +62,73 @@ export default function RegisterScreen() {
   const hasAlphaNumeric = /[a-zA-Z]/.test(password) && /\d/.test(password);
 
   const onSubmit = async (data: RegisterForm) => {
+    if (isLoading) return;
+
     setIsLoading(true);
     setError('');
+    beginAuthTransition();
 
     try {
-      const { error: authError } = await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
-        options: {
-          data: { display_name: data.fullName },
+      const result = await registerWithPassword({
+        signUp: (credentials) => supabase.auth.signUp(credentials),
+        completeSession: async (session) => {
+          setSession(session);
+          return fetchProfile(session.user.id);
         },
+      }, {
+        email: data.email.trim(),
+        password: data.password,
+        displayName: data.fullName.trim(),
       });
 
-      if (authError) {
-        if (authError.message.includes('already registered')) {
-          setError('Email này đã được đăng ký');
-        } else {
-          setError(authError.message);
-        }
+      if (result.status === 'confirmation_required') {
+        endAuthTransition();
+        setConfirmationEmail(result.email);
         return;
       }
-      // Profile will be created by database trigger
-      // Auth state change will navigate to onboarding
-    } catch (err) {
-      setError('Đã có lỗi xảy ra. Vui lòng thử lại.');
+
+      router.replace(result.destination);
+    } catch (err: unknown) {
+      endAuthTransition();
+      const message = err instanceof Error ? err.message : '';
+      setError(
+        message.includes('already registered')
+          ? 'Email này đã được đăng ký'
+          : message || 'Đã có lỗi xảy ra. Vui lòng thử lại.'
+      );
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (confirmationEmail) {
+    return (
+      <View style={[styles.confirmationContainer, { backgroundColor: colors.background }]}>
+        <View style={[styles.confirmationIcon, { backgroundColor: colors.primary + '12' }]}>
+          <Ionicons name="mail-outline" size={36} color={colors.primary} />
+        </View>
+        <Text style={[styles.confirmationTitle, { color: colors.text }]}>
+          Kiểm tra email của bạn
+        </Text>
+        <Text style={[styles.confirmationText, { color: colors.textSecondary }]}>
+          Chúng tôi đã gửi liên kết xác nhận đến:
+        </Text>
+        <Text style={[styles.confirmationEmail, { color: colors.primary }]}>
+          {confirmationEmail}
+        </Text>
+        <Text style={[styles.confirmationText, { color: colors.textSecondary }]}>
+          Xác nhận email trước khi đăng nhập. Tài khoản chưa được đăng nhập trên thiết bị này.
+        </Text>
+        <Button
+          title="Quay lại đăng nhập"
+          variant="primary"
+          size="lg"
+          onPress={() => router.replace('/(auth)/login')}
+          style={styles.confirmationButton}
+        />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -350,6 +398,44 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  confirmationContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing['2xl'],
+  },
+  confirmationIcon: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.xl,
+  },
+  confirmationTitle: {
+    fontSize: 24,
+    fontFamily: FontFamily.heading,
+    fontWeight: FontWeight.bold,
+    textAlign: 'center',
+    marginBottom: Spacing.md,
+  },
+  confirmationText: {
+    fontSize: 15,
+    fontFamily: FontFamily.regular,
+    lineHeight: 22,
+    textAlign: 'center',
+  },
+  confirmationEmail: {
+    fontSize: 16,
+    fontFamily: FontFamily.semibold,
+    fontWeight: FontWeight.semibold,
+    marginVertical: Spacing.sm,
+    textAlign: 'center',
+  },
+  confirmationButton: {
+    marginTop: Spacing['2xl'],
+    minWidth: 220,
   },
 
   // Header

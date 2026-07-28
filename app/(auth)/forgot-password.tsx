@@ -15,6 +15,8 @@ import { useThemeStore } from '@/stores/theme-store';
 import { supabase } from '@/lib/supabase';
 import { Button, Input } from '@/components/ui';
 import { FontSize, Spacing } from '@/constants/theme';
+import { getRecoveryRedirectUrl } from '@/services/auth-recovery';
+import { requestPasswordReset } from '@/services/auth-flow';
 
 const schema = z.object({
   email: z.string().email('Email không hợp lệ'),
@@ -26,6 +28,7 @@ export default function ForgotPasswordScreen() {
   const { colors } = useThemeStore();
   const [isLoading, setIsLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState('');
 
   const { control, handleSubmit, formState: { errors } } = useForm<ForgotForm>({
     resolver: zodResolver(schema),
@@ -33,13 +36,27 @@ export default function ForgotPasswordScreen() {
   });
 
   const onSubmit = async (data: ForgotForm) => {
+    if (isLoading) return;
+
     setIsLoading(true);
+    setError('');
     try {
-      await supabase.auth.resetPasswordForEmail(data.email);
+      const platform = Platform.OS === 'web'
+        ? 'web'
+        : Platform.OS === 'ios'
+          ? 'ios'
+          : 'android';
+      await requestPasswordReset({
+        resetPasswordForEmail: (email, options) =>
+          supabase.auth.resetPasswordForEmail(email, options),
+      }, data.email.trim(), getRecoveryRedirectUrl(platform));
       setSent(true);
-    } catch {
-      // Still show success to prevent email enumeration
-      setSent(true);
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error && err.message
+          ? err.message
+          : 'Không thể gửi email. Vui lòng thử lại.',
+      );
     } finally {
       setIsLoading(false);
     }
@@ -103,12 +120,17 @@ export default function ForgotPasswordScreen() {
           )}
         />
 
+        {error ? (
+          <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
+        ) : null}
+
         <Button
           title="Gửi email"
           variant="primary"
           size="lg"
           fullWidth
           loading={isLoading}
+          disabled={isLoading}
           onPress={handleSubmit(onSubmit)}
         />
       </View>
@@ -153,5 +175,10 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: FontSize.base,
     textAlign: 'center',
+  },
+  error: {
+    fontSize: FontSize.sm,
+    marginBottom: Spacing.lg,
+    lineHeight: 20,
   },
 });
