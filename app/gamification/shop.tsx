@@ -25,6 +25,7 @@ export default function ShopScreen() {
   } = useQuery({
     queryKey: ['shop-items'],
     queryFn: fetchShopItems,
+    enabled: Boolean(profile),
   });
 
   const {
@@ -35,6 +36,7 @@ export default function ShopScreen() {
   } = useQuery({
     queryKey: ['gamification-summary'],
     queryFn: getGamificationSummary,
+    enabled: Boolean(profile),
   });
 
   const purchaseMutation = useMutation({

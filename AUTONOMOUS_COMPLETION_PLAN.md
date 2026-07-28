@@ -584,16 +584,51 @@ Stitch migration remains the visual source of truth.
   - The Supabase CLI emitted the known non-fatal pg-delta certificate-cache
     warning after apply; matching history and the fresh hosted schema dump
     independently confirmed success
-- Commit: pending
+- Commit: `b60e378` (`docs: record hosted hardening deployment`)
 
 ### Phase 12 — Full product QA
 
-- Status: PENDING
-- Files: pending
-- Migrations: none expected
-- Deployments: none expected
-- Validation: pending
-- Blockers: native-device and provider-interactive QA may require owner accounts/devices
+- Status: COMPLETE
+- Files:
+  - `app/(tabs)/learn.tsx`
+  - `app/(tabs)/videos.tsx`
+  - `app/(tabs)/profile.tsx`
+  - `app/videos/[id].tsx`
+  - `app/gamification/shop.tsx`
+  - `app/gamification/leaderboard.tsx`
+  - `app/pronunciation/tone-training.tsx`
+  - `__tests__/interaction-reachability.test.ts`
+- Migrations: none
+- Deployments: none
+- Validation:
+  - Browser QA at 390x844, 430x932, and 1440x900 covered Welcome, Login,
+    Register, Forgot Password, invalid Reset Password, Terms, Privacy, and
+    signed-out protected deep links
+  - Learn, Review, AI Tutor, Videos, Profile, video detail, Shop, Leaderboard,
+    Tone Training, and Admin deep links all redirect without console errors or
+    unauthorized data requests
+  - TypeScript: 0 errors
+  - Jest: 30 suites / 301 tests passed
+  - Expo Web: 51 routes exported
+  - Expo Doctor: 20/20 checks passed
+  - Local pgTAP: 9 files / 219 assertions passed
+  - Hosted migrations match locally through `20260729080000`
+  - Five hosted Edge Functions remain active with JWT verification
+  - npm audit: 0 critical, 0 runtime high, 11 moderate Expo-tooling findings,
+    and 21 high development-only Jest-tooling findings; available aggregate
+    fixes are breaking downgrades and were not applied
+- Result:
+  - Protected React Query requests now wait for the resolved authenticated
+    profile, closing a redirect race that produced transient hosted 401s
+  - Public auth/legal layouts remain responsive and validation/error states are
+    reachable without creating production data
+  - No canonical Stitch visuals or completed screen designs were changed
+- Blockers:
+  - Authenticated Google account-collision/relogin, AI/voice provider, real
+    video media, and native microphone/playback flows require owner-controlled
+    accounts, missing content/secrets, or physical devices
+  - React Native Web reports non-blocking deprecation warnings for legacy
+    shadow/text-shadow and `pointerEvents` style APIs
 - Commit: pending
 
 ### Finalization

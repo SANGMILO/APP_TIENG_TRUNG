@@ -82,6 +82,7 @@ export default function ProfileScreen() {
   } = useQuery({
     queryKey: ['level-thresholds'],
     queryFn: fetchLevelThresholds,
+    enabled: Boolean(profile),
   });
 
   const handleSignOut = async () => {

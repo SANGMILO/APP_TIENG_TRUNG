@@ -31,7 +31,7 @@ Status reviewed: 2026-07-29
 
 ## Resolved During Autonomous Completion
 
-- Supabase is linked and migrations are deployed through `20260729070000`.
+- Supabase is linked and migrations are deployed through `20260729080000`.
 - Google OAuth, password recovery, protected navigation, and profile provisioning
   are implemented and regression-tested.
 - `expo-av` was replaced by the maintained `expo-audio` package.

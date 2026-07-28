@@ -50,6 +50,7 @@ export default function LearnScreen() {
       if (lessonsError) throw lessonsError;
       return { course, lessons: (lessonData ?? []) as Lesson[] };
     },
+    enabled: !!profile,
   });
 
   const lessons = courseData?.lessons;

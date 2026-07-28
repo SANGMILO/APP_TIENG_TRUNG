@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { useThemeStore } from '@/stores/theme-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { supabase } from '@/lib/supabase';
 import { Button, EmptyState, ProgressBar } from '@/components/ui';
 import { AudioPlayer } from '@/components/media';
@@ -21,6 +22,7 @@ interface ToneSyllable {
 
 export default function ToneTrainingScreen() {
   const { colors } = useThemeStore();
+  const { profile } = useAuthStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedTone, setSelectedTone] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -35,6 +37,7 @@ export default function ToneTrainingScreen() {
       if (error) throw error;
       return (data ?? []) as ToneSyllable[];
     },
+    enabled: Boolean(profile),
   });
 
   const currentSyllable = syllables?.[currentIndex];

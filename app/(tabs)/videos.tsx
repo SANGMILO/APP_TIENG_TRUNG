@@ -40,6 +40,7 @@ export default function VideosScreen() {
       if (error) throw error;
       return (data ?? []).filter((item: any) => hasPotentialPlayableSource(item));
     },
+    enabled: Boolean(profile),
   });
 
   const { data: continueWatching } = useQuery({

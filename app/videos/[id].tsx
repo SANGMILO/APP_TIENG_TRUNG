@@ -70,19 +70,19 @@ export default function VideoDetailScreen() {
   } = useQuery({
     queryKey: ['video', id],
     queryFn: () => fetchVideoById(id!),
-    enabled: Boolean(id),
+    enabled: Boolean(id && profile),
   });
 
   const { data: subtitles } = useQuery({
     queryKey: ['video-subtitles', id],
     queryFn: () => fetchSubtitles(id!),
-    enabled: Boolean(id),
+    enabled: Boolean(id && profile),
   });
 
   const { data: questions } = useQuery({
     queryKey: ['video-questions', id],
     queryFn: () => fetchVideoQuestions(id!),
-    enabled: Boolean(id),
+    enabled: Boolean(id && profile),
   });
 
   const {
@@ -110,6 +110,7 @@ export default function VideoDetailScreen() {
       if (error) throw error;
       return new Set((data ?? []).map((item) => item.chinese));
     },
+    enabled: Boolean(profile),
   });
 
   const { data: savedVideos } = useSavedVideos();

@@ -18,6 +18,7 @@ export default function LeaderboardScreen() {
   const { data: entries, isLoading, isError, refetch } = useQuery({
     queryKey: ['leaderboard'],
     queryFn: fetchLeaderboard,
+    enabled: Boolean(profile),
   });
 
   const getRankDisplay = (index: number) => {

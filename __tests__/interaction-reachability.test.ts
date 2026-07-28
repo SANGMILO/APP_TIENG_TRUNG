@@ -77,6 +77,9 @@ describe('user interaction reachability', () => {
     expect(learn).toContain('visibleLessons?.map');
     expect(learn).toContain('getGamificationSummary');
     expect(learn).not.toContain("queryKey: ['today-xp']");
+    expect(learn).toMatch(
+      /queryKey: \['learning-path'\],[\s\S]*?enabled: !!profile,/,
+    );
   });
 
   it('makes pronunciation, leaderboard, and shop reachable from primary screens', () => {
@@ -98,6 +101,26 @@ describe('user interaction reachability', () => {
       const source = read(route);
       expect(source).toContain('isError');
       expect(source).toContain('void refetch()');
+    }
+  });
+
+  it('does not query protected route data before authentication resolves', () => {
+    const protectedQueryRoutes: Array<[string, number]> = [
+      ['app/(tabs)/learn.tsx', 3],
+      ['app/(tabs)/videos.tsx', 2],
+      ['app/(tabs)/profile.tsx', 2],
+      ['app/videos/[id].tsx', 6],
+      ['app/gamification/shop.tsx', 2],
+      ['app/gamification/leaderboard.tsx', 1],
+      ['app/pronunciation/tone-training.tsx', 1],
+    ];
+
+    for (const [route, expectedQueryCount] of protectedQueryRoutes) {
+      const source = read(route);
+      expect(source.match(/\buseQuery\(\{/g)).toHaveLength(expectedQueryCount);
+      expect(
+        source.match(/enabled: (?:Boolean\(profile\)|!!profile|Boolean\(id && profile\)),/g),
+      ).toHaveLength(expectedQueryCount);
     }
   });
 });
