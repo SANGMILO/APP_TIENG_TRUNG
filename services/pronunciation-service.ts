@@ -29,7 +29,10 @@ export interface AssessmentRequestResult {
     | 'SERVER_ERROR';
 }
 
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+// PostgreSQL accepts canonical UUID text independently of RFC version/variant
+// bits. The production seed uses stable legacy IDs such as e000...0006, so
+// requiring RFC-generated nibbles would incorrectly discard real foreign keys.
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function buildAssessmentFunctionBody(
   input: PronunciationAssessmentInput,

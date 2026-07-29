@@ -15,7 +15,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
 
 const MAX_AUDIO_SIZE = 5 * 1024 * 1024; // 5MB
 const DAILY_LIMIT = 20;
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+// Match PostgreSQL's canonical UUID input shape. Existing production content
+// intentionally uses deterministic legacy UUIDs without RFC version bits.
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 interface RequestBody {
   audio: string;           // base64 encoded audio

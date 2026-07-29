@@ -24,6 +24,10 @@ const UUIDS = {
   lesson: '27000000-0000-4000-8000-000000000002',
   vocabulary: '27000000-0000-4000-8000-000000000003',
 };
+const SEEDED_NIHAO = {
+  exercise: 'e0000000-0000-0000-0000-000000000006',
+  lesson: '10000000-0000-0000-0000-000000000001',
+};
 
 const result = {
   overallScore: 87,
@@ -91,6 +95,25 @@ describe('Pronunciation quick practice', () => {
       exerciseId: UUIDS.exercise,
       lessonId: UUIDS.lesson,
     });
+  });
+
+  it('keeps the actual seeded 你好 speaking references without inventing a vocabulary ID', () => {
+    const body = buildAssessmentFunctionBody({
+      audio: new ArrayBuffer(1),
+      referenceText: '你好',
+      pinyin: 'nǐ hǎo',
+      locale: 'zh-CN',
+      exerciseId: SEEDED_NIHAO.exercise,
+      lessonId: SEEDED_NIHAO.lesson,
+      clientAttemptId: 'nihao-speaking-attempt',
+    }, 'audio');
+
+    expect(body).toMatchObject({
+      referenceText: '你好',
+      exerciseId: SEEDED_NIHAO.exercise,
+      lessonId: SEEDED_NIHAO.lesson,
+    });
+    expect(body).not.toHaveProperty('vocabularyId');
   });
 
   it('returns the persisted provider score to the caller', async () => {
@@ -187,5 +210,8 @@ describe('Pronunciation quick practice', () => {
     expect(providerCall).toBeGreaterThan(retryLookup);
     expect(edgeFunction).toContain("attemptError.code === '23505'");
     expect(edgeFunction).toContain('validateAssessmentReference');
+    expect(edgeFunction).toContain(
+      "const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;",
+    );
   });
 });
